@@ -46,6 +46,21 @@ describe("read handlers", () => {
     ]);
   });
 
+  it("list_strategy_options returns three valid directions scored against current priorities", () => {
+    const { store, handlers } = setup();
+    store.dispatch({ type: "human/setPriority", key: "safety", weight: 3 });
+    const result = handlers.list_strategy_options({}) as {
+      strategies: { id: string; valid: boolean; scoreAtResidentPriorities: { illustrativeScore: number } }[];
+    };
+    expect(result.strategies).toHaveLength(3);
+    expect(result.strategies.every((s) => s.valid)).toBe(true);
+    expect(result.strategies.map((s) => s.id)).toEqual([
+      "safety_access",
+      "climate_resilience",
+      "broad_coverage",
+    ]);
+  });
+
   it("simulate_allocation validates without mutating and rejects a stale revision", () => {
     const { store, handlers } = setup();
     const ok = handlers.simulate_allocation({ budgetRevision: 0, allocations: plan }) as {
@@ -141,6 +156,7 @@ describe("authority boundary", () => {
         "explain_tradeoffs",
         "get_budget_state",
         "list_projects",
+        "list_strategy_options",
         "propose_allocation",
         "request_allocation_review",
         "simulate_allocation",

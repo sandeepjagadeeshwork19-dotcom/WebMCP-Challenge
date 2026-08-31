@@ -11,12 +11,14 @@ const STATUS_TEXT: Record<WebMcpState["status"], string> = {
 export function ScenarioHeader({ webmcp }: { webmcp: WebMcpState }) {
   return (
     <header className="scenario-header">
-      <p className="eyebrow">Participatory Budget Workspace</p>
+      <p className="eyebrow">Participatory budgeting workspace</p>
       <h1>Neighbors Decide</h1>
       <p className="task">
-        One resident allocates a hypothetical <strong>$1,000,000</strong> neighbourhood-improvement
-        fund across exactly eight hypothetical capital projects. This is a capital-allocation
-        exercise, not a real municipal budget.
+        Real participatory budgeting programmes &mdash; New York City, Paris, Porto Alegre &mdash;
+        let residents directly allocate tens of millions of dollars in public funds every year.
+        This is a hypothetical version of one such cycle: one resident allocates a{" "}
+        <strong>$1,000,000</strong> capital fund across eight candidate projects, working alongside
+        an AI assistant that can model options but cannot make the decision.
       </p>
       <Disclosure id="hypothetical-disclosure" />
       <p

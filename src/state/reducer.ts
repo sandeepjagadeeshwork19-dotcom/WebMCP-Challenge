@@ -9,6 +9,7 @@
 import { buildFinalRecord } from "../domain/finalRecord";
 import { allocationHash } from "../domain/hash";
 import { getProject } from "../domain/projects";
+import { getStrategy } from "../domain/strategies";
 import { committedTotal, validateAllocation } from "../domain/validation";
 import type { Allocation, PriorityKey, ProjectId } from "../domain/types";
 import { actorForAction, type AppAction } from "./actions";
@@ -126,6 +127,21 @@ export function reducer(state: AppState, action: AppAction): AppState {
         },
         "set_priority",
         `Set ${action.key} priority to ${action.weight}`,
+        timestamp,
+      );
+    }
+
+    case "human/applyStrategyPriorities": {
+      const preset = getStrategy(action.strategyId);
+      const same = PRIORITY_KEYS.every(
+        (key) => state.residentPriorities[key] === preset.priorities[key],
+      );
+      if (same) return state;
+      return commitHumanBudgetChange(
+        state,
+        { residentPriorities: { ...preset.priorities } },
+        "adopt_strategy",
+        `Adopted the "${preset.label}" priority direction`,
         timestamp,
       );
     }

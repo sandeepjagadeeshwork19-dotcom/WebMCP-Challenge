@@ -6,6 +6,7 @@
 
 import { HYPOTHETICAL_DISCLOSURE } from "../domain/disclosure";
 import { DATASET_VERSION, FUND_LIMIT, getProject, PROJECT_IDS } from "../domain/projects";
+import { STRATEGY_PRESETS, strategyNeighbourhoods } from "../domain/strategies";
 import { benefitSummary, compareTradeoffs } from "../domain/tradeoffs";
 import {
   committedTotal,
@@ -32,6 +33,7 @@ import {
 export interface Handlers {
   get_budget_state: (input: unknown) => unknown;
   list_projects: (input: unknown) => unknown;
+  list_strategy_options: (input: unknown) => unknown;
   simulate_allocation: (input: unknown) => unknown;
   propose_allocation: (input: unknown) => unknown;
   explain_tradeoffs: (input: unknown) => unknown;
@@ -123,6 +125,36 @@ export function createHandlers(store: Store): Handlers {
             minimumViableFunding: p.minimumViableFunding,
             hypotheticalAssumption: p.hypotheticalAssumption,
             disclosure: "Hypothetical data",
+          };
+        }),
+      };
+    },
+
+    list_strategy_options(input) {
+      const parsed = asObject(input ?? {}, []);
+      if (!parsed.ok) return parsed.error;
+      const state = store.getState();
+      return {
+        datasetVersion: DATASET_VERSION,
+        residentPriorities: { ...state.residentPriorities },
+        note: "Adopting a direction only sets priority weights. It does not fund any project.",
+        strategies: STRATEGY_PRESETS.map((s) => {
+          const total = committedTotal(s.allocations);
+          return {
+            id: s.id,
+            label: s.label,
+            blurb: s.blurb,
+            lensPriorities: s.priorities,
+            allocations: s.allocations,
+            committedTotal: total,
+            remainingFunds: FUND_LIMIT - total,
+            selectedProjectIds: selectedProjectIds(s.allocations),
+            neighbourhoods: strategyNeighbourhoods(s),
+            valid: validateAllocation(s.allocations, {
+              lockedAllocations: state.lockedAllocations,
+            }).valid,
+            scoreAtResidentPriorities: benefitSummary(s.allocations, state.residentPriorities),
+            scoreAtLensPriorities: benefitSummary(s.allocations, s.priorities),
           };
         }),
       };

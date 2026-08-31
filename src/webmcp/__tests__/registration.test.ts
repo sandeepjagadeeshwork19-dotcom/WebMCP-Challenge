@@ -16,7 +16,7 @@ describe("registerWebMcpTools", () => {
     expect(result.registeredTools).toEqual([]);
   });
 
-  it("registers exactly the six tools with an abort signal when supported", async () => {
+  it("registers exactly the expected tools with an abort signal when supported", async () => {
     const registered: WebMcpToolDefinition[] = [];
     const signals: (AbortSignal | undefined)[] = [];
     (document as { modelContext?: unknown }).modelContext = {
@@ -30,7 +30,7 @@ describe("registerWebMcpTools", () => {
     const result = await registerWebMcpTools(createStore());
     expect(result.supported).toBe(true);
     expect(result.registeredTools).toEqual([...TOOL_NAMES]);
-    expect(registered).toHaveLength(6);
+    expect(registered).toHaveLength(TOOL_NAMES.length);
     expect(signals.every((s) => s instanceof AbortSignal)).toBe(true);
 
     // Aborting unregisters: the shared signal is now aborted.

@@ -33,6 +33,7 @@ const allocationsArraySchema = {
 export const TOOL_NAMES = [
   "get_budget_state",
   "list_projects",
+  "list_strategy_options",
   "simulate_allocation",
   "propose_allocation",
   "explain_tradeoffs",
@@ -77,6 +78,19 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
         },
       },
       execute: (input) => handlers.list_projects(input),
+    },
+    {
+      name: "list_strategy_options",
+      title: "List strategy options",
+      description:
+        "List three deterministically valid budget directions (safety & access, climate resilience, broad coverage), each scored against the resident's current priorities.",
+      annotations: { readOnlyHint: true },
+      inputSchema: {
+        type: "object",
+        additionalProperties: false,
+        properties: {},
+      },
+      execute: (input) => handlers.list_strategy_options(input),
     },
     {
       name: "simulate_allocation",

@@ -45,6 +45,13 @@ export function AgentProposal() {
           <p className={`proposal-status proposal-status--${state.proposalStatus}`} role="status">
             Status: {STATUS_TEXT[state.proposalStatus] ?? state.proposalStatus}
           </p>
+          {state.proposalStatus === "stale" && (
+            <p className="stale-banner" role="alert">
+              ⚠ The resident changed the budget (revision {proposal.basedOnBudgetRevision} →{" "}
+              {state.budgetRevision}) after this proposal. It can no longer enter review — the agent
+              must re-read the state and propose again.
+            </p>
+          )}
           <blockquote className="rationale">{proposal.rationale}</blockquote>
 
           <table className="allocation-table">

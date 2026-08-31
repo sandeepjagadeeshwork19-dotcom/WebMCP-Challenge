@@ -8,10 +8,11 @@ function contracts() {
 }
 
 describe("tool contracts", () => {
-  it("defines exactly the six approved tools and no finalisation tool", () => {
+  it("defines exactly the approved tool set and no state-committing tool", () => {
     const names = contracts().map((t) => t.name);
     expect(names).toEqual([...TOOL_NAMES]);
     expect(names).not.toContain("finalise_allocation");
+    expect(names).not.toContain("accept_proposal");
     expect(names).not.toContain("set_priority");
     expect(names).not.toContain("lock_project");
     expect(names).not.toContain("reset_demo");

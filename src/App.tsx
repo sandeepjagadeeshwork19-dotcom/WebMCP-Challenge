@@ -4,6 +4,7 @@ import { ScenarioHeader } from "./components/ScenarioHeader";
 import { UnsupportedWebMcpNotice } from "./components/UnsupportedWebMcpNotice";
 import { BudgetSummary } from "./components/BudgetSummary";
 import { PriorityControls } from "./components/PriorityControls";
+import { StrategyDirections } from "./components/StrategyDirections";
 import { ProjectList } from "./components/ProjectList";
 import { CurrentAllocation } from "./components/CurrentAllocation";
 import { AgentProposal } from "./components/AgentProposal";
@@ -30,10 +31,11 @@ export function App() {
         <div className="layout__col">
           <BudgetSummary />
           <PriorityControls />
-          <CurrentAllocation />
+          <StrategyDirections />
         </div>
         <div className="layout__col">
           <ProjectList />
+          <CurrentAllocation />
         </div>
         <div className="layout__col">
           <AgentProposal />
