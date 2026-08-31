@@ -6,6 +6,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
   useSyncExternalStore,
@@ -62,6 +63,11 @@ export function StoreProvider({
 }) {
   const [fallback] = useState(() => createStore());
   const value = store ?? fallback;
+  useEffect(() => {
+    if (import.meta.env.DEV && typeof window !== "undefined") {
+      (window as unknown as { __nd?: Store }).__nd = value;
+    }
+  }, [value]);
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }
 
