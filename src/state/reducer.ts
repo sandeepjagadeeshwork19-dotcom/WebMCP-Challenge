@@ -8,6 +8,7 @@
 
 import { buildFinalRecord } from "../domain/finalRecord";
 import { allocationHash } from "../domain/hash";
+import { inr } from "../domain/money";
 import { getProject } from "../domain/projects";
 import { getStrategy } from "../domain/strategies";
 import { committedTotal, validateAllocation } from "../domain/validation";
@@ -27,7 +28,7 @@ function isLocked(state: AppState, projectId: ProjectId): boolean {
 }
 
 function money(amount: number): string {
-  return `$${amount.toLocaleString("en-US")}`;
+  return inr(amount);
 }
 
 function appendActivity(

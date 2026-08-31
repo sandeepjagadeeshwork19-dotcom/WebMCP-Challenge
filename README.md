@@ -1,17 +1,22 @@
-# Neighbors Decide — Participatory Budget Workspace
+# Neighbors Decide — Ward Participatory-Budgeting Workspace
 
 A bounded, **WebMCP-enabled demonstration** in which one resident allocates a
-hypothetical **$1,000,000** neighbourhood-improvement fund across exactly eight
-hypothetical capital projects. A browser agent can inspect state, simulate
-combinations, propose a valid plan, and explain trade-offs. A deterministic
-engine — not the agent — enforces every constraint, and **only the resident can
-finalise**, through the visible interface.
+hypothetical **₹10,00,000** ward development fund across exactly eight hypothetical
+local works. A browser agent can inspect state, simulate combinations, propose a
+valid plan, and explain trade-offs. A deterministic engine — not the agent —
+enforces every constraint, and **only the resident can finalise**, through the
+visible interface.
 
-> **Hypothetical demonstration:** This workspace uses invented projects, costs,
-> benefits, constraints, neighbourhoods and community-support indicators. It is
-> not connected to, endorsed by or deployed for any government. Finalising
-> records a demonstration choice only; it does not cast a vote or allocate real
-> funds.
+The framing draws on India's 73rd/74th Constitutional Amendments (local planning
+by the gram sabha and ward committee) and Kerala's People's Plan Campaign, which
+has devolved participatory budgets for decades.
+
+> **Hypothetical demonstration:** This workspace uses invented ward projects,
+> costs, benefits, constraints, localities and community-support indicators. It
+> is not connected to, endorsed by or deployed for any government, ward
+> committee, gram sabha or participatory-budgeting programme. Finalising records
+> a demonstration choice only; it does not cast a vote in a ward sabha or
+> allocate real funds.
 
 ## Setup
 

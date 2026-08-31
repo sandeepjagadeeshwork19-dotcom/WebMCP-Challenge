@@ -5,6 +5,7 @@
  * objective optimum or "public value". People-served estimates are never summed.
  */
 
+import { inr } from "./money";
 import { getProject, P06_ALLOWED_AMOUNTS, PRIORITY_KEYS } from "./projects";
 import { committedTotal, remainingFunds, selectedProjectIds } from "./validation";
 import type {
@@ -124,9 +125,9 @@ export function compareTradeoffs(
   for (const change of fundingChanged) {
     if (change.projectId === "P-06" && change.toAmount < change.fromAmount) {
       opportunityCosts.push(
-        `Reducing P-06 (Street-tree programme) from $${change.fromAmount.toLocaleString(
-          "en-US",
-        )} to $${change.toAmount.toLocaleString("en-US")} covers fewer block groups.`,
+        `Reducing ${change.projectId} (${getProject(change.projectId).name}) from ${inr(
+          change.fromAmount,
+        )} to ${inr(change.toAmount)} covers fewer lanes.`,
       );
     }
   }

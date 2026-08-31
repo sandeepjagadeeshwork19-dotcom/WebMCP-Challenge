@@ -14,11 +14,11 @@ Narration is written to ~155 wpm. Trim, don't rush.
 cards below.
 
 **Say:**
-> New York City, Paris, and Porto Alegre let residents vote directly on how to
-> spend tens of millions in public money. This is a hypothetical version of one
-> of those cycles — one resident, a one-million-dollar fund, eight projects — and
-> an AI assistant that can model every option but is not allowed to make the
-> call.
+> In India, the gram sabha and the ward committee decide how local development
+> money is spent — that's the 73rd and 74th Amendments, and it's how Kerala's
+> People's Plan has run for decades. This is a hypothetical version of one ward's
+> cycle — one resident, a ten-lakh-rupee fund, eight works — and an AI assistant
+> that can model every option but is not allowed to make the call.
 
 ## 0:18 – 0:35 · The tools register
 
@@ -49,7 +49,7 @@ access first*. Budget revision ticks to 1.
 `Simulate a plan you'd recommend, then propose it.`
 
 **Screen:** the Agent Proposal panel fills in — revision 1, **Status: Valid**,
-rationale, six line items, $990,000 / $10,000 remaining, green "satisfies every
+rationale, six line items, ₹9,90,000 · ₹10,000 remaining, green "satisfies every
 rule".
 
 **Say:**
@@ -59,25 +59,26 @@ rule".
 
 ## 1:20 – 1:55 · The money shot: a human change stales it
 
-**Screen:** scroll to projects. Click **Fund P-03** (playground) → an inline
+**Screen:** scroll to projects. Click **Fund P-03** (riverside play area) → an inline
 message appears: *requires P-04 at full funding*. Click **Lock P-03**. Cut to the
 Agent Proposal panel — now an **amber STALE banner**: "revision 1 → 3 … must
 re-read and propose again".
 
 **Say:**
-> Now the value judgment. I fund the playground and lock it. The engine tells me
-> it needs the drainage project first — it won't fix that for me. And the agent's
-> plan? Instantly stale. The budget moved underneath it.
+> Now the value judgment. I fund the play area and lock it. The engine tells me
+> it needs the storm-water drain first — the ground floods every monsoon — and it
+> won't fix that for me. The agent's plan? Instantly stale. The budget moved
+> underneath it.
 
 **Type to the agent:**
-`I locked the playground. Re-read the state and propose a revised plan.`
+`I locked the play area. Re-read the state and propose a revised plan.`
 
 **Screen:** new proposal — revision 2, Valid, keeps P-03 locked, includes P-04,
 trims the tree phase. Scroll to the trade-off block.
 
 **Say:**
-> It re-reads, and re-proposes around my lock — keeps the playground and its
-> drainage, trims the tree programme, drops the crossings. The comparison spells
+> It re-reads, and re-proposes around my lock — keeps the play area and its
+> drain, trims the tree drive, drops the road crossings. The comparison spells
 > out exactly what changed and what it cost.
 
 ## 1:55 – 2:12 · The engine says no
@@ -89,7 +90,7 @@ trims the tree phase. Scroll to the trade-off block.
 nothing on the page changes.
 
 **Say:**
-> Ask for an impossible plan — the crossings and the bike lane share the same
+> Ask for an impossible plan — the road crossings and the cycle track share the same
 > road — and the engine refuses with the same structured reason the UI would
 > show. No trial-and-error clicking.
 
@@ -124,12 +125,12 @@ attribution, Copy button. Then click **Reset demo → Confirm**.
 - [ ] Status pill "Agent tools registered" legible
 - [ ] Seven tool names visible once
 - [ ] "Adopt these priorities" → budget revision 0→1
-- [ ] Proposal panel: Status **Valid**, $990,000
-- [ ] Playground dependency message on the card
+- [ ] Proposal panel: Status **Valid**, ₹9,90,000
+- [ ] Play-area → storm-water-drain dependency message on the card
 - [ ] **Amber STALE banner** clearly on screen ≥ 2s  ← the key frame
 - [ ] Revised proposal keeps P-03; trade-off block visible
 - [ ] `valid: false` incompatibility result, page unchanged
 - [ ] Human Review "only the resident can…" line
 - [ ] Finalise disabled → enabled after the checkbox
 - [ ] Final record with `human_finalisation`
-- [ ] Reset returns to $1,000,000 / revision 0
+- [ ] Reset returns to ₹10,00,000 / revision 0

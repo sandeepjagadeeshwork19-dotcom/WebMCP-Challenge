@@ -47,7 +47,7 @@ describe("manual allocation", () => {
     await user.click(screen.getByRole("button", { name: /Fund P-01/ }));
     await user.click(screen.getByRole("button", { name: /Fund P-08/ }));
 
-    expect(screen.getByText("Committed").nextSibling).toHaveTextContent("$440,000");
+    expect(screen.getByText("Committed").nextSibling).toHaveTextContent("₹4,40,000");
     const allocation = screen.getByRole("region", { name: /Current allocation/i });
     expect(
       within(allocation).getByText(/cannot both be funded/i),

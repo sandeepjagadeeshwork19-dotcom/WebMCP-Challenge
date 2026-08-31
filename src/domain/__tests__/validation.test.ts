@@ -30,9 +30,9 @@ describe("validateAllocation — fund limit", () => {
       full("P-07", 140_000),
       full("P-06", 90_000),
     ]);
-    // 260+240+160+150+140+90 = 1,040,000 -> $40,000 over
+    // 260+240+160+150+140+90 = 1,040,000 -> ₹40,000 over
     const issue = result.issues.find((i) => i.code === "budget_exceeded");
-    expect(issue?.message).toContain("$40,000 over");
+    expect(issue?.message).toContain("₹40,000 over");
   });
 
   it("committed total and remaining funds helpers", () => {

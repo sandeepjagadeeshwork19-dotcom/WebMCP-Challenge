@@ -4,26 +4,33 @@
 options and the resident keeps the decision — with the human-only boundary
 enforced by *which WebMCP tools exist*, not by a popup.
 
-> **Hypothetical demonstration.** Every project, cost, benefit, neighbourhood and
+> **Hypothetical demonstration.** Every ward project, cost, benefit, locality and
 > community-support figure is invented for this demo. It is not connected to,
-> endorsed by, or deployed for any government. Finalising records a local
-> demonstration choice only — it does not cast a vote or move real money.
+> endorsed by, or deployed for any government, ward committee, gram sabha or
+> participatory-budgeting programme. Finalising records a local demonstration
+> choice only — it does not cast a vote in a ward sabha or move real money.
 
 ---
 
 ## The problem
 
-Participatory budgeting is real and growing: **New York City** puts ~$35M/year to
-a resident vote, **Paris** ~€100M, and **Porto Alegre** has run it for decades.
-Residents decide how to spend a fixed public fund — and it is genuinely hard to
-do well. The constraints interact (dependencies, incompatibilities, phased
-funding, a hard cap), and the trade-offs are value judgments, not arithmetic.
+India already puts local development planning in residents' hands. The **73rd and
+74th Constitutional Amendments (1992)** vest it in the **gram sabha** and the
+**ward committee** — direct citizen assemblies. **Kerala's People's Plan
+Campaign** has devolved a large share of plan funds to local bodies, decided in
+these assemblies, since the 1990s — one of the largest participatory-budgeting
+efforts anywhere. Cities like **Pune** and **Bengaluru** have run ward-level
+participatory budgeting too.
 
-An AI agent can compute a valid allocation in one shot — which is exactly why
-handing it the decision is the wrong move. Budget legitimacy comes from a person
-owning the priorities and the commitment. This project is a working answer to
-*how you let an agent assist a civic decision without letting it make one*, built
-on WebMCP. The usual patterns don't get there:
+Deciding a ward's works is genuinely hard: a fixed fund, constraints that
+interact (one work needs another first; two can't share the same road; the tree
+drive comes in phases), and trade-offs that are value judgments, not arithmetic.
+
+An AI assistant could obviously help a resident navigate that. But it's exactly
+where "the agent is capable, so let it decide" breaks — the legitimacy of a ward
+allocation comes from residents owning it. This project is a working answer to
+*how you let an agent assist that decision without letting it make one*, built on
+WebMCP. The usual patterns don't get there:
 
 - **A chatbot that writes you a budget** — nothing is validated, nothing is tied
   to what you see, you can't tell what changed.
@@ -35,8 +42,8 @@ on WebMCP. The usual patterns don't get there:
 
 ## What it does
 
-One resident allocates a hypothetical **$1,000,000** across exactly **eight**
-capital projects. A deterministic engine — not the agent — enforces every rule.
+One resident allocates a hypothetical **₹10,00,000** ward development fund across
+exactly **eight** local works. A deterministic engine — not the agent — enforces every rule.
 The resident sets priorities, funds and **locks** projects, and is the only actor
 who can accept or finalise. The agent can read the exact on-page state, simulate
 combinations, store a revision-bound proposal beside the resident's choices, and
@@ -91,10 +98,11 @@ follow the agent's reasoning in the UI in real time:
    directions and how each scores on what they've said they value; the resident
    adopts one with a visible "Adopt these priorities" control (or sets weights by
    hand) → budget revision advances.
-2. Agent reads that revision, simulates, proposes a valid $990k plan — the page
-   shows *why* it's valid.
-3. Resident funds and locks the personally-important playground → the page
-   explains the required drainage project; the proposal turns visibly stale.
+2. Agent reads that revision, simulates, proposes a valid ₹9,90,000 plan — the
+   page shows *why* it's valid.
+3. Resident funds and locks the riverside play area — their block, where the
+   ground floods every monsoon → the page explains the required storm-water
+   drain; the proposal turns visibly stale.
 4. Agent re-reads, re-proposes preserving the lock; a side-by-side comparison
    shows exactly what was gained, reduced, and given up.
 5. Agent requests review — focus moves to a region that states only the resident
@@ -137,17 +145,21 @@ documented narrow shapes.
 ## Why it matters  *(judging: Potential Impact)*
 
 This build is intentionally hypothetical, so the impact claim is about the
-**pattern**, not this app helping residents tomorrow:
+**audience and the pattern**, not this app helping residents tomorrow:
 
-- Civic-tech, clinical, legal, and financial-planning tools all face the same
-  bind — the agent is capable enough to decide, but shouldn't. "Agent models and
-  restructures options; the human owns priorities and commitment" is a
-  transferable design, and WebMCP is what makes it honest: the collaboration runs
-  on the *same visible, validated state*, and the boundary is enforced by the
-  tool surface.
-- It is a concrete answer to "how do you keep a human accountable for an
-  agent-assisted decision without pretending the agent is dumb, and without a
-  confirmation dialog the agent could route around."
+- **The audience is real and large.** Gram sabhas and ward committees across
+  India already decide local works; Kerala alone runs this at the scale of
+  millions of participants. As AI assistants reach these residents, "let the
+  agent draft the ward budget" will be the obvious, wrong shortcut — it hollows
+  out exactly the local ownership the 73rd/74th Amendments were meant to create.
+  This shows the alternative: the agent models every option, the resident owns
+  the call, and the software is built so it *can't* be otherwise.
+- **The pattern transfers.** Clinical, legal and financial-planning tools face
+  the same bind — the agent is capable enough to decide, but shouldn't. "Agent
+  models and restructures options; the human owns priorities and commitment" is a
+  reusable design, and WebMCP is what makes it honest: the collaboration runs on
+  the *same visible, validated state*, and the boundary is enforced by the tool
+  surface — not a confirmation dialog the agent could route around.
 
 ## What's novel  *(judging: Creativity & Ambition)*
 
@@ -168,8 +180,8 @@ This build is intentionally hypothetical, so the impact claim is about the
 ## What's next
 
 Public deployment, a recorded walkthrough, an optional print view of the final
-record, and adapting the dataset/rules to a real municipal participatory-budget
-cycle behind a clearly labelled pilot.
+record, and adapting the dataset/rules to a real ward participatory-budget cycle
+(a Kerala panchayat or a Pune prabhag) behind a clearly labelled pilot.
 
 ## Links
 

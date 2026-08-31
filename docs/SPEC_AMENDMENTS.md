@@ -39,11 +39,27 @@ It funds nothing. It is a human-only action with no WebMCP equivalent.
   `explain_tradeoffs({ compareWith: "previous_proposal" })`.
 - `activitySequence: number` — monotonic id source for activity events.
 
-## 4. Framing
+## 4. Framing and localisation (India-centric)
 
-Copy now situates the hypothetical scenario against real participatory-budgeting
-programmes (New York City, Paris, Porto Alegre). All data remains invented and
-every hypothetical-data disclosure from the spec is retained verbatim.
+The scenario is now an Indian **ward development fund** (gram sabha / ward
+committee under the 73rd & 74th Constitutional Amendments; Kerala's People's Plan
+as the real-world anchor). Concretely:
+
+- Currency is hypothetical **Indian rupees** with lakh/crore digit grouping
+  (`₹1,80,000`), via `src/domain/money.ts` (`inr`), used by `format.ts`,
+  `validation.ts` and `reducer.ts`.
+- **`FUND_LIMIT` is unchanged at `1_000_000`** — displayed as `₹10,00,000`
+  (₹10 lakh). Every project cost, the `P-06` phase amounts (₹60k/90k/1.2L),
+  dependency, incompatibility, benefit rating, funding rule and all validator
+  logic are **byte-identical** to `demo-budget-v1`; `DATASET_VERSION` is retained.
+- Project names, descriptions, localities and assumptions are re-skinned to
+  ward-works vocabulary (storm-water drain, bus shelters, play area, PHC
+  equipment, tree drive, study room, cycle track). Project IDs `P-01`…`P-08` and
+  the constraint graph are unchanged.
+- The mandatory hypothetical-data disclosure keeps its `"Hypothetical
+  demonstration:"` opening and its meaning; wording now also names ward
+  committees / gram sabhas / participatory-budgeting programmes as things this is
+  *not* connected to.
 
 ## 5. Test tooling
 

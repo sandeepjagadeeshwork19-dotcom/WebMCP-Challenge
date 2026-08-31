@@ -27,7 +27,7 @@ export const STRATEGY_PRESETS: readonly StrategyPreset[] = [
     id: "safety_access",
     label: "Safety & access first",
     blurb:
-      "Prioritise reduced injury risk and step-free, inclusive design. Funds the crossings, accessible stops, drainage, health equipment and library.",
+      "Prioritise reduced injury risk and step-free, inclusive design. Funds the road crossings, bus shelters, the storm-water drain, PHC equipment and the study room.",
     priorities: { safety: 3, accessibility: 3, climate: 1, communitySupport: 1 },
     allocations: [
       { projectId: "P-01", amount: 180_000 },
@@ -42,7 +42,7 @@ export const STRATEGY_PRESETS: readonly StrategyPreset[] = [
     id: "climate_resilience",
     label: "Climate resilience",
     blurb:
-      "Prioritise heat relief, drainage and lower-emission travel. Funds drainage, the protected bike link, the full tree programme, accessible stops and health equipment.",
+      "Prioritise heat relief, drainage and lower-emission travel. Funds the storm-water drain, the protected cycle track, the full tree drive, bus shelters and PHC equipment.",
     priorities: { safety: 2, accessibility: 1, climate: 3, communitySupport: 1 },
     allocations: [
       { projectId: "P-02", amount: 150_000 },
@@ -54,9 +54,9 @@ export const STRATEGY_PRESETS: readonly StrategyPreset[] = [
   },
   {
     id: "broad_coverage",
-    label: "Broad neighbourhood coverage",
+    label: "Broad ward coverage",
     blurb:
-      "Spread investment across the most neighbourhoods. Funds accessible stops, the playground and its required drainage, health equipment, the library and a starter tree phase.",
+      "Spread the fund across the most localities. Funds bus shelters, the play area and its required drain, PHC equipment, the study room and a starter tree phase.",
     priorities: { safety: 2, accessibility: 2, climate: 2, communitySupport: 3 },
     allocations: [
       { projectId: "P-02", amount: 150_000 },

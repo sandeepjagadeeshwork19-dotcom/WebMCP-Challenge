@@ -15,6 +15,7 @@
  * Revision freshness (step 8) is enforced by the store / handlers, not here.
  */
 
+import { inr } from "./money";
 import { FUND_LIMIT, getProject, isProjectId, PROJECT_IDS } from "./projects";
 import type {
   Allocation,
@@ -30,7 +31,7 @@ export interface ValidateOptions {
 const ALLOWED_ENTRY_KEYS = new Set(["projectId", "amount"]);
 
 function money(amount: number): string {
-  return `$${amount.toLocaleString("en-US")}`;
+  return inr(amount);
 }
 
 function label(id: ProjectId): string {
@@ -196,7 +197,7 @@ export function validateAllocation(
         projectIds: [a, b],
         message: `${label(a)} and ${label(
           b,
-        )} cannot both be funded; they are alternative designs for the same Willow Avenue curb space and construction window.`,
+        )} cannot both be funded; they are alternative designs for the same stretch of MG Road and the same work window.`,
       });
     }
   }
