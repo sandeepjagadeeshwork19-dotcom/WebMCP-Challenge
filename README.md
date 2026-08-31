@@ -88,14 +88,20 @@ editing, accepting, rejecting, finalising, or resetting.
 
 ## WebMCP compatibility notes
 
-- Uses `document.modelContext` (not `navigator.modelContext`).
+Verified against the WebMCP spec IDL and Chrome's imperative-API docs
+(<https://developer.chrome.com/docs/ai/webmcp/imperative-api>) on 2026-08-31.
+
+- Uses `document.modelContext` (`navigator.modelContext` is deprecated as of
+  Chrome 150).
 - Each tool is registered with `await document.modelContext.registerTool(tool, { signal })`
-  using a shared `AbortController`; aborting the signal unregisters every tool.
+  (which resolves to `undefined`) using a shared `AbortController`; aborting the
+  signal unregisters every tool.
 - A tool definition carries `name`, optional `title`, `description`, optional
   JSON Schema `inputSchema`, `async execute(input, { signal })`, and optional
   `annotations` (`readOnlyHint`).
-- Tool callbacks return plain JSON-serializable values. Rule violations are
-  returned as `valid: false` / `status: "invalid"`; transport problems are
+- Tool callbacks return plain JSON-serializable values (the spec serializes the
+  result via `JSON.stringify`; no MCP-style `content` wrapper). Rule violations
+  are returned as `valid: false` / `status: "invalid"`; transport problems are
   returned as `{ error: { code, message } }`.
 - No nonstandard confirmation API (`requestUserInput` / `requestUserInteraction`)
   is used or assumed. WebMCP does not provide a native, non-bypassable
