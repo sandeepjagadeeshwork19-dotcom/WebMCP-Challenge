@@ -34,8 +34,8 @@ export function AdoptedRecord() {
 
       <div className="record">
         <p className="record__by">
-          Adopted by the resident on {new Date(record.createdAt).toLocaleString()} &mdash; not by the
-          assistant. Record ID {record.recordId}.
+          Adopted by the resident on {new Date(record.createdAt).toLocaleString()}. Record ID{" "}
+          {record.recordId}.
         </p>
         <hr className="sheet__rule" />
 
@@ -94,14 +94,12 @@ export function AdoptedRecord() {
         </div>
 
         <p className="record__validation">
-          &#10003; Full validation summary recorded &mdash; every rule of the fund passed at
-          adoption.
+          &#10003; Every rule of the fund passed at adoption.
         </p>
 
         <p className="record__attribution">
-          Attribution: {record.actor}. The assistant modelled options, pencilled drafts and explained
-          trade-offs. The resident set the priorities, protected what mattered, reviewed,
-          acknowledged and adopted. The assistant was never able to.
+          Attribution: {record.actor}. The assistant modelled and drafted; the resident set
+          priorities, protected works, reviewed and adopted. The assistant had no tool to.
         </p>
 
         <details className="record-json">
@@ -137,11 +135,6 @@ export function AdoptedRecord() {
           </button>
         )}
       </div>
-
-      <p className="disclosure">
-        Hypothetical demonstration. This record is not a vote, not a government act, and is not
-        transmitted anywhere &mdash; it lives only in this browser tab.
-      </p>
     </section>
   );
 }

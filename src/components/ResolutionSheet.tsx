@@ -26,9 +26,8 @@ export function ResolutionSheet() {
   return (
     <section className="stage-block" aria-labelledby="draft-heading">
       <p className="compare__lead">
-        The assistant has pencilled a complete draft
-        {locked.size > 0 ? " that keeps your protected work" : ""}. Read it, then take it into
-        review &mdash; or send it back for changes.
+        A complete draft{locked.size > 0 ? ", keeping your protected work" : ""}. Take it into review,
+        or send it back for changes.
       </p>
 
       <div className="sheet">
@@ -85,10 +84,7 @@ export function ResolutionSheet() {
 
         <p className="sheet__validation" data-bad={!cv.valid || undefined}>
           {cv.valid ? (
-            <>
-              &#10003; Satisfies every rule of the fund &mdash; funding amounts, the P&#8209;03&rarr;P&#8209;04
-              dependency, incompatibilities, and the {formatMoney(FUND_LIMIT)} limit.
-            </>
+            <>&#10003; Satisfies every rule of the fund.</>
           ) : (
             <>&#10007; {cv.issues.map((x) => x.message).join(" ")}</>
           )}

@@ -28,8 +28,8 @@ function Body({ stage, state }: { stage: string; state: ReturnType<typeof useApp
         <>
           <p className="lede">Tell me what the ward should weigh, and I&rsquo;ll model the options.</p>
           <p className="muted">
-            I can suggest three directions, test any combination against the fund, and pencil a full
-            draft. I cannot resolve a line, accept, or adopt &mdash; those are yours.
+            I suggest directions, test combinations, and draft. Choosing, protecting and adopting are
+            yours &mdash; I have no tool for them.
           </p>
         </>
       );
@@ -38,8 +38,7 @@ function Body({ stage, state }: { stage: string; state: ReturnType<typeof useApp
       return (
         <>
           <p className="lede">
-            I modelled every valid combination. These three hold up against your priorities &mdash;
-            they differ in what they give up.
+            Three directions that hold up against your priorities. Each gives up something different:
           </p>
           {STRATEGY_PRESETS.map((preset) => {
             const v = describeStrategy(preset, state.residentPriorities);
@@ -52,8 +51,7 @@ function Body({ stage, state }: { stage: string; state: ReturnType<typeof useApp
           <div className="margin__note">
             <span className="kicker">The score won&rsquo;t decide this</span>
             <p className="muted">
-              Pick the direction that fits what you want for the ward. Protect any work first and
-              I&rsquo;ll build the rest around it.
+              Protect any work first and I&rsquo;ll build the rest around it.
             </p>
           </div>
         </>
@@ -64,11 +62,10 @@ function Body({ stage, state }: { stage: string; state: ReturnType<typeof useApp
       return (
         <>
           <p className="lede">
-            Draft ready. It keeps every work you protected and satisfies every rule of the fund.
+            Draft ready &mdash; keeps your protected work, clears every rule.
           </p>
           <p className="muted">
-            Take it into review when you&rsquo;re happy, or send it back and I&rsquo;ll redraft. I
-            cannot accept, revise, reject or adopt this &mdash; those are yours.
+            Take it into review, or send it back and I&rsquo;ll redraft.
           </p>
         </>
       );
@@ -127,10 +124,10 @@ function Body({ stage, state }: { stage: string; state: ReturnType<typeof useApp
     case "review":
       return (
         <>
-          <p className="lede">I have stepped back. This step is yours.</p>
+          <p className="lede">I&rsquo;ve stepped back. This step is yours.</p>
           <p className="muted">
-            I can still model alternatives or redraft if you send the draft back. I have no tool to
-            accept, reject or adopt &mdash; the page never registered one.
+            Send the draft back and I&rsquo;ll redraft. Accepting and adopting have no tool &mdash;
+            the page never registered one.
           </p>
           <hr className="margin__rule" />
           <p className="waiting">&mdash; waiting for the resident &mdash;</p>
@@ -141,12 +138,11 @@ function Body({ stage, state }: { stage: string; state: ReturnType<typeof useApp
       return (
         <>
           <p className="lede">
-            Recorded. I laid out the options and did the arithmetic; the resolution is the
-            resident&rsquo;s.
+            Recorded. I did the arithmetic; the resolution is the resident&rsquo;s.
           </p>
           <p className="muted">
-            Seven tools on this page &mdash; read state, list works, compare directions, simulate,
-            propose, explain trade-offs, request review. None of them adopts.
+            Seven tools on this page &mdash; read, list, compare, simulate, propose, explain, request
+            review. None of them adopts.
           </p>
         </>
       );

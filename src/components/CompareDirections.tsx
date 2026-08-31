@@ -24,8 +24,8 @@ export function CompareDirections() {
       </h2>
       <p className="compare__lead">
         {prioritiesSet
-          ? "The assistant modelled every valid combination and pencilled three that hold up against your priorities. Compare them, then choose one to begin the draft."
-          : "Set your priorities on the left first — then the assistant scores these three directions against what you value. You can also just pick the one that fits."}
+          ? "Three directions that hold up against your priorities. They differ in what they give up — choose one to start the draft."
+          : "Set your priorities on the left, or just pick the direction that fits. Each starts a draft you can change."}
       </p>
 
       <div className="compare__cards">

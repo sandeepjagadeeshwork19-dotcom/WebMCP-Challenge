@@ -42,16 +42,6 @@ export function ReviewMode() {
         <span>This step is the resident&rsquo;s alone</span>
       </div>
 
-      <div className="review-disclosure" role="note">
-        <Icon name="info" size={16} />
-        <p>
-          Hypothetical demonstration. This resolution, its works, costs and constraints are
-          invented. It is not connected to, endorsed by or affiliated with any government body, ward
-          committee or gram sabha. Adopting records a demonstration choice only &mdash; it does not
-          cast a vote or allocate real funds.
-        </p>
-      </div>
-
       <div className="review-summary">
         <p className="review-summary__lead">
           Fund {formatMoney(FUND_LIMIT)} to {works.length} works:{" "}
@@ -59,8 +49,7 @@ export function ReviewMode() {
           resolved, {formatMoney(FUND_LIMIT - total)} unallocated.
         </p>
         <p className="review-summary__validation">
-          &#10003; Fresh validation passed &mdash; funding, dependencies, incompatibilities and the{" "}
-          {formatMoney(FUND_LIMIT)} limit.
+          &#10003; Fresh validation passed &mdash; every rule of the fund.
         </p>
         {tradeoff && (tradeoff.added.length > 0 || tradeoff.removed.length > 0) && (
           <p className="review-summary__tradeoff">
@@ -75,8 +64,8 @@ export function ReviewMode() {
       <div className="authority-notice">
         <Icon name="user" size={18} />
         <p>
-          Only the resident can accept, revise, reject or adopt this resolution. The assistant has
-          no WebMCP tool for any of these steps &mdash; it cannot reach past this point.
+          Only the resident can accept, revise, reject or adopt. The page registered no WebMCP tool
+          for any of these &mdash; the assistant cannot reach past this point.
         </p>
       </div>
 

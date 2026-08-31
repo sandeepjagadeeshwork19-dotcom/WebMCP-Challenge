@@ -26,8 +26,7 @@ export function ScheduleOfWorks() {
         The eight candidate works
       </h2>
       <p className="schedule__note">
-        Each work is fully funded or not at all &mdash; except the tree drive, which comes in phases.
-        The deterministic engine, not the assistant, enforces every rule. Protect any work to keep it
+        Fully funded or not at all &mdash; except the phased tree drive. Protect any work to keep it
         in every draft.
       </p>
 

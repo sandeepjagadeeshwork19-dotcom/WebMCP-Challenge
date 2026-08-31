@@ -45,10 +45,8 @@ export function App() {
         <aside className="fallback-notice" role="note">
           <h2>Assistant tools unavailable</h2>
           <p>
-            Agent tools are unavailable in this browser; the full manual workspace still works. Every
-            priority, direction, protection, review, adoption and reset flow is functional. Choosing
-            a direction loads it as an application-attributed example draft. No project or constraint
-            information is hidden, and no tool registration is claimed.
+            This browser has no WebMCP runtime. The workspace still works manually &mdash; choosing a
+            direction loads it as an app-attributed draft.
           </p>
         </aside>
       )}
@@ -71,9 +69,8 @@ export function App() {
 
       <footer className="app-footer">
         <p>
-          Hypothetical demonstration only. No government data, no real funds, no vote. WebMCP does
-          not provide a native human-confirmation primitive; the human-only boundary is enforced by
-          this application registering no tool to accept, adopt or reset.
+          Hypothetical demonstration &mdash; no real funds, no vote. The human-only boundary is
+          enforced structurally: the page registers no tool to accept, adopt or reset.
         </p>
       </footer>
     </div>

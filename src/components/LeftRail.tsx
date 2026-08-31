@@ -19,7 +19,7 @@ export function LeftRail() {
           Your priorities
         </h2>
         <p className="rail-block__note">
-          What the ward should weigh. Each change advances the budget revision.
+          What the ward should weigh. Each change advances the revision.
         </p>
         {PRIORITY_KEYS.map((key: PriorityKey) => (
           <div
@@ -58,7 +58,7 @@ export function LeftRail() {
         </h2>
         {state.lockedAllocations.length === 0 ? (
           <p className="rail-block__note">
-            Nothing protected yet. Protect a work to keep it in every proposal the assistant builds.
+            Nothing protected yet. Protect a work to keep it in every draft.
           </p>
         ) : (
           state.lockedAllocations.map((lock) => (

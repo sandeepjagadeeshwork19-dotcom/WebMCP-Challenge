@@ -30,9 +30,8 @@ export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
         Decide which ward works should receive the &#8377;10 lakh
       </h1>
       <p className="masthead__standfirst">
-        A resident allocates a hypothetical &#8377;10,00,000 ward development fund across eight
-        candidate works. An assistant can model every option and pencil a full draft &mdash; but only
-        the resident chooses, reviews and adopts.
+        A hypothetical &#8377;10,00,000 ward fund across eight works. The assistant models options and
+        drafts &mdash; only the resident chooses, reviews and adopts.
       </p>
       <p className="disclosure" role="note">
         <strong>{lead}:</strong> {rest.join(": ")}

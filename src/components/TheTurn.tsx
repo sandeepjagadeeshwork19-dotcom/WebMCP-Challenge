@@ -51,8 +51,7 @@ export function TheTurn() {
         <Icon name="alert" size={18} />
         <p>
           This draft is stale. You protected {protectedNames || "a work"} &mdash; the assistant must
-          re-plan. Budget revision {stale.basedOnBudgetRevision} &rarr; {state.budgetRevision}. It
-          cannot enter review until it is redrafted around your protected work.
+          re-plan around it (budget rev {stale.basedOnBudgetRevision} &rarr; {state.budgetRevision}).
         </p>
       </div>
 
@@ -93,10 +92,9 @@ export function TheTurn() {
           </p>
         </div>
         <p className="cost-hero__note">
-          Your priorities scored this direction highly &mdash; but the {protectedNames || "protected"}{" "}
-          work is on your block. That is your call to make, not the score&rsquo;s. Ask the assistant
-          to redraft, and it will keep what you protected and rebalance the rest within{" "}
-          {formatMoney(FUND_LIMIT)}.
+          The score liked this direction &mdash; but protecting {protectedNames || "that work"} is
+          your call, not the score&rsquo;s. Ask the assistant to redraft: it keeps what you protected
+          and rebalances the rest within {formatMoney(FUND_LIMIT)}.
         </p>
       </div>
 
