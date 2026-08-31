@@ -26,6 +26,7 @@ export const P06_ALLOWED_AMOUNTS = [60_000, 90_000, 120_000] as const;
 const RAW_PROJECTS: readonly Project[] = [
   {
     id: "P-01",
+    shortName: "road crossings",
     name: "Safer road crossings & footpath",
     description:
       "Table-top crossings, footpath repair and brighter street lights at two busy MG Road junctions in the ward.",
@@ -44,6 +45,7 @@ const RAW_PROJECTS: readonly Project[] = [
   },
   {
     id: "P-02",
+    shortName: "bus shelters",
     name: "Accessible bus shelters",
     description:
       "Rebuild six stops on the market road with raised boarding, seating, shade and tactile paving.",
@@ -62,6 +64,7 @@ const RAW_PROJECTS: readonly Project[] = [
   },
   {
     id: "P-03",
+    shortName: "play area",
     name: "Riverside play area upgrade",
     description:
       "Replace broken equipment with inclusive play structures, shade and a safe soft surface at the riverside ground.",
@@ -80,6 +83,7 @@ const RAW_PROJECTS: readonly Project[] = [
   },
   {
     id: "P-04",
+    shortName: "storm-water drain",
     name: "Riverside storm-water drain",
     description:
       "Widen two stormwater drains and add a planted retention pit beside the riverside ground.",
@@ -98,6 +102,7 @@ const RAW_PROJECTS: readonly Project[] = [
   },
   {
     id: "P-05",
+    shortName: "PHC equipment",
     name: "Primary Health Centre equipment",
     description:
       "Equip two examination rooms and add an accessible diagnostic station at the ward Primary Health Centre.",
@@ -116,6 +121,7 @@ const RAW_PROJECTS: readonly Project[] = [
   },
   {
     id: "P-06",
+    shortName: "tree drive",
     name: "Tree plantation & shade drive",
     description:
       "Plant avenue trees with tree guards and two years of upkeep on heat-exposed lanes across the ward.",
@@ -135,6 +141,7 @@ const RAW_PROJECTS: readonly Project[] = [
   },
   {
     id: "P-07",
+    shortName: "study room",
     name: "Ward library study room",
     description:
       "Convert an unused room in the ward office into a quiet, accessible study room with furniture, power points and lighting.",
@@ -153,6 +160,7 @@ const RAW_PROJECTS: readonly Project[] = [
   },
   {
     id: "P-08",
+    shortName: "cycle track",
     name: "Protected cycle track",
     description:
       "Build a protected one-kilometre cycle track along MG Road linking the station and the market.",

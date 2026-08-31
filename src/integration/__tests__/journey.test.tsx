@@ -6,20 +6,21 @@ import { App } from "../../App";
 import { createHandlers } from "../../webmcp/handlers";
 import { isToolError } from "../../webmcp/errors";
 
-describe("primary journey — tool/UI parity through stale, re-propose, review, finalise, reset", () => {
-  it("completes the full loop with shared state", async () => {
+describe("primary journey — tool/UI parity through compare, the turn, review, adopt, reset", () => {
+  it("completes the full loop on one shared store", { timeout: 25_000 }, async () => {
     const user = userEvent.setup();
     const { store } = renderWithStore(<App />);
     const tools = createHandlers(store);
 
-    // 1. Resident sets safety + accessibility to most important (human, +2 revisions).
-    await user.click(screen.getAllByRole("radio", { name: /3 — Most important/ })[0]);
-    await user.click(screen.getAllByRole("radio", { name: /3 — Most important/ })[1]);
+    // 1. Resident sets safety + accessibility to most important (2 human revisions).
+    const safety = screen.getByRole("radiogroup", { name: /Safety priority/i });
+    const access = screen.getByRole("radiogroup", { name: /Accessibility priority/i });
+    await user.click(within(safety).getByRole("radio", { name: "Safety 3" }));
+    await user.click(within(access).getByRole("radio", { name: "Accessibility 3" }));
     expect(store.getState().budgetRevision).toBe(2);
 
     // 2. Agent reads the same revision the page shows.
-    const state1 = tools.get_budget_state({}) as { budgetRevision: number };
-    expect(state1.budgetRevision).toBe(2);
+    expect((tools.get_budget_state({}) as { budgetRevision: number }).budgetRevision).toBe(2);
 
     // 3. Agent simulates an over-budget combination -> valid:false, no mutation.
     const sim = tools.simulate_allocation({
@@ -36,7 +37,7 @@ describe("primary journey — tool/UI parity through stale, re-propose, review, 
     expect(sim.valid).toBe(false);
     expect(store.getState().proposalRevision).toBe(0);
 
-    // 4. Agent proposes a valid plan.
+    // 4. Agent proposes a valid plan; the draft resolution shows.
     tools.propose_allocation({
       budgetRevision: 2,
       allocations: [
@@ -48,21 +49,21 @@ describe("primary journey — tool/UI parity through stale, re-propose, review, 
       ],
       rationale: "Safety-and-access plan within budget.",
     });
-    expect(await screen.findByText(/Status: Valid/i)).toBeInTheDocument();
+    expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
 
-    // 5. Resident makes a value judgment: fund + lock the playground (needs P-04).
-    await user.click(screen.getByRole("button", { name: /Fund P-03/ }));
-    await user.click(screen.getByRole("button", { name: /Lock P-03/ }));
-    expect(screen.getByText(/Status: Stale/i)).toBeInTheDocument();
+    // 5. Value judgment: protect the riverside play area (P-03, not in the draft, needs P-04).
+    const row = screen.getByText("Riverside play area upgrade").closest(".schedule__row")!;
+    await user.click(within(row as HTMLElement).getByRole("button", { name: /Protect/i }));
+    expect(await screen.findByText(/This draft is stale/i)).toBeInTheDocument();
 
     // 6. Old revision now rejected by the review tool.
     const staleReview = tools.request_allocation_review({ budgetRevision: 2, proposalRevision: 1 });
     expect(isToolError(staleReview) && staleReview.error.code).toBe("stale_budget_revision");
 
-    // 7. Agent re-reads, re-proposes preserving the lock.
-    const state2 = tools.get_budget_state({}) as { budgetRevision: number };
+    // 7. Agent re-reads, re-proposes preserving the protected work.
+    const rev = (tools.get_budget_state({}) as { budgetRevision: number }).budgetRevision;
     tools.propose_allocation({
-      budgetRevision: state2.budgetRevision,
+      budgetRevision: rev,
       allocations: [
         { projectId: "P-02", amount: 150_000 },
         { projectId: "P-03", amount: 210_000 },
@@ -70,41 +71,36 @@ describe("primary journey — tool/UI parity through stale, re-propose, review, 
         { projectId: "P-05", amount: 160_000 },
         { projectId: "P-06", amount: 90_000 },
       ],
-      rationale: "Revised plan keeps the locked playground and required drainage.",
+      rationale: "Revised plan keeps the protected play area and its required drain.",
     });
     expect(store.getState().proposalStatus).toBe("valid");
 
-    // 8. Agent requests review; UI review region opens.
-    const opened = tools.request_allocation_review({
-      budgetRevision: state2.budgetRevision,
-      proposalRevision: 2,
-    }) as { reviewStatus: string };
+    // 8. Agent requests review; the human-only review region opens.
+    const opened = tools.request_allocation_review({ budgetRevision: rev, proposalRevision: 2 }) as {
+      reviewStatus: string;
+    };
     expect(opened.reviewStatus).toBe("open");
+    expect(
+      await screen.findByText(/Only the resident can accept, revise, reject or adopt/i),
+    ).toBeInTheDocument();
 
-    // 9. There is no finalisation tool.
+    // 9. There is no finalisation / adopt tool.
     expect(Object.keys(tools)).not.toContain("finalise_allocation");
+    expect(Object.keys(tools)).not.toContain("adopt_resolution");
 
-    // 10. Resident accepts, acknowledges disclosure, finalises via visible controls.
-    const review = screen.getByRole("region", { name: /Human review/i });
-    await user.click(within(review).getByRole("button", { name: /Accept proposal/i }));
-    await user.click(within(review).getByRole("checkbox"));
-    await user.click(within(review).getByRole("button", { name: /Finalise allocation/i }));
-
-    expect(screen.getByRole("region", { name: /Final allocation record/i })).toBeInTheDocument();
-    const finalState = tools.get_budget_state({}) as { finalised: boolean };
-    expect(finalState.finalised).toBe(true);
+    // 10. Resident accepts, acknowledges, adopts via visible controls only.
+    await user.click(screen.getByRole("button", { name: /Accept the draft/i }));
+    await user.click(screen.getByRole("checkbox"));
+    await user.click(screen.getByRole("button", { name: /Adopt resolution WD-12/i }));
+    expect(screen.getByText(/RESOLUTION WD-12 — ADOPTED/i)).toBeInTheDocument();
+    expect((tools.get_budget_state({}) as { finalised: boolean }).finalised).toBe(true);
 
     // 11. Reset restores the initial scenario.
-    await user.click(screen.getByRole("button", { name: /^Reset demo$/ }));
-    await user.click(screen.getByRole("button", { name: /Confirm reset/ }));
-    const resetState = tools.get_budget_state({}) as {
-      budgetRevision: number;
-      finalised: boolean;
-      proposal: unknown;
-    };
-    expect(resetState.budgetRevision).toBe(0);
-    expect(resetState.finalised).toBe(false);
-    expect(resetState.proposal).toBeNull();
+    await user.click(screen.getByRole("button", { name: /Reset — run the demonstration again/i }));
+    await user.click(screen.getByRole("button", { name: /Confirm reset/i }));
+    const after = tools.get_budget_state({}) as { budgetRevision: number; proposal: unknown };
+    expect(after.budgetRevision).toBe(0);
+    expect(after.proposal).toBeNull();
     expect(store.getState().demoResetVersion).toBe(1);
   });
 });

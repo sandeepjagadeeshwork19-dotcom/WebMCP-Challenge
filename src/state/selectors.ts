@@ -100,3 +100,86 @@ export function selectCanFinalise(state: AppState): boolean {
 export function selectRecentActivity(state: AppState, limit = 20) {
   return state.activityHistory.slice(-limit).reverse();
 }
+
+// --- Flow stage --------------------------------------------------------------
+
+export type Stage =
+  | "priorities"
+  | "compare"
+  | "draft"
+  | "replanning"
+  | "invalid"
+  | "review"
+  | "adopted";
+
+export function selectPrioritiesSet(state: AppState): boolean {
+  return (
+    Object.values(state.residentPriorities).some((w) => w > 0) || state.budgetRevision > 0
+  );
+}
+
+export function selectStage(state: AppState): Stage {
+  if (state.proposalStatus === "finalised") return "adopted";
+  if (
+    state.reviewStatus === "open" ||
+    state.proposalStatus === "under_review" ||
+    state.proposalStatus === "accepted" ||
+    state.proposalStatus === "rejected"
+  ) {
+    return "review";
+  }
+  if (state.proposalStatus === "stale") return "replanning";
+  if (state.proposalStatus === "invalid") return "invalid";
+  if (state.proposalStatus === "valid") return "draft";
+  return selectPrioritiesSet(state) ? "compare" : "priorities";
+}
+
+/** The allocation currently in focus: the proposal if there is one, else manual. */
+export function selectActiveAllocation(state: AppState): Allocation[] {
+  return state.agentProposal ? state.agentProposal.allocations : state.manualAllocations;
+}
+
+export function selectStatusLabel(state: AppState): string {
+  switch (selectStage(state)) {
+    case "adopted":
+      return "adopted";
+    case "review":
+      return state.proposalStatus === "accepted" ? "accepted" : "under review";
+    case "replanning":
+      return "draft stale";
+    case "invalid":
+      return "draft rejected by the engine";
+    case "draft":
+      return "valid";
+    default: {
+      if (state.manualAllocations.length === 0) return "incomplete";
+      return selectManualValidation(state).valid ? "valid" : "has issues";
+    }
+  }
+}
+
+export interface TurnIndicator {
+  actor: "you" | "assistant" | "done";
+  text: string;
+}
+
+export function selectTurn(state: AppState): TurnIndicator {
+  switch (selectStage(state)) {
+    case "priorities":
+      return { actor: "you", text: "Your move — set what you value, or ask the assistant to suggest directions" };
+    case "compare":
+      return { actor: "you", text: "Your move — compare the directions and choose one" };
+    case "draft":
+      return { actor: "you", text: "Your move — review the draft, or send it back for changes" };
+    case "replanning":
+      return { actor: "assistant", text: "Assistant's move — ask it to redraft in your assistant window" };
+    case "invalid":
+      return { actor: "assistant", text: "The engine rejected the draft — ask the assistant for a valid plan" };
+    case "review":
+      return state.proposalStatus === "accepted"
+        ? { actor: "you", text: "Your move — acknowledge the disclosure, then adopt" }
+        : { actor: "you", text: "Your move — accept, send back, or reject; then adopt" };
+    case "adopted":
+      return { actor: "done", text: "Adopted. The assistant modelled the options; you made the call." };
+  }
+}

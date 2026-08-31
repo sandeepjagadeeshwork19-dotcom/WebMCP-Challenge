@@ -326,48 +326,18 @@ export function reducer(state: AppState, action: AppAction): AppState {
       return fresh;
     }
 
-    case "agent/proposeAllocation": {
-      const hash = allocationHash(action.allocations);
-      const validation = validateAllocation(action.allocations, {
-        lockedAllocations: state.lockedAllocations,
-      });
-      const proposalRevision = state.proposalRevision + 1;
-      const constraintValidation: ConstraintValidation = {
-        valid: validation.valid,
-        issues: validation.issues,
-        validatedBudgetRevision: state.budgetRevision,
-        allocationHash: hash,
-      };
-      const next: AppState = {
-        ...state,
-        previousProposal: state.agentProposal,
-        agentProposal: {
-          proposalRevision,
-          allocations: [...action.allocations],
-          rationale: action.rationale,
-          basedOnBudgetRevision: state.budgetRevision,
-          allocationHash: hash,
-          previousProposalRevision: state.agentProposal?.proposalRevision ?? null,
-          createdAt: timestamp,
-        },
-        proposalRevision,
-        proposalStatus: validation.valid ? "valid" : "invalid",
-        constraintValidation,
-        reviewStatus: "none",
-      };
-      Object.assign(
-        next,
-        appendActivity(
-          next,
-          "agent",
-          "propose_allocation",
-          `Proposed allocation rev ${proposalRevision}: ${
-            validation.valid ? "valid" : "invalid"
-          }, ${money(committedTotal(action.allocations))} committed`,
-          timestamp,
-        ),
+    case "agent/proposeAllocation":
+      return storeProposal(state, action.allocations, action.rationale, "agent", timestamp);
+
+    case "app/loadDirectionDraft": {
+      const preset = getStrategy(action.strategyId);
+      return storeProposal(
+        state,
+        preset.allocations,
+        `Application-loaded starting draft — the "${preset.label}" direction.`,
+        "system",
+        timestamp,
       );
-      return next;
     }
 
     case "agent/requestReview": {
@@ -398,6 +368,57 @@ export function reducer(state: AppState, action: AppAction): AppState {
       return state;
     }
   }
+}
+
+/** Store an allocation as the active proposal (agent- or application-attributed). */
+function storeProposal(
+  state: AppState,
+  allocations: Allocation[],
+  rationale: string,
+  actor: "agent" | "system",
+  timestamp: string,
+): AppState {
+  const hash = allocationHash(allocations);
+  const validation = validateAllocation(allocations, {
+    lockedAllocations: state.lockedAllocations,
+  });
+  const proposalRevision = state.proposalRevision + 1;
+  const constraintValidation: ConstraintValidation = {
+    valid: validation.valid,
+    issues: validation.issues,
+    validatedBudgetRevision: state.budgetRevision,
+    allocationHash: hash,
+  };
+  const next: AppState = {
+    ...state,
+    previousProposal: state.agentProposal,
+    agentProposal: {
+      proposalRevision,
+      allocations: [...allocations],
+      rationale,
+      basedOnBudgetRevision: state.budgetRevision,
+      allocationHash: hash,
+      previousProposalRevision: state.agentProposal?.proposalRevision ?? null,
+      createdAt: timestamp,
+    },
+    proposalRevision,
+    proposalStatus: validation.valid ? "valid" : "invalid",
+    constraintValidation,
+    reviewStatus: "none",
+  };
+  Object.assign(
+    next,
+    appendActivity(
+      next,
+      actor,
+      actor === "agent" ? "propose_allocation" : "load_direction_draft",
+      `${actor === "agent" ? "Proposed" : "Loaded"} allocation rev ${proposalRevision}: ${
+        validation.valid ? "valid" : "invalid"
+      }, ${money(committedTotal(allocations))} committed`,
+      timestamp,
+    ),
+  );
+  return next;
 }
 
 /** Reasons finalisation is currently blocked, in a stable order. */

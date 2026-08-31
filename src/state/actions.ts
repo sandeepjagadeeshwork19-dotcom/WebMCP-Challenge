@@ -33,8 +33,22 @@ export type AgentAction =
     }
   | { type: "agent/requestReview"; timestamp?: string };
 
-export type AppAction = HumanAction | AgentAction;
+/**
+ * Application-owned actions. `app/loadDirectionDraft` places one of the canonical
+ * direction plans as a starting draft — used when the resident chooses a
+ * direction, and as the WebMCP-absent fallback for "load an example proposal".
+ * It is attributed to the application (`system`), never to the agent.
+ */
+export type SystemAction = {
+  type: "app/loadDirectionDraft";
+  strategyId: StrategyId;
+  timestamp?: string;
+};
 
-export function actorForAction(action: AppAction): "human" | "agent" {
-  return action.type.startsWith("agent/") ? "agent" : "human";
+export type AppAction = HumanAction | AgentAction | SystemAction;
+
+export function actorForAction(action: AppAction): "human" | "agent" | "system" {
+  if (action.type.startsWith("agent/")) return "agent";
+  if (action.type.startsWith("app/")) return "system";
+  return "human";
 }

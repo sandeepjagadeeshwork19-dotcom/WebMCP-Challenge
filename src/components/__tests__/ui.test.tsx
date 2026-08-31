@@ -3,108 +3,88 @@ import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithStore } from "../../test/renderWithStore";
 import { App } from "../../App";
-import { BudgetSummary } from "../BudgetSummary";
-import { PriorityControls } from "../PriorityControls";
-import { ProjectList } from "../ProjectList";
-import { CurrentAllocation } from "../CurrentAllocation";
 
-describe("disclosure and fallback", () => {
-  it("shows the mandatory hypothetical-data disclosure and the unsupported-WebMCP notice", () => {
+describe("shell", () => {
+  it("shows the mandatory hypothetical-data disclosure and the WebMCP-absent fallback", () => {
     renderWithStore(<App />);
     expect(screen.getAllByText(/Hypothetical demonstration:/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Assistant tools unavailable/i).length).toBeGreaterThan(0);
     expect(
-      screen.getAllByText(/Agent tools are unavailable in this browser/i).length,
-    ).toBeGreaterThan(0);
-  });
-});
-
-describe("priority controls", () => {
-  it("a resident change advances the visible budget revision", async () => {
-    const user = userEvent.setup();
-    renderWithStore(
-      <>
-        <BudgetSummary />
-        <PriorityControls />
-      </>,
-    );
-    expect(screen.getByText("Budget revision").nextSibling).toHaveTextContent("0");
-    await user.click(screen.getAllByRole("radio", { name: /3 — Most important/ })[0]);
-    expect(screen.getByText("Budget revision").nextSibling).toHaveTextContent("1");
-  });
-});
-
-describe("manual allocation", () => {
-  it("funding projects updates totals and reports incompatibility", async () => {
-    const user = userEvent.setup();
-    renderWithStore(
-      <>
-        <BudgetSummary />
-        <ProjectList />
-        <CurrentAllocation />
-      </>,
-    );
-
-    await user.click(screen.getByRole("button", { name: /Fund P-01/ }));
-    await user.click(screen.getByRole("button", { name: /Fund P-08/ }));
-
-    expect(screen.getByText("Committed").nextSibling).toHaveTextContent("₹4,40,000");
-    const allocation = screen.getByRole("region", { name: /Current allocation/i });
-    expect(
-      within(allocation).getByText(/cannot both be funded/i),
+      screen.getByText(/Decide which ward works should receive the ₹10 lakh/i),
     ).toBeInTheDocument();
   });
-
-  it("locked projects cannot be removed from the UI", async () => {
-    const user = userEvent.setup();
-    renderWithStore(<ProjectList />);
-    await user.click(screen.getByRole("button", { name: /Fund P-05/ }));
-    await user.click(screen.getByRole("button", { name: /Lock P-05/ }));
-    expect(screen.getByRole("button", { name: /Remove P-05/ })).toBeDisabled();
-  });
 });
 
-describe("human-only review and finalisation", () => {
-  it("finalise stays disabled until every precondition holds", async () => {
+describe("priorities + compare", () => {
+  it("setting a priority advances the budget revision and shows three directions", async () => {
     const user = userEvent.setup();
     const { store } = renderWithStore(<App />);
 
+    expect(screen.getByText(/proposal rev 0/i)).toHaveTextContent(/incomplete/i);
+
+    const safety = screen.getByRole("radiogroup", { name: /Safety priority/i });
+    await user.click(within(safety).getByRole("radio", { name: "Safety 3" }));
+
+    expect(store.getState().budgetRevision).toBe(1);
+    const cards = screen.getAllByRole("article");
+    expect(cards.length).toBeGreaterThanOrEqual(3);
+    expect(within(cards[0]).getByRole("heading", { name: /Safety & access first/i })).toBeInTheDocument();
+  });
+
+  it("choosing a direction loads a draft resolution", async () => {
+    const user = userEvent.setup();
+    renderWithStore(<App />);
+    await user.click(screen.getByRole("button", { name: /Choose DIRECTION A/i }));
+    expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Review this resolution/i })).toBeInTheDocument();
+  });
+});
+
+describe("the turn — protecting a work stales the draft", () => {
+  it("protecting the play area moves to the stale/re-plan state", async () => {
+    const user = userEvent.setup();
+    const { store } = renderWithStore(<App />);
+    await user.click(screen.getByRole("button", { name: /Choose DIRECTION A/i }));
+    // P-03 is not in Direction A; protecting it stales the draft
+    const scheduleRow = screen.getByText("Riverside play area upgrade").closest(".schedule__row")!;
+    await user.click(within(scheduleRow as HTMLElement).getByRole("button", { name: /Protect/i }));
+
+    expect(store.getState().proposalStatus).toBe("stale");
+    expect(await screen.findByText(/This draft is stale/i)).toBeInTheDocument();
+    expect(screen.getByText(/STALE/)).toBeInTheDocument();
+  });
+});
+
+describe("review is human-only and gated", () => {
+  it("Adopt stays disabled until the resident accepts and acknowledges", async () => {
+    const user = userEvent.setup();
+    const { store } = renderWithStore(<App />);
+    store.dispatch({ type: "human/setPriority", key: "safety", weight: 3 });
     store.dispatch({
       type: "agent/proposeAllocation",
       allocations: [
         { projectId: "P-02", amount: 150_000 },
         { projectId: "P-05", amount: 160_000 },
       ],
-      rationale: "Balanced accessibility plan.",
+      rationale: "Two accessible-transport and health investments.",
     });
+    await user.click(await screen.findByRole("button", { name: /Review this resolution/i }));
 
-    const review = screen.getByRole("region", { name: /Human review/i });
-    const finaliseButton = within(review).getByRole("button", { name: /Finalise allocation/i });
-    expect(finaliseButton).toBeDisabled();
+    expect(
+      screen.getByText(/Only the resident can accept, revise, reject or adopt/i),
+    ).toBeInTheDocument();
 
-    await user.click(within(review).getByRole("button", { name: /Open review/i }));
-    await user.click(within(review).getByRole("button", { name: /Accept proposal/i }));
-    expect(finaliseButton).toBeDisabled();
+    const adopt = screen.getByRole("button", { name: /Adopt resolution WD-12/i });
+    expect(adopt).toBeDisabled();
 
-    await user.click(within(review).getByRole("checkbox"));
-    expect(finaliseButton).toBeEnabled();
+    await user.click(screen.getByRole("button", { name: /Accept the draft/i }));
+    expect(adopt).toBeDisabled();
 
-    await user.click(finaliseButton);
-    const record = screen.getByRole("region", { name: /Final allocation record/i });
-    expect(record).toBeInTheDocument();
-    expect(within(record).getAllByText(/human_finalisation/).length).toBeGreaterThan(0);
-  });
+    await user.click(screen.getByRole("checkbox"));
+    expect(adopt).toBeEnabled();
 
-  it("a human edit after a proposal marks it stale in the UI", async () => {
-    const user = userEvent.setup();
-    const { store } = renderWithStore(<App />);
-    store.dispatch({
-      type: "agent/proposeAllocation",
-      allocations: [{ projectId: "P-02", amount: 150_000 }],
-      rationale: "Single accessible-transport investment.",
-    });
-    expect(await screen.findByText(/Status: Valid/i)).toBeInTheDocument();
-
-    await user.click(screen.getAllByRole("radio", { name: /2 — Important/ })[0]);
-    expect(await screen.findByText(/Status: Stale/i)).toBeInTheDocument();
+    await user.click(adopt);
+    expect(screen.getByText(/RESOLUTION WD-12 — ADOPTED/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/human_finalisation/).length).toBeGreaterThan(0);
   });
 });

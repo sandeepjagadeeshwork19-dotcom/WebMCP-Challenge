@@ -33,6 +33,8 @@ export type FundingRule =
 export interface Project {
   id: ProjectId;
   name: string;
+  /** Two- or three-word label for dense lists (e.g. direction cards). */
+  shortName: string;
   description: string;
   neighbourhood: string;
   category: string;
