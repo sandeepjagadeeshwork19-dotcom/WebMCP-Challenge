@@ -13,15 +13,17 @@ enforced by *which WebMCP tools exist*, not by a popup.
 
 ## The problem
 
-Participatory budgeting — residents deciding how to spend a fixed public fund —
-is real, growing, and genuinely hard for a person to do well. The constraints
-interact (dependencies, incompatibilities, phased funding, a hard cap), and the
-trade-offs are value judgments, not arithmetic.
+Participatory budgeting is real and growing: **New York City** puts ~$35M/year to
+a resident vote, **Paris** ~€100M, and **Porto Alegre** has run it for decades.
+Residents decide how to spend a fixed public fund — and it is genuinely hard to
+do well. The constraints interact (dependencies, incompatibilities, phased
+funding, a hard cap), and the trade-offs are value judgments, not arithmetic.
 
-An AI agent can compute a valid allocation in one shot. That is exactly why
-handing it the decision is the wrong move: budget legitimacy comes from a person
-owning the priorities and the commitment. But the usual "AI helps with a
-decision" patterns are all unsatisfying:
+An AI agent can compute a valid allocation in one shot — which is exactly why
+handing it the decision is the wrong move. Budget legitimacy comes from a person
+owning the priorities and the commitment. This project is a working answer to
+*how you let an agent assist a civic decision without letting it make one*, built
+on WebMCP. The usual patterns don't get there:
 
 - **A chatbot that writes you a budget** — nothing is validated, nothing is tied
   to what you see, you can't tell what changed.
@@ -47,13 +49,15 @@ record with full attribution — then a one-click reset.
 
 ## How WebMCP is used  *(judging: WebMCP Leverage)*
 
-Six narrow tools are registered on `document.modelContext`, each doing something
+Seven narrow tools are registered on `document.modelContext` (five read-only, two
+state-changing, none that commits a decision), each doing something
 the DOM cannot do cleanly:
 
 | Tool | Mode | Why it's a tool, not a click |
 | --- | --- | --- |
 | `get_budget_state` | read | Returns canonical revisions, amounts, statuses — no scraping formatted text |
 | `list_projects` | read | Structured benefits and constraint relationships, layout-independent |
+| `list_strategy_options` | read | Three valid budget directions, each scored against the resident's *current* priorities — the agent's opening analytical move |
 | `simulate_allocation` | read | Calls the real validator, returns *every* constraint issue at once — no trial clicks |
 | `propose_allocation` | write | One atomic op binds a proposal to a budget revision, validates it, preserves agent attribution |
 | `explain_tradeoffs` | read | Canonical added/removed/funding/benefit deltas + opportunity costs — not "subtract the displayed numbers" |
@@ -83,7 +87,10 @@ Key properties that make this non-trivial:
 Every fact the agent returns is the same fact on the page, so a resident can
 follow the agent's reasoning in the UI in real time:
 
-1. Resident marks safety + accessibility "most important" → budget revision advances.
+1. Agent calls `list_strategy_options`, walks the resident through three valid
+   directions and how each scores on what they've said they value; the resident
+   adopts one with a visible "Adopt these priorities" control (or sets weights by
+   hand) → budget revision advances.
 2. Agent reads that revision, simulates, proposes a valid $990k plan — the page
    shows *why* it's valid.
 3. Resident funds and locks the personally-important playground → the page
@@ -116,14 +123,14 @@ registered" claim.
 - **`src/components/`** — an accessible workspace: semantic headings, fieldsets,
   tables, full keyboard operation, a polite live region, status conveyed by icon
   + text (never colour alone).
-- **Tests:** 56 Vitest / Testing Library tests — validator constraints and
-  boundaries, revision/staleness/attribution, the six-tool contract and absence
+- **Tests:** 62 Vitest / Testing Library tests — validator constraints and
+  boundaries, revision/staleness/attribution, the tool contract and absence
   of a finalisation tool, handler behaviour, registration in supported and
   unsupported environments, key UI behaviour, and the full primary journey end to
   end. `pnpm test`, `pnpm lint`, and `pnpm build` all pass from a clean install.
 
 WebMCP registration and handler execution were exercised in a real Chromium
-browser (see `docs/CHATGPT_RUNTIME_CHECKLIST.md`): exactly six tools register with
+browser (see `docs/CHATGPT_RUNTIME_CHECKLIST.md`): exactly the seven tools register with
 the shared abort signal and correct `readOnlyHint`, and handlers return the
 documented narrow shapes.
 

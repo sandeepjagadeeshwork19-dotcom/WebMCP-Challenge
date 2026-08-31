@@ -47,7 +47,7 @@ src/
     store.tsx       createStore + React bindings (useSyncExternalStore)
     selectors.ts    Derived views shared by UI and read tools
   webmcp/      WebMCP adapter
-    contracts.ts    The six tool definitions + JSON Schemas
+    contracts.ts    The seven tool definitions + JSON Schemas
     handlers.ts     Handlers that read/write the *same* store as the UI
     register.ts     document.modelContext.registerTool(tool, { signal })
     useWebMcp.ts    Feature-detect + register for the app lifetime
@@ -71,20 +71,24 @@ src/
 
 ## WebMCP tools
 
-Registered on `document.modelContext` per the 26 August 2026 draft
-(<https://webmachinelearning.github.io/webmcp/>). Exactly six:
+Registered on `document.modelContext`
+(<https://webmachinelearning.github.io/webmcp/>). Seven tools — **five read-only,
+two state-changing, none that commits a decision**:
 
 | Tool | Mode | Purpose |
 | --- | --- | --- |
 | `get_budget_state` | read-only | Canonical snapshot: priorities, locks, allocation, proposal summary, revisions |
 | `list_projects` | read-only | The eight projects with costs, benefits, funding rules, dependencies |
+| `list_strategy_options` | read-only | Three valid budget directions, scored against the resident's current priorities |
 | `simulate_allocation` | read-only | Validate a candidate against the current revision without mutation |
 | `propose_allocation` | state-changing | Store an agent-attributed proposal after deterministic validation |
 | `explain_tradeoffs` | read-only | Canonical added/removed/funding/benefit deltas + opportunity costs |
 | `request_allocation_review` | state-changing | Open the visible resident review; does **not** accept or finalise |
 
 There is intentionally **no tool** for setting priorities, locking, manual
-editing, accepting, rejecting, finalising, or resetting.
+editing, accepting, rejecting, finalising, or resetting. `PRODUCT_SPEC.md`
+specified six tools; the read-only `list_strategy_options` was added in Phase 3 —
+see [`docs/SPEC_AMENDMENTS.md`](docs/SPEC_AMENDMENTS.md).
 
 ## WebMCP compatibility notes
 
