@@ -114,8 +114,9 @@ export function compareTradeoffs(
   const opportunityCosts: string[] = [];
   for (const id of removed) {
     const project = getProject(id);
+    const reach = project.peopleServed.replace(/^About /, "about ");
     opportunityCosts.push(
-      `Dropping ${id} (${project.name}) gives up its ${project.peopleServed.toLowerCase()} and its ${describeStrengths(
+      `Dropping ${id} (${project.name}) gives up its reach of ${reach}, along with ${describeStrengths(
         id,
       )}.`,
     );
@@ -155,5 +156,12 @@ function describeStrengths(id: ProjectId): string {
     if (project.benefits[key] === "High") strengths.push(`high ${key} benefit`);
   }
   if (project.communitySupport === "High") strengths.push("high community support");
-  return strengths.length > 0 ? strengths.join(", ") : "modest illustrative benefits";
+  if (strengths.length === 0) return "its modest illustrative benefits";
+  return `its ${joinWithAnd(strengths)}`;
+}
+
+function joinWithAnd(parts: string[]): string {
+  if (parts.length <= 1) return parts.join("");
+  if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
+  return `${parts.slice(0, -1).join(", ")}, and ${parts[parts.length - 1]}`;
 }
