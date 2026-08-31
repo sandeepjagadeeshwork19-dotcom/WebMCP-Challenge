@@ -1,136 +1,137 @@
 # Demo video script — Neighbors Decide (target 2:50, hard cap 3:00)
 
-Record in a WebMCP-capable agent browser (ChatGPT browser or Chrome with WebMCP
-enabled) at the deployed URL. 1280×720+, audio on. Do one dry run of the whole
-path first so `Reset demo` leaves you at a clean start.
+Record in a WebMCP-capable agent browser (ChatGPT browser, or Chrome with WebMCP
+enabled) at the deployed URL, 1280×720+, audio on. Do a full dry run first so
+`Reset` leaves a clean start. Narration is ~155 wpm — trim, don't rush.
 
-Narration is written to ~155 wpm. Trim, don't rush.
+The look: a black-and-vermilion **ward gazette** — "NEIGHBORS DECIDE", docket
+"NO. WD-12", a state line reading *Priorities set → Comparing directions → Draft
+ready → Reviewed → Adopted*, and a right-hand **assistant's margin**.
 
 ---
 
 ## 0:00 – 0:18 · Hook
 
-**Screen:** the loaded page — teal header, disclosure visible, eight project
-cards below.
+**Screen:** the loaded page — masthead, the disclosure line, the "7 assistant
+tools connected" indicator, three direction cards below.
 
 **Say:**
-> In India, the gram sabha and the ward committee decide how local development
-> money is spent — that's the 73rd and 74th Amendments, and it's how Kerala's
-> People's Plan has run for decades. This is a hypothetical version of one ward's
-> cycle — one resident, a ten-lakh-rupee fund, eight works — and an AI assistant
-> that can model every option but is not allowed to make the call.
+> In India, a ward's development money is meant to be decided *in the ward* —
+> by residents, not an officer. Here it's a hypothetical ₹10 lakh and eight
+> works that can't all be funded. An assistant can model every option and pencil
+> a full draft — but it is not allowed to make the call.
 
-## 0:18 – 0:35 · The tools register
+## 0:18 – 0:33 · The tools, and what's missing
 
-**Screen:** point at the status pill ("Agent tools registered"), then briefly at
-the agent panel / devtools tools list showing the seven tool names.
-
-**Say:**
-> The page exposes seven WebMCP tools on `document.modelContext`. Five are
-> read-only. Two change state. **None of them commits the budget** — there is no
-> finalise tool, on purpose.
-
-## 0:35 – 1:00 · Agent lays out directions
-
-**Type to the agent:**
-`Call list_strategy_options and walk me through the three directions.`
-
-**Screen:** agent's reply; then click **"Adopt these priorities"** on *Safety &
-access first*. Budget revision ticks to 1.
+**Screen:** point to "7 assistant tools connected — read state, list works,
+compare, simulate, propose, explain, request review." Then the command bar.
 
 **Say:**
-> It calls `list_strategy_options` and gets three valid directions, each scored
-> against what I've said I care about. I pick safety and access. That's a human
-> action — the budget revision moves.
+> Seven WebMCP tools on the page. Five read-only, two that change state — and
+> **none that adopts the budget**. There is no finalise tool, on purpose.
 
-## 1:00 – 1:20 · Agent proposes
+## 0:33 – 0:55 · Priorities, then three modelled directions
 
-**Type to the agent:**
-`Simulate a plan you'd recommend, then propose it.`
+**Screen:** in the left rail, click **Safety 3** and **Accessibility 3**. The
+budget revision ticks; the state line moves to *Comparing directions*. The three
+cards re-score.
 
-**Screen:** the Agent Proposal panel fills in — revision 1, **Status: Valid**,
-rationale, six line items, ₹9,90,000 · ₹10,000 remaining, green "satisfies every
-rule".
+**Type to the assistant:** `Call list_strategy_options and walk me through the three directions.`
 
 **Say:**
-> It simulates against the live revision, then stores a proposal — bound to that
-> revision, validated by the same engine the page uses. The panel shows exactly
-> why it holds.
+> I tell the page what I value. The assistant scores three valid directions
+> against that — and says plainly, the score won't decide this. Safety-and-access
+> fits best, so I take it.
 
-## 1:20 – 1:55 · The money shot: a human change stales it
+**Screen:** click **Choose DIRECTION A**. A **DRAFT RESOLUTION — WD-12** appears,
+marked *valid*.
 
-**Screen:** scroll to projects. Click **Fund P-03** (riverside play area) → an inline
-message appears: *requires P-04 at full funding*. Click **Lock P-03**. Cut to the
-Agent Proposal panel — now an **amber STALE banner**: "revision 1 → 3 … must
-re-read and propose again".
+## 0:55 – 1:35 · The turn — a human choice stales the plan
 
-**Say:**
-> Now the value judgment. I fund the play area and lock it. The engine tells me
-> it needs the storm-water drain first — the ground floods every monsoon — and it
-> won't fix that for me. The agent's plan? Instantly stale. The budget moved
-> underneath it.
-
-**Type to the agent:**
-`I locked the play area. Re-read the state and propose a revised plan.`
-
-**Screen:** new proposal — revision 2, Valid, keeps P-03 locked, includes P-04,
-trims the tree phase. Scroll to the trade-off block.
+**Screen:** scroll to **The eight candidate works**. On *Riverside play area
+upgrade*, click **Protect**.
 
 **Say:**
-> It re-reads, and re-proposes around my lock — keeps the play area and its
-> drain, trims the tree drive, drops the road crossings. The comparison spells
-> out exactly what changed and what it cost.
+> Now the judgement the assistant can't make. The riverside play area is on my
+> block, and it floods every monsoon. It isn't in the "efficient" plan — I
+> protect it anyway.
 
-## 1:55 – 2:12 · The engine says no
-
-**Type to the agent:**
-`Simulate funding both P-01 and P-08.`
-
-**Screen:** agent's result showing `valid: false` with the incompatibility issue;
-nothing on the page changes.
+**Screen:** the command bar shows a red **BUDGET REV 1 → N** chip; the state line
+reads **Re-planning — draft stale**; a **STALE** stamp sits over the superseded
+draft; the hero reads *PROTECTING PLAY AREA CHANGES THE PLAN — must now include
+the play area — over the fund by ₹1,70,000 — the assistant must drop about
+₹1,70,000 of other works.*
 
 **Say:**
-> Ask for an impossible plan — the road crossings and the cycle track share the same
-> road — and the engine refuses with the same structured reason the UI would
-> show. No trial-and-error clicking.
+> The plan the assistant built is now stale. Protecting the play area pushes it
+> over the fund — something has to give. That's the assistant's problem to solve,
+> not mine.
 
-## 2:12 – 2:40 · Human-only review and finalise
+**Type to the assistant:** `I protected the play area. Redraft around it.`
 
-**Type to the agent:**
-`Request review of your proposal.`
+**Screen:** a fresh **DRAFT RESOLUTION** appears — *valid*, proposal rev 2, the
+play area line carrying a **PROTECTED** badge, and a *"compared with where you
+started"* strip: `+ play area · − road crossings`.
 
-**Screen:** focus jumps to the Human Review region. Point at the text "Only the
-resident can accept, modify, reject or finalise." Click **Accept proposal**, tick
-the **hypothetical-data acknowledgement**, then **Finalise allocation**.
+## 1:35 – 1:52 · The engine says no
 
-**Say:**
-> The agent can request review — it can't grant it. Focus moves to the
-> resident's controls. I accept, I acknowledge this is hypothetical, and I
-> finalise. The agent never touches this step.
+**Type to the assistant:** `Propose funding both P-01 and P-08.`
 
-## 2:40 – 2:55 · The record, and the point
-
-**Screen:** the Final Allocation Record — revisions, validation, `human_finalisation`
-attribution, Copy button. Then click **Reset demo → Confirm**.
+**Screen:** the page shows a **Draft rejected** state — *"P-01 and P-08 cannot
+both be funded; alternative designs for the same stretch of MG Road."*
 
 **Say:**
-> A transparent local record — every revision, the validation, and a human
-> signature. The agent modelled the options. The resident owned the decision.
-> That's the pattern, and WebMCP is what makes it honest.
+> Ask for an impossible plan and the deterministic engine refuses it on the
+> page, with the reason — the same check the assistant sees.
+
+**Type to the assistant:** `Re-propose the valid redraft.`
+
+## 1:52 – 2:35 · Review — the resident's alone
+
+**Screen:** click **Review this resolution**. A black **REVIEW — RESOLUTION
+WD-12 · this step is the resident's alone** band; the disclosure repeated; then
+the notice: *"Only the resident can accept, revise, reject or adopt this
+resolution. The assistant has no WebMCP tool for any of these steps — it cannot
+reach past this point."* In the margin: *"I have stepped back. This step is
+yours."*
+
+**Say:**
+> The assistant can request review — it can't grant it, accept it, or adopt it.
+> Focus moves to the resident's controls. I accept the draft, I acknowledge this
+> is a demonstration, and only then can I adopt.
+
+**Screen:** click **Accept the draft** (Adopt still disabled) → tick the
+acknowledgement checkbox (Adopt enables) → click **Adopt resolution WD-12**.
+
+## 2:35 – 2:55 · The record, and the point
+
+**Screen:** **RESOLUTION WD-12 — ADOPTED**, green band, *"local record · not
+transmitted"*, *"Adopted by the resident … not by the assistant,"* the record ID,
+the works, and the attribution: *human_finalisation — the assistant modelled
+options, pencilled drafts and explained trade-offs; the resident set the
+priorities, protected what mattered, reviewed, acknowledged and adopted. The
+assistant was never able to.*
+
+**Say:**
+> A transparent local record — the assistant's arithmetic, the resident's
+> decision. That's the pattern, and WebMCP is what makes it honest: one board,
+> both parties reading it, and a boundary the agent can't route around.
+
+**Screen:** click **Reset — run the demonstration again**.
 
 ---
 
-## Shot list checklist
+## Shot-list checklist
 
-- [ ] Status pill "Agent tools registered" legible
-- [ ] Seven tool names visible once
-- [ ] "Adopt these priorities" → budget revision 0→1
-- [ ] Proposal panel: Status **Valid**, ₹9,90,000
-- [ ] Play-area → storm-water-drain dependency message on the card
-- [ ] **Amber STALE banner** clearly on screen ≥ 2s  ← the key frame
-- [ ] Revised proposal keeps P-03; trade-off block visible
-- [ ] `valid: false` incompatibility result, page unchanged
-- [ ] Human Review "only the resident can…" line
-- [ ] Finalise disabled → enabled after the checkbox
-- [ ] Final record with `human_finalisation`
-- [ ] Reset returns to ₹10,00,000 / revision 0
+- [ ] "7 assistant tools connected" line legible
+- [ ] State line visible and advancing each beat
+- [ ] Three direction cards, scores at your priorities, "the score won't decide this"
+- [ ] Choose Direction A → DRAFT RESOLUTION — WD-12, *valid*
+- [ ] **Protect** on the play area → red **BUDGET REV → chip** + **STALE stamp** on screen ≥ 2s  ← key frame
+- [ ] Cost hero: "over the fund by ₹1,70,000 · drop about ₹1,70,000 of other works"
+- [ ] Redraft: **PROTECTED** badge on the play-area line; "compared with where you started" strip
+- [ ] Draft rejected state for P-01 + P-08, with the reason
+- [ ] Review band + the "no WebMCP tool … cannot reach past this point" notice
+- [ ] Adopt disabled → enabled only after Accept + acknowledgement
+- [ ] RESOLUTION WD-12 — ADOPTED, human_finalisation attribution
+- [ ] Reset returns to the start
