@@ -1,5 +1,9 @@
 # Neighbors Decide — Ward Participatory-Budgeting Workspace
 
+**Live demo:** https://neighbours-decide.netlify.app
+&nbsp;·&nbsp; open it in ChatGPT's browser or Chrome with WebMCP enabled to drive
+it with an agent; it also works fully as a manual workspace.
+
 A bounded, **WebMCP-enabled demonstration** in which one resident allocates a
 hypothetical **₹10,00,000** ward development fund across exactly eight hypothetical
 local works. A browser agent can inspect state, model directions, propose a valid

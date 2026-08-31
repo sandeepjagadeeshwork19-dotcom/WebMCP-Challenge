@@ -185,8 +185,8 @@ record, and adapting the dataset/rules to a real ward participatory-budget cycle
 
 ## Links
 
+- **Live demo:** https://neighbours-decide.netlify.app
 - **Repo:** _(GitHub URL — add on push)_
-- **Live demo:** _(deployed URL — add on deploy)_
 - **Demo video:** _(YouTube URL — add on upload)_
 - **Runtime checklist:** `docs/CHATGPT_RUNTIME_CHECKLIST.md`
-- **Demo script:** `PRODUCT_SPEC.md` §13 (minute-by-minute)
+- **Demo script:** `docs/DEMO_SCRIPT.md`
