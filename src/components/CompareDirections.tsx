@@ -10,8 +10,10 @@ export function CompareDirections() {
   const dispatch = useDispatch();
   const prioritiesSet = selectPrioritiesSet(state);
 
+  // Choosing a direction loads its plan as a starting draft. It does NOT touch
+  // the resident's priorities — those stay exactly as the resident set them, and
+  // the final record reflects what the resident actually chose.
   const choose = (strategyId: (typeof STRATEGY_PRESETS)[number]["id"]) => {
-    dispatch({ type: "human/applyStrategyPriorities", strategyId });
     dispatch({ type: "app/loadDirectionDraft", strategyId });
   };
 
@@ -69,11 +71,7 @@ export function CompareDirections() {
               </div>
 
               <div className="direction-card__choose">
-                <button
-                  type="button"
-                  className={`btn ${v.matchesCurrentPriorities ? "" : "btn--outline"}`}
-                  onClick={() => choose(v.id)}
-                >
+                <button type="button" className="btn" onClick={() => choose(v.id)}>
                   Choose {TAG[i]}
                 </button>
               </div>

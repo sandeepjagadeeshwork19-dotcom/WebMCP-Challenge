@@ -10,13 +10,12 @@ afterEach(() => {
 });
 
 describe("registerWebMcpTools", () => {
-  it("reports unsupported when document.modelContext is absent", async () => {
-    const result = await registerWebMcpTools(createStore());
-    expect(result.supported).toBe(false);
-    expect(result.registeredTools).toEqual([]);
+  it("registers nothing when document.modelContext is absent", async () => {
+    const names = await registerWebMcpTools(createStore(), new AbortController().signal);
+    expect(names).toEqual([]);
   });
 
-  it("registers exactly the expected tools with an abort signal when supported", async () => {
+  it("registers exactly the expected tools, each with the caller's abort signal", async () => {
     const registered: WebMcpToolDefinition[] = [];
     const signals: (AbortSignal | undefined)[] = [];
     (document as { modelContext?: unknown }).modelContext = {
@@ -27,18 +26,29 @@ describe("registerWebMcpTools", () => {
       },
     };
 
-    const result = await registerWebMcpTools(createStore());
-    expect(result.supported).toBe(true);
-    expect(result.registeredTools).toEqual([...TOOL_NAMES]);
+    const controller = new AbortController();
+    const names = await registerWebMcpTools(createStore(), controller.signal);
+    expect(names).toEqual([...TOOL_NAMES]);
     expect(registered).toHaveLength(TOOL_NAMES.length);
-    expect(signals.every((s) => s instanceof AbortSignal)).toBe(true);
-
-    // Aborting unregisters: the shared signal is now aborted.
-    result.unregister();
-    expect(signals[0]?.aborted).toBe(true);
+    expect(signals.every((s) => s === controller.signal)).toBe(true);
   });
 
-  it("does not register a finalisation tool", async () => {
+  it("stops immediately if the signal is already aborted", async () => {
+    let calls = 0;
+    (document as { modelContext?: unknown }).modelContext = {
+      registerTool: () => {
+        calls += 1;
+        return Promise.resolve();
+      },
+    };
+    const controller = new AbortController();
+    controller.abort();
+    const names = await registerWebMcpTools(createStore(), controller.signal);
+    expect(names).toEqual([]);
+    expect(calls).toBe(0);
+  });
+
+  it("does not register any tool that accepts or adopts", async () => {
     const names: string[] = [];
     (document as { modelContext?: unknown }).modelContext = {
       registerTool: (tool: WebMcpToolDefinition) => {
@@ -46,8 +56,9 @@ describe("registerWebMcpTools", () => {
         return Promise.resolve();
       },
     };
-    await registerWebMcpTools(createStore());
+    await registerWebMcpTools(createStore(), new AbortController().signal);
     expect(names).not.toContain("finalise_allocation");
-    expect(names).not.toContain("finalize_allocation");
+    expect(names).not.toContain("adopt_resolution");
+    expect(names).not.toContain("accept_proposal");
   });
 });

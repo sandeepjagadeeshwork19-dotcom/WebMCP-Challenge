@@ -1,8 +1,49 @@
-import { describe, expect, it } from "vitest";
-import { screen, within } from "@testing-library/react";
+import { StrictMode } from "react";
+import { afterEach, describe, expect, it } from "vitest";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithStore } from "../../test/renderWithStore";
 import { App } from "../../App";
+import { StoreProvider } from "../../state/store";
+import { TOOL_NAMES } from "../../webmcp/contracts";
+import type { WebMcpToolDefinition } from "../../webmcp/types";
+
+afterEach(() => {
+  delete (document as { modelContext?: unknown }).modelContext;
+});
+
+describe("WebMCP registration under StrictMode", () => {
+  it("registers every tool exactly once despite the setup/cleanup/setup double-invoke", async () => {
+    const live = new Set<string>();
+    const attempts: string[] = [];
+    (document as { modelContext?: unknown }).modelContext = {
+      registerTool: (tool: WebMcpToolDefinition, options?: { signal?: AbortSignal }) => {
+        attempts.push(tool.name);
+        if (live.has(tool.name)) {
+          return Promise.reject(new Error(`already registered: ${tool.name}`));
+        }
+        live.add(tool.name);
+        options?.signal?.addEventListener("abort", () => live.delete(tool.name));
+        return Promise.resolve();
+      },
+    };
+
+    render(
+      <StrictMode>
+        <StoreProvider>
+          <App />
+        </StoreProvider>
+      </StrictMode>,
+    );
+
+    await waitFor(() =>
+      expect(screen.getByText(new RegExp(`${TOOL_NAMES.length} assistant tools connected`, "i"))).toBeInTheDocument(),
+    );
+    expect([...live].sort()).toEqual([...TOOL_NAMES].sort());
+    // no duplicate-registration rejections logged for a tool that stayed live
+    expect(attempts.length).toBe(TOOL_NAMES.length);
+  });
+});
 
 describe("shell", () => {
   it("shows the mandatory hypothetical-data disclosure and the WebMCP-absent fallback", () => {

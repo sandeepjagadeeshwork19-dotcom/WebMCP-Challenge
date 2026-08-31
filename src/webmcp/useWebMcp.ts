@@ -22,28 +22,32 @@ export function useWebMcp(): WebMcpState {
   useEffect(() => {
     if (!isWebMcpSupported()) return;
 
-    let cancelled = false;
-    let cleanup: (() => void) | undefined;
+    const controller = new AbortController();
+    let started = false;
 
-    registerWebMcpTools(store)
-      .then((result) => {
-        if (cancelled) {
-          result.unregister();
-          return;
-        }
-        cleanup = result.unregister;
-        setState({
-          status: result.registeredTools.length > 0 ? "registered" : "error",
-          registeredTools: result.registeredTools,
+    // Defer one tick so StrictMode's setup / cleanup / setup collapses to a
+    // single real registration pass — the cleanup below clears this timer
+    // before it fires on the first (discarded) setup.
+    const timer = setTimeout(() => {
+      started = true;
+      registerWebMcpTools(store, controller.signal)
+        .then((names) => {
+          if (controller.signal.aborted) return;
+          setState({
+            status: names.length > 0 ? "registered" : "error",
+            registeredTools: names,
+          });
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) {
+            setState({ status: "error", registeredTools: [] });
+          }
         });
-      })
-      .catch(() => {
-        if (!cancelled) setState({ status: "error", registeredTools: [] });
-      });
+    }, 0);
 
     return () => {
-      cancelled = true;
-      cleanup?.();
+      clearTimeout(timer);
+      if (started) controller.abort();
     };
   }, [store]);
 
