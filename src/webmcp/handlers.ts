@@ -171,21 +171,30 @@ export function createHandlers(store: Store): Handlers {
           "These are structured comparison options. Calling this tool changes nothing; the page can separately load an application example draft.",
         strategies: STRATEGY_PRESETS.map((s) => {
           const total = committedTotal(s.allocations);
+          const funded = selectedProjectIds(s.allocations);
           return {
             id: s.id,
             label: s.label,
             blurb: s.blurb,
+            mainBenefit: s.mainBenefit,
+            mainSacrifice: s.mainSacrifice,
             lensPriorities: s.priorities,
             allocations: s.allocations,
             committedTotal: total,
             remainingFunds: FUND_LIMIT - total,
-            selectedProjectIds: selectedProjectIds(s.allocations),
+            selectedProjectIds: funded,
+            unfundedProjectIds: PROJECT_IDS.filter((id) => !funded.includes(id)),
             neighbourhoods: strategyNeighbourhoods(s),
             valid: validateAllocation(s.allocations, {
               lockedAllocations: state.lockedAllocations,
             }).valid,
             scoreAtResidentPriorities: benefitSummary(s.allocations, state.residentPriorities),
             scoreAtLensPriorities: benefitSummary(s.allocations, s.priorities),
+            comparedWithResidentAllocation: compareTradeoffs(
+              state.manualAllocations,
+              s.allocations,
+              state.residentPriorities,
+            ),
           };
         }),
       };
@@ -258,14 +267,33 @@ export function createHandlers(store: Store): Handlers {
       const proposal = next.agentProposal!;
       const cv = next.constraintValidation!;
       const total = committedTotal(proposal.allocations);
+      const valid = next.proposalStatus === "valid";
       return {
         proposalRevision: proposal.proposalRevision,
-        status: next.proposalStatus === "valid" ? "valid" : "invalid",
+        status: valid ? "valid" : "invalid",
         basedOnBudgetRevision: proposal.basedOnBudgetRevision,
         committedTotal: total,
         remainingFunds: FUND_LIMIT - total,
-        validationIssues: cv.issues,
+        selectedProjectIds: selectedProjectIds(proposal.allocations),
+        rationale: proposal.rationale,
+        validationIssues: cv.issues.map((issue) => ({
+          ...issue,
+          fix: fixHintForIssue(issue, proposal.allocations),
+        })),
         allocationHash: proposal.allocationHash,
+        benefitSummary: benefitSummary(proposal.allocations, next.residentPriorities),
+        comparedWithResidentAllocation: compareTradeoffs(
+          next.manualAllocations,
+          proposal.allocations,
+          next.residentPriorities,
+        ),
+        recordedAs: valid
+          ? "A visible, agent-attributed draft proposal — not the decision."
+          : "A visible rejected draft — the resident can see why the engine rejected it.",
+        nextStep: valid
+          ? `Call request_allocation_review with budgetRevision=${proposal.basedOnBudgetRevision}, proposalRevision=${proposal.proposalRevision} when ready. Any resident edit stales this and you must redraft.`
+          : "Fix the validationIssues (each has a machine-readable `fix`) and propose again.",
+        humanOnlyFromHere: ["accept", "send back", "reject", "adopt"],
       };
     },
 
