@@ -24,6 +24,30 @@ import type {
 const RATING_VALUE: Record<BenefitRating, number> = { Low: 1, Medium: 2, High: 3 };
 const SUPPORT_VALUE: Record<CommunitySupport, number> = { Moderate: 2, High: 3 };
 
+/**
+ * The full scoring model, disclosed so an agent (or a reader) can reproduce every
+ * `illustrativeScore` and `byPriority` figure this engine returns. It is a
+ * directional comparison, not a measure of public value or an optimum.
+ */
+export const SCORING_MODEL = {
+  formula:
+    "illustrativeScore = sum over selected works of ratingValue(work, priority) * residentWeight(priority) * phaseFraction",
+  ratingValue: RATING_VALUE,
+  communitySupportValue: SUPPORT_VALUE,
+  phaseFraction: {
+    "P-06": Object.fromEntries(P06_ALLOWED_AMOUNTS.map((a, i) => [a, [0.5, 0.75, 1][i]])),
+    default: 1,
+  },
+  residentWeightScale: "0 (ignore) to 3 (weigh heavily)",
+  note: "Illustrative comparison only. Not an optimum and not a measure of public value.",
+} as const;
+
+export function projectBenefitValues(id: ProjectId): Record<PriorityKey, number> {
+  return Object.fromEntries(
+    PRIORITY_KEYS.map((key) => [key, projectRatingValue(id, key)]),
+  ) as Record<PriorityKey, number>;
+}
+
 /** Fraction of P-06's rating credited at each allowed phase amount. */
 export function p06Fraction(amount: number): number {
   const index = P06_ALLOWED_AMOUNTS.indexOf(amount as (typeof P06_ALLOWED_AMOUNTS)[number]);

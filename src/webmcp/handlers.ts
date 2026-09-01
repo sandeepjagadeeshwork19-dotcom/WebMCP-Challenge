@@ -7,7 +7,13 @@
 import { HYPOTHETICAL_DISCLOSURE } from "../domain/disclosure";
 import { DATASET_VERSION, FUND_LIMIT, getProject, PROJECT_IDS } from "../domain/projects";
 import { STRATEGY_PRESETS, strategyNeighbourhoods } from "../domain/strategies";
-import { benefitSummary, compareTradeoffs } from "../domain/tradeoffs";
+import { fixHintForIssue } from "../domain/fixHints";
+import {
+  benefitSummary,
+  compareTradeoffs,
+  projectBenefitValues,
+  SCORING_MODEL,
+} from "../domain/tradeoffs";
 import {
   committedTotal,
   selectedProjectIds,
@@ -129,6 +135,7 @@ export function createHandlers(store: Store): Handlers {
       }
       return {
         datasetVersion: DATASET_VERSION,
+        scoringModel: SCORING_MODEL,
         projects: ids.map((id) => {
           const p = getProject(id);
           return {
@@ -141,6 +148,7 @@ export function createHandlers(store: Store): Handlers {
             cost: p.cost,
             fundingRule: p.fundingRule,
             benefits: p.benefits,
+            benefitValues: projectBenefitValues(p.id),
             communitySupport: p.communitySupport,
             dependencies: p.dependencies,
             incompatibilities: p.incompatibilities,
@@ -209,7 +217,10 @@ export function createHandlers(store: Store): Handlers {
         committedTotal: total,
         remainingFunds: FUND_LIMIT - total,
         selectedProjectIds: selectedProjectIds(allocations.value),
-        validationIssues: validation.issues,
+        validationIssues: validation.issues.map((issue) => ({
+          ...issue,
+          fix: fixHintForIssue(issue, allocations.value),
+        })),
         benefitSummary: benefitSummary(allocations.value, state.residentPriorities),
         comparedWithCurrent: compareTradeoffs(
           state.manualAllocations,
