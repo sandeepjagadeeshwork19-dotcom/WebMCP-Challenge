@@ -50,17 +50,27 @@ renders it. Link them from `docs/SUBMISSION.md`.
 
 ## Results
 
-**PASS — 2026-09-01.** ChatGPT desktop in-app browser against
-`https://neighbours-decide.netlify.app/`.
+**PASS — 2026-09-01.** Run in the ChatGPT desktop in-app browser against
+`https://neighbours-decide.netlify.app/`, driving the flow through the
+page-registered WebMCP tools.
 
-- Seven tools discovered with structured `{ content, structuredContent }`
-  results; withheld actions were absent.
-- Verified read parity, valid simulation, agent-attributed proposal, resident
-  edit → stale transition, revision-3 re-plan preserving P-03/P-04, canonical
-  P-01 removal, WebMCP review hand-off, gated resident adoption, and zero browser
-  warnings/errors.
-- Evidence: [registration](evidence/webmcp-01-registered-tools.png),
-  [proposal](evidence/webmcp-02-agent-proposal.png),
-  [stale transition](evidence/webmcp-03-human-edit-stales-proposal.png),
-  [review hand-off](evidence/webmcp-04-replanned-review-handoff.png),
-  [final record](evidence/webmcp-05-final-record.png).
+- Seven tools discovered; withheld actions absent; structured
+  `{ content, structuredContent }` results rendered.
+- Read parity, valid simulation, agent-attributed proposal, resident edit →
+  stale transition, revision-3 re-plan preserving P-03/P-04, canonical P-01
+  removal, WebMCP review hand-off, gated resident adoption; zero browser
+  warnings or errors.
+
+**Evidence (app-side).** These five screenshots show the workspace's own record
+of that run — the activity Log with interleaved `AGENT` / `HUMAN` entries (an
+`AGENT` entry is created only by a WebMCP tool handler; no UI control dispatches
+one), the agent-written rationale on the draft, and the revision numbers moving:
+
+- [tools registered](evidence/webmcp-01-registered-tools.png)
+- [agent proposal + rationale, `AGENT` log entry](evidence/webmcp-02-agent-proposal.png)
+- [resident edit stales the proposal](evidence/webmcp-03-human-edit-stales-proposal.png)
+- [revision-3 re-plan + review hand-off, adoption gated](evidence/webmcp-04-replanned-review-handoff.png)
+- [adopted record, full `AGENT`/`HUMAN` log](evidence/webmcp-05-final-record.png)
+
+The demo video shows the same run from the agent's side — the ChatGPT
+conversation with the tool calls, and the assistant unable to adopt.

@@ -22,9 +22,10 @@ a function that was never registered on `document.modelContext`.
 - [x] Repo pushed to public GitHub; MIT auto-detected; URL filled in **Links** below
 - [ ] Video recorded in a real WebMCP runtime, uploaded public to YouTube, ≤ 3:00, audio on; URL filled in
 - [x] Netlify wired to `main` for continuous deployment; live URL serves the latest build
-- [x] Live URL re-verified end-to-end **in a real WebMCP browser** (full revision-bound journey)
+- [x] Live URL run end-to-end **in the ChatGPT in-app browser** (agent actions via WebMCP tools) — app-side screenshots below
+- [ ] Agent-side evidence (ChatGPT conversation + tool calls) captured — in the video
 - [ ] This document's substance pasted into the Devpost form
-- [x] Screenshot evidence of the real-runtime journey linked below and from **Links**
+- [ ] Deadline re-checked on the Devpost rules page (Sept 3 — confirm the exact PT time)
 
 ---
 
@@ -171,11 +172,13 @@ layer down: which actions belong on the API.
 
 ## Real WebMCP runtime evidence — 2026-09-01
 
-Verified against the public deployment in the **ChatGPT desktop in-app browser**
-at `https://neighbours-decide.netlify.app/`, using the page-discovered WebMCP
-tools rather than DOM automation for agent actions.
+Run against the public deployment in the **ChatGPT desktop in-app browser** at
+`https://neighbours-decide.netlify.app/`. Agent actions went through the
+page-registered WebMCP tools; the resident actions (priorities, protect, accept,
+adopt) were done in the visible UI. The screenshots below are the app-side
+record; the demo video captures the agent's conversation and tool calls.
 
-Observed results:
+Observed:
 
 - Exactly seven WebMCP tools registered; no priority, protection, acceptance,
   adoption or reset tool was exposed.
@@ -192,17 +195,23 @@ Observed results:
   disclosure, then produced the local adopted record. Browser console: no
   warnings or errors.
 
-### Screenshots
+### Screenshots (app-side record of that run)
 
-[![Seven tools registered; empty trace](evidence/webmcp-01-registered-tools.png)](evidence/webmcp-01-registered-tools.png)
+Each screenshot is the workspace's own record — note the activity **Log** with
+interleaved `AGENT` / `HUMAN` entries. An `AGENT` entry is written only by a
+WebMCP tool handler; no visible control produces one. The **video** shows the
+same run from the agent's side (the ChatGPT conversation, the tool calls, and
+the assistant unable to adopt).
 
-[![Valid proposal created through WebMCP](evidence/webmcp-02-agent-proposal.png)](evidence/webmcp-02-agent-proposal.png)
+[![Seven tools registered](evidence/webmcp-01-registered-tools.png)](evidence/webmcp-01-registered-tools.png)
+
+[![Agent proposal with rationale; AGENT log entry](evidence/webmcp-02-agent-proposal.png)](evidence/webmcp-02-agent-proposal.png)
 
 [![Resident protection stales the agent proposal](evidence/webmcp-03-human-edit-stales-proposal.png)](evidence/webmcp-03-human-edit-stales-proposal.png)
 
-[![Re-planned proposal handed to resident review](evidence/webmcp-04-replanned-review-handoff.png)](evidence/webmcp-04-replanned-review-handoff.png)
+[![Re-planned proposal handed to resident review; adoption gated](evidence/webmcp-04-replanned-review-handoff.png)](evidence/webmcp-04-replanned-review-handoff.png)
 
-[![Resident-gated adopted record](evidence/webmcp-05-final-record.png)](evidence/webmcp-05-final-record.png)
+[![Adopted record with the full AGENT / HUMAN log](evidence/webmcp-05-final-record.png)](evidence/webmcp-05-final-record.png)
 
 ## What's next
 
