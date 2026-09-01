@@ -29,6 +29,7 @@ export type ReviewStatus = "none" | "open" | "rejected" | "accepted" | "complete
 export type Actor = "human" | "agent" | "system";
 
 export interface AgentProposal {
+  createdBy: "agent" | "system";
   proposalRevision: number;
   allocations: Allocation[];
   rationale: string;

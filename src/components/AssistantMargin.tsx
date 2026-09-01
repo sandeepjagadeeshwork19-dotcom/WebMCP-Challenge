@@ -5,6 +5,7 @@ import { formatMoney } from "../format";
 import { useAppState } from "../state/store";
 import { selectStage } from "../state/selectors";
 import { Icon } from "./Icon";
+import { WebMcpActivity } from "./WebMcpActivity";
 
 export function AssistantMargin() {
   const state = useAppState();
@@ -17,6 +18,7 @@ export function AssistantMargin() {
       </p>
       <hr className="margin__rule" />
       <Body stage={stage} state={state} />
+      <WebMcpActivity />
     </aside>
   );
 }
@@ -28,8 +30,8 @@ function Body({ stage, state }: { stage: string; state: ReturnType<typeof useApp
         <>
           <p className="lede">Tell me what the ward should weigh, and I&rsquo;ll model the options.</p>
           <p className="muted">
-            I suggest directions, test combinations, and draft. Choosing, protecting and adopting are
-            yours &mdash; I have no tool for them.
+            Through WebMCP I can read, simulate, propose and request review. Choosing priorities,
+            protecting work and adopting have no WebMCP tool.
           </p>
         </>
       );
@@ -126,8 +128,8 @@ function Body({ stage, state }: { stage: string; state: ReturnType<typeof useApp
         <>
           <p className="lede">I&rsquo;ve stepped back. This step is yours.</p>
           <p className="muted">
-            Send the draft back and I&rsquo;ll redraft. Accepting and adopting have no tool &mdash;
-            the page never registered one.
+            Within WebMCP, my handoff ends here. Accepting and adopting have no registered tool;
+            the visible controls are the resident&rsquo;s.
           </p>
           <hr className="margin__rule" />
           <p className="waiting">&mdash; waiting for the resident &mdash;</p>

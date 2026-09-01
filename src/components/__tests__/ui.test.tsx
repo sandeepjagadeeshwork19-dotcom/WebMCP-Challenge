@@ -75,9 +75,11 @@ describe("priorities + compare", () => {
   it("choosing a direction loads a draft resolution", async () => {
     const user = userEvent.setup();
     renderWithStore(<App />);
-    await user.click(screen.getByRole("button", { name: /Choose DIRECTION A/i }));
+    await user.click(screen.getByRole("button", { name: /Load example DIRECTION A/i }));
     expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Review this resolution/i })).toBeInTheDocument();
+    expect(screen.getByText(/APPLICATION EXAMPLE/i)).toBeInTheDocument();
+    expect(screen.getByText(/No WebMCP call yet/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Open resident review manually/i })).toBeInTheDocument();
   });
 });
 
@@ -85,7 +87,7 @@ describe("the turn — protecting a work stales the draft", () => {
   it("protecting the play area moves to the stale/re-plan state", async () => {
     const user = userEvent.setup();
     const { store } = renderWithStore(<App />);
-    await user.click(screen.getByRole("button", { name: /Choose DIRECTION A/i }));
+    await user.click(screen.getByRole("button", { name: /Load example DIRECTION A/i }));
     // P-03 is not in Direction A; protecting it stales the draft
     const scheduleRow = screen.getByText("Riverside play area upgrade").closest(".schedule__row")!;
     await user.click(within(scheduleRow as HTMLElement).getByRole("button", { name: /Protect/i }));
@@ -109,10 +111,10 @@ describe("review is human-only and gated", () => {
       ],
       rationale: "Two accessible-transport and health investments.",
     });
-    await user.click(await screen.findByRole("button", { name: /Review this resolution/i }));
+    await user.click(await screen.findByRole("button", { name: /Open resident review manually/i }));
 
     expect(
-      screen.getByText(/Only the resident can accept, revise, reject or adopt/i),
+      screen.getByText(/WebMCP hands control back here/i),
     ).toBeInTheDocument();
 
     const adopt = screen.getByRole("button", { name: /Adopt resolution WD-12/i });

@@ -12,10 +12,10 @@ import type { StrategyId } from "../domain/strategies";
 
 export type HumanAction =
   | { type: "human/setPriority"; key: PriorityKey; weight: PriorityWeight; timestamp?: string }
-  | { type: "human/applyStrategyPriorities"; strategyId: StrategyId; timestamp?: string }
   | { type: "human/setAllocation"; projectId: ProjectId; amount: number; timestamp?: string }
   | { type: "human/removeAllocation"; projectId: ProjectId; timestamp?: string }
   | { type: "human/lockProject"; projectId: ProjectId; timestamp?: string }
+  | { type: "human/lockProjectAt"; projectId: ProjectId; amount: number; timestamp?: string }
   | { type: "human/unlockProject"; projectId: ProjectId; timestamp?: string }
   | { type: "human/setDisclosureAck"; acknowledged: boolean; timestamp?: string }
   | { type: "human/openReview"; timestamp?: string }
@@ -39,11 +39,21 @@ export type AgentAction =
  * direction, and as the WebMCP-absent fallback for "load an example proposal".
  * It is attributed to the application (`system`), never to the agent.
  */
-export type SystemAction = {
-  type: "app/loadDirectionDraft";
-  strategyId: StrategyId;
-  timestamp?: string;
-};
+export type SystemAction =
+  | {
+      type: "app/loadDirectionDraft";
+      strategyId: StrategyId;
+      timestamp?: string;
+    }
+  | {
+      /**
+       * Rebuild the active draft around the resident's locked works using the
+       * shared deterministic engine. Used as the WebMCP-absent fallback so a
+       * protect action never dead-ends at "draft stale" with no way forward.
+       */
+      type: "app/redraftAroundLocks";
+      timestamp?: string;
+    };
 
 export type AppAction = HumanAction | AgentAction | SystemAction;
 

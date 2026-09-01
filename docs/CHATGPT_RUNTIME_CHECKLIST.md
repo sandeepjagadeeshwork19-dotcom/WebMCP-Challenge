@@ -1,34 +1,34 @@
 # Agent-browser runtime verification checklist
 
-Verify — do not infer — the six tools, shared visible state, and human-only
-finalisation in a WebMCP-capable agent browser (e.g. ChatGPT's browser).
+Verify — do not infer — the seven tools, shared visible state, live WebMCP trace,
+and resident-controlled finalisation in a WebMCP-capable agent browser.
 
 Record for each run: runtime + app version, date, exact steps, observed results.
 
 ## Local evidence already captured
 
-Registration and handler execution were exercised in a real browser (in-app
-Chromium, dev server at `http://localhost:5173`) by stubbing
-`document.modelContext.registerTool`:
+Registration and handler execution were exercised in ChatGPT's in-app browser
+against the dev server at `http://localhost:5173`:
 
-- `registerWebMcpTools` reported `supported: true` and registered exactly
-  `get_budget_state, list_projects, simulate_allocation, propose_allocation,
+- `registerWebMcpTools` registered exactly `get_budget_state, list_projects,
+  list_strategy_options, simulate_allocation, propose_allocation,
   explain_tradeoffs, request_allocation_review` — each with an `inputSchema`, a
   correct `readOnlyHint`, and the shared `AbortController` signal.
 - `get_budget_state` returned the documented keys; `propose_allocation` returned
   `{ proposalRevision: 1, status: "valid", allocationHash, committedTotal,
   remainingFunds, validationIssues: [] }` and mutated the same store the UI
   reads; `list_projects` returned all 8.
-- `unregister()` aborts the shared signal.
+- Aborting the caller-owned signal unregisters the tools.
 
 ## Checklist against a real agent runtime
 
-1. **Discovery** — the agent lists all and only the six tools with the
+1. **Discovery** — the agent lists all and only the seven tools with the
    descriptions from `PRODUCT_SPEC.md` §9. No `finalise*`, `set_priority`,
    `lock*`, `accept*`, `reject*`, or `reset*` tool appears.
 2. **Read parity** — call `get_budget_state` and `list_projects`; compare
    `budgetRevision`, `committedTotal`, `remainingFunds`, `priorities`,
    `lockedAllocations` to the visible page. They must match exactly.
+   Confirm each call appears in the live trace while ordinary page clicks do not.
 3. **Simulate without mutation** — `simulate_allocation` with a valid and an
    over-budget candidate. Valid returns `valid: true`; over-budget returns
    `valid: false` with `budget_exceeded` and the exact overage. The page,

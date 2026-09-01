@@ -1,8 +1,8 @@
 # Neighbors Decide — WebMCP Challenge submission
 
 **Tagline:** A participatory-budgeting workspace where a browser agent models the
-options and the resident keeps the decision — with the human-only boundary
-enforced by *which WebMCP tools exist*, not by a popup.
+options through visible, revision-bound WebMCP calls and the resident keeps the
+decision — the WebMCP surface deliberately contains no adoption tool.
 
 > **Hypothetical demonstration.** Every ward project, cost, benefit, locality and
 > community-support figure is invented for this demo. It is not connected to,
@@ -50,9 +50,11 @@ combinations, store a revision-bound proposal beside the resident's choices, and
 explain the trade-offs. When the resident changes anything, the agent's proposal
 goes **stale** and it must re-read and re-propose.
 
-The demo ends with the resident acknowledging the hypothetical disclosure and
-finalising through a visible control, producing a transparent, copyable local
-record with full attribution — then a one-click reset.
+The right margin makes the machine interface observable: each WebMCP call appears
+with its tool name, read/write mode, result and current revisions. Ordinary page
+clicks do not appear there. The demo ends with the resident acknowledging the
+hypothetical disclosure and finalising through a visible control, producing a
+transparent, copyable local record with full attribution — then a one-click reset.
 
 ## How WebMCP is used  *(judging: WebMCP Leverage)*
 
@@ -84,29 +86,30 @@ Key properties that make this non-trivial:
   (`stale_budget_revision`, `proposal_revision_mismatch`, `stale_proposal`).
 - **Invalid proposals stay inspectable.** A rule-breaking proposal is stored
   visibly with `status: "invalid"` and its issue list, rather than vanishing.
-- **The authority boundary is structural.** WebMCP has no native
-  human-confirmation primitive. Rather than fake one, the app simply never
-  registers a finalisation tool — the agent *cannot* commit, and the README says
-  so plainly.
+- **The WebMCP authority boundary is structural.** WebMCP has no native
+  human-confirmation primitive. Rather than fake one, the app never registers a
+  finalisation tool, so adoption is impossible through its WebMCP surface.
+  General-purpose browser automation is explicitly outside this boundary.
 
 ## How humans and agents collaborate  *(judging: Execution / UX)*
 
 Every fact the agent returns is the same fact on the page, so a resident can
 follow the agent's reasoning in the UI in real time:
 
-1. Agent calls `list_strategy_options`, walks the resident through three valid
-   directions and how each scores on what they've said they value; the resident
-   adopts one with a visible "Adopt these priorities" control (or sets weights by
-   hand) → budget revision advances.
-2. Agent reads that revision, simulates, proposes a valid ₹9,90,000 plan — the
+1. The resident sets priority weights; the budget revision advances. The agent
+   calls `list_strategy_options` to explain three structured directions scored at
+   those priorities. Optional **Load example** buttons are clearly application
+   actions, not assistant work.
+2. Agent reads that revision, simulates, and calls `propose_allocation` with a
+   valid plan — the live WebMCP trace and the agent-attributed draft both update.
    page shows *why* it's valid.
 3. Resident funds and locks the riverside play area — their block, where the
    ground floods every monsoon → the page explains the required storm-water
    drain; the proposal turns visibly stale.
 4. Agent re-reads, re-proposes preserving the lock; a side-by-side comparison
    shows exactly what was gained, reduced, and given up.
-5. Agent requests review — focus moves to a region that states only the resident
-   can accept, modify, reject, or finalise.
+5. Agent calls `request_allocation_review` — the trace records the write and focus
+   moves to the resident controls. No WebMCP tool accepts or finalises.
 6. Resident acknowledges the disclosure and finalises. Local record + reset.
 
 When `document.modelContext` is absent, the page shows an honest fallback notice
@@ -131,7 +134,7 @@ registered" claim.
 - **`src/components/`** — an accessible workspace: semantic headings, fieldsets,
   tables, full keyboard operation, a polite live region, status conveyed by icon
   + text (never colour alone).
-- **Tests:** 62 Vitest / Testing Library tests — validator constraints and
+- **Tests:** Vitest / Testing Library suite — validator constraints and
   boundaries, revision/staleness/attribution, the tool contract and absence
   of a finalisation tool, handler behaviour, registration in supported and
   unsupported environments, key UI behaviour, and the full primary journey end to
@@ -152,19 +155,20 @@ This build is intentionally hypothetical, so the impact claim is about the
   millions of participants. As AI assistants reach these residents, "let the
   agent draft the ward budget" will be the obvious, wrong shortcut — it hollows
   out exactly the local ownership the 73rd/74th Amendments were meant to create.
-  This shows the alternative: the agent models every option, the resident owns
-  the call, and the software is built so it *can't* be otherwise.
+  This shows the alternative: the WebMCP agent models every option while the
+  application reserves priorities and adoption for visible resident controls.
 - **The pattern transfers.** Clinical, legal and financial-planning tools face
   the same bind — the agent is capable enough to decide, but shouldn't. "Agent
   models and restructures options; the human owns priorities and commitment" is a
-  reusable design, and WebMCP is what makes it honest: the collaboration runs on
-  the *same visible, validated state*, and the boundary is enforced by the tool
-  surface — not a confirmation dialog the agent could route around.
+  reusable design, and WebMCP makes the collaboration inspectable: both parties
+  work on the *same visible, validated state*, while the tool surface grants no
+  adoption capability. This is an API authority boundary, not a claim about
+  general browser-control security.
 
 ## What's novel  *(judging: Creativity & Ambition)*
 
-- Enforcing a human-only action by **omitting the tool**, and being explicit that
-  WebMCP itself does not secure the boundary.
+- Reserving adoption outside the WebMCP surface by **omitting the tool**, while
+  explicitly acknowledging that WebMCP itself is not a browser security boundary.
 - **Revision-bound proposals with automatic staleness** — the agent adapts to a
   moving human decision instead of returning one static answer.
 - Storing **invalid proposals as first-class, inspectable objects** so a failed

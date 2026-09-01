@@ -2,10 +2,9 @@
  * Canonical "strategy directions" — three distinct, deterministically valid ways
  * to spend the fund, each expressing a different priority lens.
  *
- * These are starting points a resident can adopt, and the agent can compare them
- * against the resident's current priorities via the `list_strategy_options` tool.
- * Adopting a direction only sets priority weights — it never funds anything; the
- * resident still builds and commits the actual allocation.
+ * These are application-owned example allocations. The agent can compare their
+ * structured facts against the resident's current priorities through
+ * `list_strategy_options`, but calling that read-only tool never loads a draft.
  */
 
 import { PROJECT_IDS, getProject } from "./projects";

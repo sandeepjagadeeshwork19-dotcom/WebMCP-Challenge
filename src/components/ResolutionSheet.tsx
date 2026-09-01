@@ -40,6 +40,12 @@ export function ResolutionSheet() {
             &nbsp;·&nbsp; not yet adopted
           </p>
         </div>
+        <div className="proposal-source" data-source={proposal.createdBy}>
+          <span>
+            {proposal.createdBy === "agent" ? "WEBMCP ASSISTANT PROPOSAL" : "APPLICATION EXAMPLE"}
+          </span>
+          <p>{proposal.rationale}</p>
+        </div>
         <hr className="sheet__rule" />
         <p className="sheet__preamble">
           The ward resolves to fund the following works against a fund of {formatMoney(FUND_LIMIT)}{" "}
@@ -120,7 +126,7 @@ export function ResolutionSheet() {
             className="btn btn--primary"
             onClick={() => dispatch({ type: "human/openReview" })}
           >
-            Review this resolution <Icon name="arrow" size={15} />
+            Open resident review manually <Icon name="arrow" size={15} />
           </button>
         ) : (
           <p className="sheet__validation" data-bad>
@@ -128,7 +134,7 @@ export function ResolutionSheet() {
           </p>
         )}
         <span className="btn btn--ghost" style={{ cursor: "default" }}>
-          Or ask the assistant to change something
+          A browser assistant can request review through WebMCP
         </span>
       </div>
     </section>

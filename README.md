@@ -8,8 +8,9 @@ A bounded, **WebMCP-enabled demonstration** in which one resident allocates a
 hypothetical **₹10,00,000** ward development fund across exactly eight hypothetical
 local works. A browser agent can inspect state, model directions, propose a valid
 draft, and explain trade-offs. A deterministic engine — not the agent — enforces
-every constraint, and **only the resident can adopt** the resolution, through the
-visible interface (`human/finalise` internally; there is no WebMCP tool for it).
+every constraint. Adoption is reserved for the visible resident interface
+(`human/finalise` internally); there is no WebMCP tool for it. This is a WebMCP
+authority boundary, not a restriction on general-purpose browser automation.
 
 The framing is motivated by participatory budgeting in India — the gram sabha and
 ward committee, Kerala's People's Plan Campaign, Pune's ward budgets — but the
@@ -59,11 +60,12 @@ src/
   webmcp/      WebMCP adapter
     contracts.ts    The seven tool definitions + JSON Schemas
     handlers.ts     Handlers that read/write the *same* store as the UI
+    trace.ts        Per-store visible trace; observes calls without changing budget state
     register.ts     document.modelContext.registerTool(tool, { signal })
   components/  Accessible React UI — a "ward gazette":
     Masthead · CommandBar (fund · revisions · whose-move indicator)
     StateLine (Priorities → Compare → Draft → Review → Adopt)
-    LeftRail (you control this) · AssistantMargin (stage-aware, the agent's hand)
+    LeftRail (you control this) · AssistantMargin + live WebMCP call trace
     CompareDirections · ResolutionSheet · TheTurn · ReviewMode · AdoptedRecord
     ScheduleOfWorks (the 8 works; protect any)
 ```
@@ -76,8 +78,8 @@ src/
 - `human/*` actions alone change priorities, protections, manual allocations,
   acceptance and adoption. A human budget change increments `budgetRevision`
   once and makes any active proposal `stale`.
-- `agent/proposeAllocation` (and `app/loadDirectionDraft`, used when the resident
-  picks a direction or as the WebMCP-absent fallback) increments
+- `agent/proposeAllocation` (and `app/loadDirectionDraft`, which loads a clearly
+  labelled application example or provides the WebMCP-absent fallback) increments
   `proposalRevision` only, never `budgetRevision`. A rule-invalid candidate is
   stored visibly with `status: "invalid"` so the failure stays inspectable.
 - Finalisation is a visible human action that re-checks freshness, allocation
@@ -124,8 +126,8 @@ Verified against the WebMCP spec IDL and Chrome's imperative-API docs
   returned as `{ error: { code, message } }`.
 - No nonstandard confirmation API (`requestUserInput` / `requestUserInteraction`)
   is used or assumed. WebMCP does not provide a native, non-bypassable
-  human-confirmation primitive; the human-only finalisation boundary is enforced
-  purely by this application registering no finalisation tool.
+  human-confirmation primitive. This application exposes no WebMCP finalisation
+  tool; general browser automation remains outside that tool boundary.
 - When `document.modelContext` is absent the page shows
   *"Agent tools are unavailable in this browser; the full manual workspace still
   works"* and every manual flow remains fully functional.

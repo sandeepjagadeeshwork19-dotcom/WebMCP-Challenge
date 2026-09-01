@@ -99,7 +99,8 @@ export function AdoptedRecord() {
 
         <p className="record__attribution">
           Attribution: {record.actor}. The assistant modelled and drafted; the resident set
-          priorities, protected works, reviewed and adopted. The assistant had no tool to.
+          priorities, protected works, reviewed and adopted. No WebMCP tool was registered to
+          accept, adopt or reset; general browser automation sits outside that boundary.
         </p>
 
         <details className="record-json">

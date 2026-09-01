@@ -1,7 +1,7 @@
 import { FUND_LIMIT, getProject } from "../domain/projects";
 import { committedTotal, validateAllocation } from "../domain/validation";
 import { formatMoney } from "../format";
-import { useAppState } from "../state/store";
+import { useAppState, useDispatch } from "../state/store";
 import { Icon } from "./Icon";
 import type { Allocation, ProjectId } from "../domain/types";
 
@@ -9,8 +9,9 @@ import type { Allocation, ProjectId } from "../domain/types";
  * The turn: a human protect action has stalled the current draft. Show the
  * *problem* the assistant must now solve — not a re-plan that does not exist yet.
  */
-export function TheTurn() {
+export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
   const state = useAppState();
+  const dispatch = useDispatch();
   const stale = state.agentProposal;
   if (!stale) return null;
 
@@ -122,6 +123,31 @@ export function TheTurn() {
         <span className="stale-stamp" aria-hidden="true">
           STALE
         </span>
+      </div>
+
+      <div className="stage-actions">
+        {webmcpAvailable ? (
+          <>
+            <span className="btn btn--ghost" style={{ cursor: "default" }}>
+              Ask the assistant to redraft around your protected work
+            </span>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+            >
+              Or rebuild it here
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            className="btn btn--primary"
+            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+          >
+            Rebuild the draft around your protected work <Icon name="arrow" size={15} />
+          </button>
+        )}
       </div>
     </section>
   );

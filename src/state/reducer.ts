@@ -10,6 +10,7 @@ import { buildFinalRecord } from "../domain/finalRecord";
 import { allocationHash } from "../domain/hash";
 import { inr } from "../domain/money";
 import { getProject } from "../domain/projects";
+import { redraftAroundLocks } from "../domain/redraft";
 import { getStrategy } from "../domain/strategies";
 import { committedTotal, validateAllocation } from "../domain/validation";
 import type { Allocation, PriorityKey, ProjectId } from "../domain/types";
@@ -132,21 +133,6 @@ export function reducer(state: AppState, action: AppAction): AppState {
       );
     }
 
-    case "human/applyStrategyPriorities": {
-      const preset = getStrategy(action.strategyId);
-      const same = PRIORITY_KEYS.every(
-        (key) => state.residentPriorities[key] === preset.priorities[key],
-      );
-      if (same) return state;
-      return commitHumanBudgetChange(
-        state,
-        { residentPriorities: { ...preset.priorities } },
-        "adopt_strategy",
-        `Adopted the "${preset.label}" priority direction`,
-        timestamp,
-      );
-    }
-
     case "human/setAllocation": {
       if (isLocked(state, action.projectId)) {
         const locked = state.lockedAllocations.find((l) => l.projectId === action.projectId);
@@ -194,6 +180,29 @@ export function reducer(state: AppState, action: AppAction): AppState {
         },
         "lock_project",
         `Locked ${action.projectId} at ${money(entry.amount)}`,
+        timestamp,
+      );
+    }
+
+    case "human/lockProjectAt": {
+      if (!Number.isFinite(action.amount) || action.amount <= 0) return state;
+      if (isLocked(state, action.projectId)) return state;
+      const projectName = getProject(action.projectId).name;
+      return commitHumanBudgetChange(
+        state,
+        {
+          manualAllocations: upsertAllocation(
+            state.manualAllocations,
+            action.projectId,
+            action.amount,
+          ),
+          lockedAllocations: [
+            ...state.lockedAllocations,
+            { projectId: action.projectId, amount: action.amount },
+          ].sort((a, b) => a.projectId.localeCompare(b.projectId)),
+        },
+        "lock_project",
+        `Protected ${action.projectId} (${projectName}) at ${money(action.amount)}`,
         timestamp,
       );
     }
@@ -340,6 +349,22 @@ export function reducer(state: AppState, action: AppAction): AppState {
       );
     }
 
+    case "app/redraftAroundLocks": {
+      const seed = state.agentProposal?.allocations ?? state.manualAllocations;
+      const rebuilt = redraftAroundLocks(
+        seed,
+        state.lockedAllocations,
+        state.residentPriorities,
+      );
+      return storeProposal(
+        state,
+        rebuilt,
+        "Application rebuild around the protected works — same validator and benefit ranking the resident and agent see.",
+        "system",
+        timestamp,
+      );
+    }
+
     case "agent/requestReview": {
       if (state.proposalStatus !== "valid") return state;
       if (state.reviewStatus === "open") return state;
@@ -393,6 +418,7 @@ function storeProposal(
     ...state,
     previousProposal: state.agentProposal,
     agentProposal: {
+      createdBy: actor,
       proposalRevision,
       allocations: [...allocations],
       rationale,

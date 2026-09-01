@@ -64,8 +64,9 @@ export function ReviewMode() {
       <div className="authority-notice">
         <Icon name="user" size={18} />
         <p>
-          Only the resident can accept, revise, reject or adopt. The page registered no WebMCP tool
-          for any of these &mdash; the assistant cannot reach past this point.
+          WebMCP hands control back here: the page exposes no WebMCP tool to accept, revise, reject
+          or adopt. These visible controls belong to the resident. General browser automation is
+          outside that WebMCP tool boundary.
         </p>
       </div>
 

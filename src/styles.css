@@ -1285,6 +1285,137 @@ select {
   margin-top: 0.15rem;
 }
 
+.tool-trace {
+  border-top: 2px solid var(--agent);
+  margin-top: 0.25rem;
+  padding-top: 0.8rem;
+}
+
+.tool-trace__head,
+.tool-trace__event-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tool-trace__head h2 {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--agent);
+}
+
+.tool-trace__head > span {
+  font-size: 0.62rem;
+  color: var(--pencil);
+}
+
+.tool-trace__empty {
+  border: 1px dashed var(--margin-rule);
+  border-radius: 5px;
+  padding: 0.6rem;
+  margin-top: 0.55rem;
+}
+
+.tool-trace__empty p {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+}
+
+.tool-trace__list {
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.55rem;
+}
+
+.tool-trace__event {
+  border-left: 3px solid var(--agent);
+  background: var(--surface);
+  padding: 0.5rem 0.55rem;
+}
+
+.tool-trace__event[data-status="blocked"] {
+  border-left-color: var(--warn);
+}
+
+.tool-trace__event-head code {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.tool-trace__event-head span {
+  border: 1px solid var(--margin-rule);
+  border-radius: 999px;
+  color: var(--agent);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.1rem 0.3rem;
+}
+
+.tool-trace__event p {
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  margin-top: 0.25rem;
+}
+
+.tool-trace__event small {
+  color: var(--pencil);
+  display: block;
+  font-size: 0.6rem;
+  margin-top: 0.2rem;
+}
+
+.assistant-prompt {
+  background: var(--agent);
+  border-radius: 5px;
+  color: #fff;
+  margin-top: 0.7rem;
+  padding: 0.7rem;
+}
+
+.assistant-prompt > span {
+  display: block;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.82;
+}
+
+.assistant-prompt p {
+  color: #fff;
+  font-family: var(--font-doc);
+  font-size: 0.78rem;
+  margin-top: 0.35rem;
+}
+
+.proposal-source {
+  background: var(--surface);
+  border-left: 3px solid var(--pencil);
+  margin: 0.8rem 0;
+  padding: 0.55rem 0.7rem;
+}
+
+.proposal-source[data-source="agent"] {
+  border-left-color: var(--agent);
+}
+
+.proposal-source span {
+  color: var(--agent);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.proposal-source p {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  margin-top: 0.2rem;
+}
+
 /* ---------- schedule of works ---------- */
 
 .schedule {

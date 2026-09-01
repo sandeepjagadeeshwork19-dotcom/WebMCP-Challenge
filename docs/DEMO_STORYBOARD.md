@@ -40,14 +40,18 @@ The state line moves to *Comparing directions*; the three cards re-score.
 
 ---
 
-## Beat 3 — you choose a direction  · 0:48–1:02
+## Beat 3 — WebMCP builds the draft  · 0:48–1:02
 
-**You do:** click **Choose Direction A** on the first card.
+**You type to the assistant:**
+`Simulate the Safety & access direction. If it is valid, propose it at the current revision.`
 
-**On screen:** the centre becomes **DRAFT RESOLUTION — WD-12**, marked *valid*.
+**On screen:** the live trace records **simulate READ** then **propose WRITE**.
+The centre becomes **DRAFT RESOLUTION — WD-12**, marked **WEBMCP ASSISTANT
+PROPOSAL** and *valid*.
 
 **You say:**
-> I take safety and access. That becomes the draft resolution.
+> The agent validates that direction against the real engine and stores one
+> atomic, revision-bound proposal. Now WebMCP is visibly doing the work.
 
 ---
 
@@ -87,19 +91,13 @@ on the play-area line and a *"compared with where you started"* strip
 `Open this resolution for review.`
 
 **On screen:** a black **REVIEW — RESOLUTION WD-12 · this step is the resident's
-alone** band, the disclosure repeated, and the notice:
-*"Only the resident can accept, revise, reject or adopt this resolution. The
-assistant has no WebMCP tool for any of these steps — it cannot reach past this
-point."*
-
-**You type to the assistant:**
-`Now adopt it.`
-
-**On screen / in chat:** the assistant says it **can't** — there is no tool.
+alone** band, the disclosure repeated, the **request review WRITE** trace event,
+and the notice that no WebMCP tool can accept, revise, reject or adopt. The notice
+also states that general browser automation is outside the WebMCP tool boundary.
 
 **You say:**
-> The assistant can hand it to me. It has no tool to accept it, or adopt it —
-> so I do that.
+> The assistant handed it to me through WebMCP. That tool surface ends here, so
+> I use the visible resident controls to decide.
 
 **You do:** click **Accept the draft** → tick the acknowledgement checkbox →
 click **Adopt resolution WD-12**.
@@ -114,12 +112,12 @@ transmitted"*, *"Adopted by the resident … not by the assistant,"* the record
 ID, the works, and the attribution:
 *"human_finalisation — the assistant modelled options, pencilled drafts and
 explained trade-offs; the resident set the priorities, protected what mattered,
-reviewed, acknowledged and adopted. The assistant was never able to."*
+reviewed, acknowledged and adopted."*
 
 **You say:**
 > A transparent record — the assistant's arithmetic, my decision. That's the
-> pattern, and WebMCP is what makes it honest: one board, both of us reading it,
-> and a boundary the agent can't route around.
+> pattern: one board, both of us reading the same validated state, a visible tool
+> trace, and a WebMCP surface with no adoption capability.
 
 **You do:** click **Reset — run the demonstration again**.
 
@@ -127,9 +125,8 @@ reviewed, acknowledged and adopted. The assistant was never able to."*
 
 ## If you want it shorter (≈1:45)
 
-Cut Beat 5's "now adopt it → it can't" exchange and just narrate it; keep Beats
-1, 2, 3, 4, 6. **Never cut Beat 4** — the protect → stale → re-plan turn is the
-whole point.
+Compress Beat 5's narration; keep Beats 1, 2, 3, 4, 6. **Never cut Beat 4** —
+the protect → stale → re-plan turn is the whole point.
 
 ## What the judges are looking for, and where each beat delivers it
 

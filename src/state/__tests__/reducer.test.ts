@@ -37,20 +37,6 @@ describe("human budget changes", () => {
     expect(s.budgetRevision).toBe(0);
   });
 
-  it("adopting a strategy direction sets all four weights in one revision", () => {
-    const s = run(createInitialState(), {
-      type: "human/applyStrategyPriorities",
-      strategyId: "safety_access",
-    });
-    expect(s.budgetRevision).toBe(1);
-    expect(s.residentPriorities).toEqual({
-      safety: 3,
-      accessibility: 3,
-      climate: 1,
-      communitySupport: 1,
-    });
-    expect(s.activityHistory.at(-1)?.action).toBe("adopt_strategy");
-  });
 });
 
 describe("agent proposals", () => {
@@ -59,6 +45,7 @@ describe("agent proposals", () => {
     expect(s.budgetRevision).toBe(0);
     expect(s.proposalRevision).toBe(1);
     expect(s.proposalStatus).toBe("valid");
+    expect(s.agentProposal?.createdBy).toBe("agent");
     expect(s.agentProposal?.basedOnBudgetRevision).toBe(0);
     expect(s.activityHistory.at(-1)?.actor).toBe("agent");
   });

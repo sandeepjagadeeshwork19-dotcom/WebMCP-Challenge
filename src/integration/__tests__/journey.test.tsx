@@ -21,6 +21,8 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
 
     // 2. Agent reads the same revision the page shows.
     expect((tools.get_budget_state({}) as { budgetRevision: number }).budgetRevision).toBe(2);
+    expect(screen.getByRole("heading", { name: /LIVE WEBMCP TRACE/i })).toBeInTheDocument();
+    expect(await screen.findByText("get state")).toBeInTheDocument();
 
     // 3. Agent simulates an over-budget combination -> valid:false, no mutation.
     const sim = tools.simulate_allocation({
@@ -50,6 +52,7 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
       rationale: "Safety-and-access plan within budget.",
     });
     expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
+    expect(screen.getByText(/WEBMCP ASSISTANT PROPOSAL/i)).toBeInTheDocument();
 
     // 5. Value judgment: protect the riverside play area (P-03, not in the draft, needs P-04).
     const row = screen.getByText("Riverside play area upgrade").closest(".schedule__row")!;
@@ -81,7 +84,7 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
     };
     expect(opened.reviewStatus).toBe("open");
     expect(
-      await screen.findByText(/Only the resident can accept, revise, reject or adopt/i),
+      await screen.findByText(/WebMCP hands control back here/i),
     ).toBeInTheDocument();
 
     // 9. There is no finalisation / adopt tool.

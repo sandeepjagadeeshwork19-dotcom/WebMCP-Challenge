@@ -13,10 +13,9 @@ export function ScheduleOfWorks() {
       dispatch({ type: "human/unlockProject", projectId });
       return;
     }
-    // ensure it is selected at its funding amount, then protect it
+    // Select at its funding amount and protect it in a single revision bump.
     const entry = state.manualAllocations.find((a) => a.projectId === projectId);
-    if (!entry) dispatch({ type: "human/setAllocation", projectId, amount: cost });
-    dispatch({ type: "human/lockProject", projectId });
+    dispatch({ type: "human/lockProjectAt", projectId, amount: entry?.amount ?? cost });
   };
 
   return (

@@ -21,6 +21,8 @@ import {
   selectProposalTradeoffVsPrevious,
 } from "../state/selectors";
 import { toolError } from "./errors";
+import { getWebMcpTrace, type ToolMode } from "./trace";
+import type { ToolName } from "./contracts";
 import {
   asBoolean,
   asBoundedString,
@@ -44,6 +46,7 @@ function proposalSummary(store: Store) {
   const state = store.getState();
   if (!state.agentProposal) return null;
   return {
+    createdBy: state.agentProposal.createdBy,
     proposalRevision: state.agentProposal.proposalRevision,
     status: state.proposalStatus,
     basedOnBudgetRevision: state.agentProposal.basedOnBudgetRevision,
@@ -53,7 +56,7 @@ function proposalSummary(store: Store) {
 }
 
 export function createHandlers(store: Store): Handlers {
-  return {
+  const handlers: Handlers = {
     get_budget_state(input) {
       const parsed = asObject(input ?? {}, ["includeRecentActivity"]);
       if (!parsed.ok) return parsed.error;
@@ -137,7 +140,8 @@ export function createHandlers(store: Store): Handlers {
       return {
         datasetVersion: DATASET_VERSION,
         residentPriorities: { ...state.residentPriorities },
-        note: "Adopting a direction only sets priority weights. It does not fund any project.",
+        note:
+          "These are structured comparison options. Calling this tool changes nothing; the page can separately load an application example draft.",
         strategies: STRATEGY_PRESETS.map((s) => {
           const total = committedTotal(s.allocations);
           return {
@@ -337,6 +341,24 @@ export function createHandlers(store: Store): Handlers {
         allocationHash: next.agentProposal!.allocationHash,
       };
     },
+  };
+
+  const trace = getWebMcpTrace(store);
+  const wrap = <K extends keyof Handlers>(name: K, mode: ToolMode): Handlers[K] =>
+    ((input: unknown) => {
+      const result = handlers[name](input);
+      trace.record(name as ToolName, mode, result);
+      return result;
+    }) as Handlers[K];
+
+  return {
+    get_budget_state: wrap("get_budget_state", "read"),
+    list_projects: wrap("list_projects", "read"),
+    list_strategy_options: wrap("list_strategy_options", "read"),
+    simulate_allocation: wrap("simulate_allocation", "read"),
+    propose_allocation: wrap("propose_allocation", "write"),
+    explain_tradeoffs: wrap("explain_tradeoffs", "read"),
+    request_allocation_review: wrap("request_allocation_review", "write"),
   };
 }
 

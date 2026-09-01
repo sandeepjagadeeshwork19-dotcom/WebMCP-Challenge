@@ -24,8 +24,8 @@ export function CompareDirections() {
       </h2>
       <p className="compare__lead">
         {prioritiesSet
-          ? "Three directions that hold up against your priorities. They differ in what they give up — choose one to start the draft."
-          : "Set your priorities on the left, or just pick the direction that fits. Each starts a draft you can change."}
+          ? "Three application examples scored at your priorities. Loading one is a normal page action — WebMCP calls appear separately in the live trace."
+          : "Set your priorities on the left, or load an application example. Ask your browser assistant to build a genuinely agent-proposed draft through WebMCP."}
       </p>
 
       <div className="compare__cards">
@@ -37,9 +37,13 @@ export function CompareDirections() {
               <h3 className="direction-card__name">{v.label}</h3>
 
               <div className="direction-card__score">
-                <span className="direction-card__score-num">{v.scoreAtResidentPriorities}</span>
+                <span className="direction-card__score-num">
+                  {prioritiesSet ? v.scoreAtResidentPriorities : "—"}
+                </span>
                 <span className="direction-card__score-label">
-                  illustrative score at your priorities
+                  {prioritiesSet
+                    ? "illustrative score at your priorities"
+                    : "set priorities on the left to score"}
                 </span>
               </div>
 
@@ -72,7 +76,7 @@ export function CompareDirections() {
 
               <div className="direction-card__choose">
                 <button type="button" className="btn" onClick={() => choose(v.id)}>
-                  Choose {TAG[i]}
+                  Load example {TAG[i]}
                 </button>
               </div>
             </article>

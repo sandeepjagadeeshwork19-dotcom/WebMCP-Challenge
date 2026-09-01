@@ -23,12 +23,16 @@ Rationale: it lets the agent open the conversation with a genuine analytical
 contribution ("here are three directions and how they fit what you've said you
 value") without touching the decision.
 
-## 2. New human action: `human/applyStrategyPriorities`
+## 2. Application example directions
 
-A visible "Adopt these priorities" control sets all four priority weights to a
-strategy's lens in a single committed action → one `budgetRevision` increment,
-one `human` activity event (`adopt_strategy`), and the normal staleness rule.
-It funds nothing. It is a human-only action with no WebMCP equivalent.
+The shipped interface does not apply a strategy's lens priorities. The resident's
+four weights remain exactly as set. A visible **Load example Direction** control
+dispatches `app/loadDirectionDraft`, placing the direction's allocation into the
+shared validator as an application-attributed example. This normal page action
+is deliberately labelled as distinct from a WebMCP assistant proposal.
+
+`list_strategy_options` remains read-only: it compares the same structured
+directions at the resident's current priorities and never loads a draft.
 
 ## 3. State additions
 
@@ -71,13 +75,14 @@ The spec's §12 page hierarchy (a scrolling stack of panels) was rebuilt as a
   Adopted`, a non-locking indicator, not a wizard).
 - A stable three-zone split: **left** = "you control this" (priorities,
   protected works, log); **centre** = the current stage (compare / draft / the
-  turn / review / record); **right** = the **assistant's margin** — the agent's
-  working notes in its own hand, structurally distinct, "advises, does not
-  decide".
+  turn / review / record); **right** = the **assistant's margin** with a live
+  WebMCP trace. Every tool call shows its name, read/write mode, outcome and the
+  revisions it observed. Ordinary page clicks never appear in that trace.
 - **Review is an invoked mode**, not an always-mounted panel — no disabled
-  finalise button or blocker list on load; the human-only controls and the
-  "no WebMCP tool … cannot reach past this point" notice appear only in review.
-- New action **`app/loadDirectionDraft`** (actor `system`): choosing a direction
+  finalise button or blocker list on load. The review notice states the precise
+  boundary: no WebMCP tool accepts, rejects or adopts; general browser automation
+  is outside that WebMCP tool surface.
+- New action **`app/loadDirectionDraft`** (actor `system`): loading an example direction
   places that direction's plan as an application-attributed starting draft. It
   also serves as the §12.4 "Load example proposal" fallback when WebMCP is
   absent. It runs the same validator and revision machinery as
