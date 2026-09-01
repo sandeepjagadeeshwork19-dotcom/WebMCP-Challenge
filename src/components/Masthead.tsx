@@ -1,17 +1,14 @@
 import { HYPOTHETICAL_DISCLOSURE } from "../domain/disclosure";
 import type { WebMcpState } from "../webmcp/useWebMcp";
 
-const TOOL_NOTE = "read state, list works, compare, simulate, propose, explain, request review";
-
 export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
-  const [lead, ...rest] = HYPOTHETICAL_DISCLOSURE.split(": ");
   const connected = webmcp.status === "registered";
   const toolsText =
     webmcp.status === "registered"
-      ? `${webmcp.registeredTools.length} assistant tools connected — ${TOOL_NOTE}`
+      ? `${webmcp.registeredTools.length} tools connected`
       : webmcp.status === "detecting"
-        ? "Detecting assistant tools…"
-        : "Assistant tools unavailable in this browser — the workspace still works manually";
+        ? "Looking for an assistant…"
+        : "No assistant in this browser — you can still do everything by hand.";
 
   return (
     <header className="masthead">
@@ -24,17 +21,17 @@ export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
             {toolsText}
           </p>
         </div>
-        <p className="docket">WARD DEVELOPMENT FUND · WORKING DRAFT · NO. WD-12</p>
+        <p className="docket">WARD FUND · DRAFT WD-12</p>
       </div>
       <h1 className="masthead__headline">
         Decide which ward works should receive the &#8377;10 lakh
       </h1>
       <p className="masthead__standfirst">
-        A hypothetical &#8377;10,00,000 ward fund across eight works. The assistant models options and
-        drafts &mdash; only the resident chooses, reviews and adopts.
+        You have &#8377;10,00,000 to split across eight ward works. The assistant can suggest and
+        draft plans. You pick, you decide.
       </p>
       <p className="disclosure" role="note">
-        <strong>{lead}:</strong> {rest.join(": ")}
+        {HYPOTHETICAL_DISCLOSURE}
       </p>
     </header>
   );

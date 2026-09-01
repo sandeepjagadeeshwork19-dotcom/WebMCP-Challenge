@@ -87,7 +87,7 @@ export function validateAllocation(
       issues.push({
         code: "invalid_amount",
         projectIds: [projectId],
-        message: `Amount for ${projectId} must be an integer number of dollars.`,
+        message: `Amount for ${projectId} must be a whole number of rupees.`,
       });
       continue;
     }
@@ -210,11 +210,9 @@ export function validateAllocation(
     issues.push({
       code: "budget_exceeded",
       projectIds: [],
-      message: `Total committed cost is ${money(
-        committedTotal,
-      )}, which is ${money(committedTotal - FUND_LIMIT)} over the ${money(
-        FUND_LIMIT,
-      )} fund limit.`,
+      message: `This plan spends ${money(committedTotal)} — that's ${money(
+        committedTotal - FUND_LIMIT,
+      )} over the ${money(FUND_LIMIT)} fund.`,
     });
   }
 

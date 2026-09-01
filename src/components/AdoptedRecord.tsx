@@ -31,12 +31,12 @@ export function AdoptedRecord() {
         <strong>
           <Icon name="badge" size={18} /> RESOLUTION WD-12 &mdash; ADOPTED
         </strong>
-        <span>local record · not transmitted</span>
+        <span>saved on this device only</span>
       </div>
 
       <div className="record">
         <p className="record__by">
-          Adopted by the resident on {new Date(record.createdAt).toLocaleString()}. Record ID{" "}
+          You adopted this on {new Date(record.createdAt).toLocaleString()}. Record ID{" "}
           {record.recordId}.
         </p>
         <hr className="sheet__rule" />
@@ -54,7 +54,7 @@ export function AdoptedRecord() {
                 <span className="resolution-line__name">
                   {getProject(entry.projectId).name}
                   {isProtected ? " · protected" : ""}
-                  {dep ? " · applied dependency" : ""}
+                  {dep ? " · required by another work" : ""}
                 </span>
                 <span className="resolution-line__amount">{formatMoney(entry.amount)}</span>
               </div>
@@ -64,7 +64,7 @@ export function AdoptedRecord() {
 
         <div className="record__grid">
           <p className="record-fact">
-            <span>COMMITTED / UNALLOCATED</span>
+            <span>SPENT / LEFT</span>
             <b>
               {formatMoney(record.committedTotal)} / {formatMoney(record.unallocatedAmount)}
             </b>
@@ -82,27 +82,20 @@ export function AdoptedRecord() {
             <b>
               {record.lockedAllocations.length
                 ? record.lockedAllocations
-                    .map((l) => `${l.projectId} ${getProject(l.projectId).shortName}`)
+                    .map((l) => getProject(l.projectId).shortName)
                     .join(", ")
                 : "None"}
-            </b>
-          </p>
-          <p className="record-fact">
-            <span>REVISIONS</span>
-            <b>
-              budget rev {record.sourceBudgetRevision} · proposal rev {record.sourceProposalRevision}
             </b>
           </p>
         </div>
 
         <p className="record__validation">
-          &#10003; Every rule of the fund passed at adoption.
+          &#10003; All funding rules passed.
         </p>
 
         <p className="record__attribution">
-          Attribution: {record.actor}. The assistant modelled and drafted; the resident set
-          priorities, protected works, reviewed and adopted. No WebMCP tool was registered to
-          accept, adopt or reset; general browser automation sits outside that boundary.
+          You set the priorities, protected works, reviewed and adopted this. The assistant only
+          modelled and drafted &mdash; it was never able to adopt anything.
         </p>
 
         <details className="record-json">

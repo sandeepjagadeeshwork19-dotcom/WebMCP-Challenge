@@ -44,10 +44,10 @@ export function App() {
 
       {(webmcp.status === "unsupported" || webmcp.status === "error") && (
         <aside className="fallback-notice" role="note">
-          <h2>Assistant tools unavailable</h2>
+          <h2>No assistant in this browser</h2>
           <p>
-            This browser has no WebMCP runtime. The workspace still works manually &mdash; loading an
-            example direction creates a clearly application-attributed draft.
+            That&rsquo;s fine &mdash; you can set priorities, compare plans, and adopt one entirely
+            by hand.
           </p>
         </aside>
       )}
@@ -69,11 +69,7 @@ export function App() {
       </main>
 
       <footer className="app-footer">
-        <p>
-          Hypothetical demonstration &mdash; no real funds, no vote. WebMCP authority boundary: the
-          page registers no WebMCP tool to accept, adopt or reset. General browser automation sits
-          outside that tool boundary.
-        </p>
+        <p>A demo &mdash; no real money, no real vote.</p>
       </footer>
     </div>
   );

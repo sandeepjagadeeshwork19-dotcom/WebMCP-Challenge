@@ -39,24 +39,23 @@ export function ReviewMode() {
     <section className="stage-block" aria-labelledby="review-band">
       <div className="review-band" ref={headingRef} tabIndex={-1} id="review-band">
         <strong>REVIEW &mdash; RESOLUTION WD-12</strong>
-        <span>This step is the resident&rsquo;s alone</span>
       </div>
 
       <div className="review-summary">
         <p className="review-summary__lead">
           Fund {formatMoney(FUND_LIMIT)} to {works.length} works:{" "}
           {works.map((w) => getProject(w.projectId).shortName).join(", ")}. {formatMoney(total)}{" "}
-          resolved, {formatMoney(FUND_LIMIT - total)} unallocated.
+          spent, {formatMoney(FUND_LIMIT - total)} left.
         </p>
         <p className="review-summary__validation">
-          &#10003; Fresh validation passed &mdash; every rule of the fund.
+          &#10003; Re-checked just now &mdash; all rules pass.
         </p>
         {tradeoff && (tradeoff.added.length > 0 || tradeoff.removed.length > 0) && (
           <p className="review-summary__tradeoff">
-            Trade-off vs where you started:{" "}
-            {tradeoff.added.map((id) => `+ ${getProject(id).shortName}`).join("  ·  ")}
-            {tradeoff.added.length && tradeoff.removed.length ? "  ·  " : ""}
-            {tradeoff.removed.map((id) => `− ${getProject(id).shortName}`).join("  ·  ")}
+            Changed from your start:{" "}
+            {tradeoff.added.map((id) => `+ ${getProject(id).shortName}`).join(", ")}
+            {tradeoff.added.length && tradeoff.removed.length ? ", " : ""}
+            {tradeoff.removed.map((id) => `− ${getProject(id).shortName}`).join(", ")}
           </p>
         )}
       </div>
@@ -64,16 +63,14 @@ export function ReviewMode() {
       <div className="authority-notice">
         <Icon name="user" size={18} />
         <p>
-          WebMCP hands control back here: the page exposes no WebMCP tool to accept, revise, reject
-          or adopt. These visible controls belong to the resident. General browser automation is
-          outside that WebMCP tool boundary.
+          The assistant can&rsquo;t accept or adopt a plan &mdash; only you can. These buttons are
+          yours.
         </p>
       </div>
 
       {rejected ? (
         <p className="sheet__validation" data-bad>
-          You rejected this resolution. Ask the assistant for a different plan, or adjust your
-          priorities.
+          You sent this back. Ask the assistant for a different plan, or change your priorities.
         </p>
       ) : (
         <>
@@ -84,7 +81,7 @@ export function ReviewMode() {
               disabled={!underReview}
               onClick={() => dispatch({ type: "human/acceptProposal" })}
             >
-              {accepted ? "Accepted" : "Accept the draft"}
+              {accepted ? "Accepted" : "Accept"}
             </button>
             <button
               type="button"
@@ -92,15 +89,7 @@ export function ReviewMode() {
               disabled={!underReview}
               onClick={() => dispatch({ type: "human/rejectProposal" })}
             >
-              Send back for changes
-            </button>
-            <button
-              type="button"
-              className="btn btn--danger"
-              disabled={!underReview}
-              onClick={() => dispatch({ type: "human/rejectProposal" })}
-            >
-              Reject
+              Send back
             </button>
           </div>
 
@@ -114,8 +103,7 @@ export function ReviewMode() {
               }
             />
             <label htmlFor="ack-box">
-              I understand this is a hypothetical demonstration. Adopting records a demonstration
-              choice only.
+              I understand this is a demo &mdash; adopting doesn&rsquo;t allocate any real money.
             </label>
           </div>
 
@@ -131,8 +119,8 @@ export function ReviewMode() {
             {!canFinalise && (
               <p className="adopt-hint" role="status">
                 {accepted
-                  ? "Tick the acknowledgement above to adopt."
-                  : blockers[0] ?? "Accept the draft, then tick the acknowledgement."}
+                  ? "Tick the box above to adopt."
+                  : blockers[0] ?? "Accept the plan, then tick the box."}
               </p>
             )}
           </div>

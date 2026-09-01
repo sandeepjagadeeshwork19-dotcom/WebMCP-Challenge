@@ -4,7 +4,7 @@ import { useAppState, useDispatch } from "../state/store";
 import { selectPrioritiesSet } from "../state/selectors";
 import { useStageFocus } from "./useStageFocus";
 
-const TAG = ["DIRECTION A", "DIRECTION B", "DIRECTION C"];
+const TAG = ["PLAN A", "PLAN B", "PLAN C"];
 
 export function CompareDirections() {
   const state = useAppState();
@@ -26,8 +26,8 @@ export function CompareDirections() {
       </h2>
       <p className="compare__lead">
         {prioritiesSet
-          ? "Three application examples scored at your priorities. Loading one is a normal page action — WebMCP calls appear separately in the live trace."
-          : "Set your priorities on the left, or load an application example. Ask your browser assistant to build a genuinely agent-proposed draft through WebMCP."}
+          ? "Three ready-made plans, scored against your priorities. Open one to start from it — you can change everything."
+          : "Set your priorities on the left first, or just open one of the plans below."}
       </p>
 
       <div className="compare__cards">
@@ -43,23 +43,21 @@ export function CompareDirections() {
                   {prioritiesSet ? v.scoreAtResidentPriorities : "—"}
                 </span>
                 <span className="direction-card__score-label">
-                  {prioritiesSet
-                    ? "illustrative score at your priorities"
-                    : "set priorities on the left to score"}
+                  {prioritiesSet ? "match with your priorities" : "set priorities to score"}
                 </span>
               </div>
 
               <div className="direction-card__metrics">
                 <div className="metric-row">
-                  <span>Total allocation</span>
+                  <span>Spent</span>
                   <b>{formatMoney(v.committedTotal)}</b>
                 </div>
                 <div className="metric-row">
-                  <span>Left unallocated</span>
+                  <span>Left</span>
                   <b>{formatMoney(v.unallocated)}</b>
                 </div>
                 <div className="metric-row">
-                  <span>Neighbourhoods with a funded work</span>
+                  <span>Neighbourhoods covered</span>
                   <b>{v.neighbourhoodCount}</b>
                 </div>
               </div>
@@ -77,8 +75,13 @@ export function CompareDirections() {
               </div>
 
               <div className="direction-card__choose">
-                <button type="button" className="btn" onClick={() => choose(v.id)}>
-                  Load example {TAG[i]}
+                <button
+                  type="button"
+                  className="btn"
+                  aria-label={`Start from ${v.label}`}
+                  onClick={() => choose(v.id)}
+                >
+                  Start from this plan
                 </button>
               </div>
             </article>

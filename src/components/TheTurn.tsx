@@ -53,15 +53,12 @@ export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
       <div className="turn-alert" role="alert">
         <Icon name="alert" size={18} />
         <p>
-          This draft is stale. You protected {protectedNames || "a work"} &mdash; the assistant must
-          re-plan around it (budget rev {stale.basedOnBudgetRevision} &rarr; {state.budgetRevision}).
+          You protected {protectedNames || "a work"}, so this plan needs to be redrawn to fit it in.
         </p>
       </div>
 
       <div className="cost-hero">
-        <p className="cost-hero__kicker">
-          PROTECTING {(protectedNames || "this work").toUpperCase()} CHANGES THE PLAN
-        </p>
+        <p className="cost-hero__kicker">WHAT CHANGES</p>
         <div className="cost-changes">
           <p className="cost-change cost-change--added">
             <span>MUST NOW INCLUDE</span>
@@ -81,33 +78,29 @@ export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
               {over > 0
                 ? formatMoney(over)
                 : staleValidation.valid
-                  ? "fits — needs re-validation"
+                  ? "still fits"
                   : "breaks a rule"}
             </b>
           </p>
           <p className="cost-change">
-            <span>SO THE ASSISTANT MUST</span>
+            <span>TO FIT, DROP</span>
             <b>
               {over > 0
-                ? `drop about ${formatMoney(over)} of other works`
-                : "rebuild and re-check the draft"}
+                ? `about ${formatMoney(over)} of other works`
+                : "nothing — just re-check"}
             </b>
           </p>
         </div>
         <p className="cost-hero__note">
-          The score liked this direction &mdash; but protecting {protectedNames || "that work"} is
-          your call, not the score&rsquo;s. Ask the assistant to redraft: it keeps what you protected
-          and rebalances the rest within {formatMoney(FUND_LIMIT)}.
+          Ask the assistant to redraft, or rebuild it here &mdash; either way your protected works
+          stay in.
         </p>
       </div>
 
       <div className="superseded">
         <div className="superseded__head">
-          <span>SUPERSEDED DRAFT</span>
-          <span>
-            proposal rev {stale.proposalRevision} &nbsp;·&nbsp;{" "}
-            {formatMoney(committedTotal(stale.allocations))} committed
-          </span>
+          <span>OLD PLAN</span>
+          <span>{formatMoney(committedTotal(stale.allocations))}</span>
         </div>
         <div className="resolution-lines">
           {[...stale.allocations]
@@ -128,28 +121,14 @@ export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
       </div>
 
       <div className="stage-actions">
-        {webmcpAvailable ? (
-          <>
-            <span className="btn btn--ghost" style={{ cursor: "default" }}>
-              Ask the assistant to redraft around your protected work
-            </span>
-            <button
-              type="button"
-              className="btn"
-              onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
-            >
-              Or rebuild it here
-            </button>
-          </>
-        ) : (
-          <button
-            type="button"
-            className="btn btn--primary"
-            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
-          >
-            Rebuild the draft around your protected work <Icon name="arrow" size={15} />
-          </button>
-        )}
+        <button
+          type="button"
+          className="btn btn--primary"
+          onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+        >
+          {webmcpAvailable ? "Rebuild the plan" : "Rebuild the plan around your protected works"}{" "}
+          <Icon name="arrow" size={15} />
+        </button>
       </div>
     </section>
   );

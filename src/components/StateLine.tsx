@@ -3,10 +3,10 @@ import { selectStage, type Stage } from "../state/selectors";
 
 const STEPS: { key: string; label: (s: Stage) => string; done: Stage[]; now: Stage[] }[] = [
   { key: "pri", label: () => "Priorities set", done: ["compare", "draft", "replanning", "invalid", "review", "adopted"], now: ["priorities"] },
-  { key: "cmp", label: () => "Comparing directions", done: ["draft", "replanning", "invalid", "review", "adopted"], now: ["compare"] },
+  { key: "cmp", label: () => "Compare plans", done: ["draft", "replanning", "invalid", "review", "adopted"], now: ["compare"] },
   {
     key: "drf",
-    label: (s) => (s === "replanning" ? "Re-planning — draft stale" : s === "invalid" ? "Draft rejected" : "Draft ready"),
+    label: (s) => (s === "replanning" ? "Needs redraft" : s === "invalid" ? "Draft breaks a rule" : "Draft ready"),
     done: ["review", "adopted"],
     now: ["draft", "replanning", "invalid"],
   },
@@ -18,8 +18,8 @@ export function StateLine() {
   const stage = selectStage(useAppState());
 
   return (
-    <nav className="stateline" aria-label="Where the draft stands">
-      <span className="stateline__label">Where the draft stands</span>
+    <nav className="stateline" aria-label="Where you are">
+      <span className="stateline__label">Where you are</span>
       {STEPS.map((step, i) => {
         const cls = step.now.includes(stage)
           ? "is-now"

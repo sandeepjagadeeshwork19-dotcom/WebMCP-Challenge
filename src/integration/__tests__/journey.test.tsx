@@ -52,12 +52,12 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
       rationale: "Safety-and-access plan within budget.",
     });
     expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
-    expect(screen.getByText(/WEBMCP ASSISTANT PROPOSAL/i)).toBeInTheDocument();
+    expect(screen.getByText(/FROM THE ASSISTANT/i)).toBeInTheDocument();
 
     // 5. Value judgment: protect the riverside play area (P-03, not in the draft, needs P-04).
     const row = screen.getByText("Riverside play area upgrade").closest(".schedule__row")!;
     await user.click(within(row as HTMLElement).getByRole("button", { name: /Protect/i }));
-    expect(await screen.findByText(/This draft is stale/i)).toBeInTheDocument();
+    expect(await screen.findByText(/needs to be redrawn to fit it in/i)).toBeInTheDocument();
 
     // 6. Old revision now rejected by the review tool.
     const staleReview = tools.request_allocation_review({ budgetRevision: 2, proposalRevision: 1 });
@@ -84,7 +84,7 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
     };
     expect(opened.reviewStatus).toBe("open");
     expect(
-      await screen.findByText(/WebMCP hands control back here/i),
+      await screen.findByText(/The assistant can.t accept or adopt a plan/i),
     ).toBeInTheDocument();
 
     // 9. There is no finalisation / adopt tool.
@@ -92,7 +92,7 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
     expect(Object.keys(tools)).not.toContain("adopt_resolution");
 
     // 10. Resident accepts, acknowledges, adopts via visible controls only.
-    await user.click(screen.getByRole("button", { name: /Accept the draft/i }));
+    await user.click(screen.getByRole("button", { name: /^Accept$/i }));
     await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /Adopt resolution WD-12/i }));
     expect(screen.getByText(/RESOLUTION WD-12 — ADOPTED/i)).toBeInTheDocument();

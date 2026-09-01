@@ -1,4 +1,4 @@
-import { PROJECTS } from "../domain/projects";
+import { PROJECTS, getProject } from "../domain/projects";
 import { formatMoney } from "../format";
 import { useAppState, useDispatch } from "../state/store";
 
@@ -20,24 +20,23 @@ export function ScheduleOfWorks() {
 
   return (
     <section className="schedule" aria-labelledby="schedule-heading">
-      <p className="kicker">Before the ward</p>
       <h2 className="rail-block__title" id="schedule-heading">
-        The eight candidate works
+        The eight works
       </h2>
       <p className="schedule__note">
-        Fully funded or not at all &mdash; except the phased tree drive. Protect any work to keep it
-        in every draft.
+        Each work is all-or-nothing to fund, except the tree drive (which can be partly funded).
+        Protect any work to keep it in every plan.
       </p>
 
       {PROJECTS.map((p) => {
         const phased = p.fundingRule.kind === "phased";
         const constraint =
           p.incompatibilities.length > 0
-            ? `not with ${p.incompatibilities.join(", ")}`
+            ? `not with the ${getProject(p.incompatibilities[0]).shortName}`
             : p.dependencies.length > 0
-              ? `needs ${p.dependencies.join(", ")}`
+              ? `needs the ${getProject(p.dependencies[0]).shortName}`
               : phased
-                ? "phased"
+                ? "can be partly funded"
                 : "";
         const defaultAmount = phased ? 60_000 : p.cost;
         return (

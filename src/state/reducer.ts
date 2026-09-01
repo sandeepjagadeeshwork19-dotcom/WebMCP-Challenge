@@ -13,6 +13,7 @@ import { getProject } from "../domain/projects";
 import { redraftAroundLocks } from "../domain/redraft";
 import { getStrategy } from "../domain/strategies";
 import { committedTotal, validateAllocation } from "../domain/validation";
+import { PRIORITY_LABELS } from "../format";
 import type { Allocation, PriorityKey, ProjectId } from "../domain/types";
 import { actorForAction, type AppAction } from "./actions";
 import {
@@ -128,7 +129,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
           },
         },
         "set_priority",
-        `Set ${action.key} priority to ${action.weight}`,
+        `Set ${PRIORITY_LABELS[action.key]} to ${action.weight}`,
         timestamp,
       );
     }
@@ -179,7 +180,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
           ].sort((a, b) => a.projectId.localeCompare(b.projectId)),
         },
         "lock_project",
-        `Locked ${action.projectId} at ${money(entry.amount)}`,
+        `Protected ${getProject(action.projectId).name} (${money(entry.amount)})`,
         timestamp,
       );
     }
@@ -202,7 +203,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
           ].sort((a, b) => a.projectId.localeCompare(b.projectId)),
         },
         "lock_project",
-        `Protected ${action.projectId} (${projectName}) at ${money(action.amount)}`,
+        `Protected ${projectName} (${money(action.amount)})`,
         timestamp,
       );
     }
@@ -217,7 +218,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
           ),
         },
         "unlock_project",
-        `Unlocked ${action.projectId}`,
+        `Unprotected ${getProject(action.projectId).name}`,
         timestamp,
       );
     }
@@ -232,8 +233,8 @@ export function reducer(state: AppState, action: AppAction): AppState {
           "human",
           action.acknowledged ? "acknowledge_disclosure" : "withdraw_disclosure_acknowledgement",
           action.acknowledged
-            ? "Acknowledged the hypothetical-data disclosure"
-            : "Withdrew the hypothetical-data acknowledgement",
+            ? "Ticked the demo acknowledgement"
+            : "Un-ticked the demo acknowledgement",
           timestamp,
         ),
       );
@@ -251,7 +252,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
       };
       Object.assign(
         next,
-        appendActivity(next, "human", "open_review", "Opened resident review", timestamp),
+        appendActivity(next, "human", "open_review", "Opened review", timestamp),
       );
       return next;
     }
@@ -265,7 +266,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
       };
       Object.assign(
         next,
-        appendActivity(next, "human", "reject_proposal", "Rejected the proposal", timestamp),
+        appendActivity(next, "human", "reject_proposal", "Sent the plan back", timestamp),
       );
       return next;
     }
@@ -280,7 +281,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
       };
       Object.assign(
         next,
-        appendActivity(next, "human", "accept_proposal", "Accepted the proposal (not yet finalised)", timestamp),
+        appendActivity(next, "human", "accept_proposal", "Accepted the plan", timestamp),
       );
       return next;
     }
@@ -317,7 +318,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
           next,
           "human",
           "finalise_allocation",
-          `Finalised allocation (${money(committedTotal(proposal.allocations))} committed)`,
+          `Adopted the plan (${money(committedTotal(proposal.allocations))})`,
           timestamp,
         ),
       );
@@ -330,7 +331,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
       fresh.activitySequence = state.activitySequence;
       Object.assign(
         fresh,
-        appendActivity(fresh, "human", "reset_demo", "Reset the demonstration to its initial state", timestamp),
+        appendActivity(fresh, "human", "reset_demo", "Started over", timestamp),
       );
       return fresh;
     }
@@ -343,7 +344,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
       return storeProposal(
         state,
         preset.allocations,
-        `Application-loaded starting draft — the "${preset.label}" direction.`,
+        `Starting point: the "${preset.label}" plan.`,
         "system",
         timestamp,
       );
@@ -359,7 +360,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
       return storeProposal(
         state,
         rebuilt,
-        "Application rebuild around the protected works — same validator and benefit ranking the resident and agent see.",
+        "Rebuilt to keep your protected works and stay within ₹10,00,000.",
         "system",
         timestamp,
       );
@@ -380,7 +381,7 @@ export function reducer(state: AppState, action: AppAction): AppState {
           next,
           "agent",
           "request_allocation_review",
-          `Requested resident review of proposal rev ${state.proposalRevision}`,
+          "Sent the draft to review",
           timestamp,
         ),
       );
@@ -438,9 +439,9 @@ function storeProposal(
       next,
       actor,
       actor === "agent" ? "propose_allocation" : "load_direction_draft",
-      `${actor === "agent" ? "Proposed" : "Loaded"} allocation rev ${proposalRevision}: ${
-        validation.valid ? "valid" : "invalid"
-      }, ${money(committedTotal(allocations))} committed`,
+      `${actor === "agent" ? "Drafted a plan" : "Loaded a plan"} — ${
+        validation.valid ? "valid" : "breaks a rule"
+      }, ${money(committedTotal(allocations))}`,
       timestamp,
     ),
   );

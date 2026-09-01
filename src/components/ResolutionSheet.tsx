@@ -28,8 +28,8 @@ export function ResolutionSheet() {
   return (
     <section className="stage-block" aria-labelledby="draft-heading" ref={focusRef} tabIndex={-1}>
       <p className="compare__lead">
-        A complete draft{locked.size > 0 ? ", keeping your protected work" : ""}. Take it into review,
-        or send it back for changes.
+        Here&rsquo;s a full plan{locked.size > 0 ? " that keeps what you protected" : ""}. Send it to
+        review, or ask for changes.
       </p>
 
       <div className="sheet">
@@ -38,21 +38,15 @@ export function ResolutionSheet() {
             DRAFT RESOLUTION &mdash; WD-12
           </h2>
           <p className="sheet__status" data-bad={!cv.valid || undefined}>
-            proposal rev {proposal.proposalRevision} &nbsp;·&nbsp; {cv.valid ? "valid" : "invalid"}{" "}
-            &nbsp;·&nbsp; not yet adopted
+            {cv.valid ? "Valid" : "Breaks a rule"}
           </p>
         </div>
         <div className="proposal-source" data-source={proposal.createdBy}>
-          <span>
-            {proposal.createdBy === "agent" ? "WEBMCP ASSISTANT PROPOSAL" : "APPLICATION EXAMPLE"}
-          </span>
+          <span>{proposal.createdBy === "agent" ? "FROM THE ASSISTANT" : "READY-MADE PLAN"}</span>
           <p>{proposal.rationale}</p>
         </div>
         <hr className="sheet__rule" />
-        <p className="sheet__preamble">
-          The ward resolves to fund the following works against a fund of {formatMoney(FUND_LIMIT)}{" "}
-          &mdash;
-        </p>
+        <p className="sheet__preamble">This plan funds:</p>
 
         <div className="resolution-lines">
           {lines.map((entry, i) => (
@@ -81,18 +75,18 @@ export function ResolutionSheet() {
         <hr className="sheet__rule" />
         <div className="sheet__tally">
           <p className="tally-figure">
-            <span>RESOLVED</span>
+            <span>SPENT</span>
             <b>{formatMoney(total)}</b>
           </p>
           <p className="tally-figure">
-            <span>UNALLOCATED</span>
+            <span>LEFT</span>
             <b>{formatMoney(FUND_LIMIT - total)}</b>
           </p>
         </div>
 
         <p className="sheet__validation" data-bad={!cv.valid || undefined}>
           {cv.valid ? (
-            <>&#10003; Satisfies every rule of the fund.</>
+            <>&#10003; Follows all the funding rules.</>
           ) : (
             <>&#10007; {cv.issues.map((x) => x.message).join(" ")}</>
           )}
@@ -100,7 +94,7 @@ export function ResolutionSheet() {
 
         {tradeoff && (tradeoff.added.length > 0 || tradeoff.removed.length > 0) && (
           <div className="tradeoff-strip">
-            <span className="kicker">Compared with where you started</span>
+            <span className="kicker">Changed from your start</span>
             <p>
               {tradeoff.added.map((id) => `+ ${getProject(id).shortName}`).join("   ·   ")}
               {tradeoff.added.length > 0 && tradeoff.removed.length > 0 ? "   ·   " : ""}
@@ -128,16 +122,13 @@ export function ResolutionSheet() {
             className="btn btn--primary"
             onClick={() => dispatch({ type: "human/openReview" })}
           >
-            Open resident review manually <Icon name="arrow" size={15} />
+            Send to review <Icon name="arrow" size={15} />
           </button>
         ) : (
           <p className="sheet__validation" data-bad>
-            The engine rejected this draft. Ask the assistant for a plan that satisfies every rule.
+            This plan breaks a funding rule. Ask the assistant to fix it.
           </p>
         )}
-        <span className="btn btn--ghost" style={{ cursor: "default" }}>
-          A browser assistant can request review through WebMCP
-        </span>
       </div>
     </section>
   );

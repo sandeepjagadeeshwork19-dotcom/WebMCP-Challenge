@@ -146,9 +146,9 @@ export function selectStatusLabel(state: AppState): string {
     case "review":
       return state.proposalStatus === "accepted" ? "accepted" : "under review";
     case "replanning":
-      return "draft stale";
+      return "needs redraft";
     case "invalid":
-      return "draft rejected by the engine";
+      return "breaks a rule";
     case "draft":
       return "valid";
     default: {
@@ -166,19 +166,19 @@ export interface TurnIndicator {
 export function selectTurn(state: AppState): TurnIndicator {
   switch (selectStage(state)) {
     case "priorities":
-      return { actor: "you", text: "Your move — set what you value, or ask the assistant to suggest directions" };
+      return { actor: "you", text: "Your move — set what you value, or ask the assistant to suggest a plan" };
     case "compare":
-      return { actor: "you", text: "Your move — compare the directions and choose one" };
+      return { actor: "you", text: "Your move — compare the plans and pick one" };
     case "draft":
       return { actor: "you", text: "Your move — review the draft, or send it back for changes" };
     case "replanning":
-      return { actor: "assistant", text: "Assistant's move — ask it to redraft in your assistant window" };
+      return { actor: "assistant", text: "Assistant's move — ask it to redraft the plan" };
     case "invalid":
-      return { actor: "assistant", text: "The engine rejected the draft — ask the assistant for a valid plan" };
+      return { actor: "assistant", text: "The draft breaks a rule — ask the assistant to fix it" };
     case "review":
       return state.proposalStatus === "accepted"
-        ? { actor: "you", text: "Your move — acknowledge the disclosure, then adopt" }
-        : { actor: "you", text: "Your move — accept, send back, or reject; then adopt" };
+        ? { actor: "you", text: "Your move — tick the box, then adopt" }
+        : { actor: "you", text: "Your move — accept or send back, then adopt" };
     case "adopted":
       return { actor: "done", text: "Adopted. The assistant modelled the options; you made the call." };
   }

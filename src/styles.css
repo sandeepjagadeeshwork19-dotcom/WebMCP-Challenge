@@ -1545,16 +1545,24 @@ select {
   }
 }
 
-/* Tools deliberately not registered — the boundary made visible. */
+/* The actions with no tool — collapsed by default. */
 .withheld {
   margin-top: 0.9rem;
+  border-top: 1px solid var(--margin-rule);
+  padding-top: 0.7rem;
 }
-.withheld__kicker {
-  font-size: 0.62rem;
+.withheld__summary {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-soft, #555);
+  cursor: pointer;
+  list-style-position: inside;
+}
+.withheld__head {
+  margin: 0.5rem 0 0.35rem;
+  font-size: 0.72rem !important;
   font-weight: 700;
-  letter-spacing: 0.1em;
   color: var(--accent);
-  margin-bottom: 0.5rem;
 }
 .withheld__list {
   list-style: none;
@@ -1562,29 +1570,16 @@ select {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.25rem;
 }
 .withheld__list li {
-  display: grid;
-  gap: 0.05rem;
-}
-.withheld__list code {
-  font-size: 0.72rem;
-  color: var(--ink);
-  text-decoration: line-through;
-  text-decoration-color: var(--accent);
-}
-.withheld__list span {
   font-size: 0.74rem;
   line-height: 1.4;
-  color: var(--ink-soft, #555);
+  color: var(--ink);
 }
 .withheld__note {
-  margin-top: 0.55rem;
-  font-size: 0.72rem !important;
+  margin-top: 0.5rem;
+  font-size: 0.7rem !important;
   line-height: 1.45 !important;
   color: var(--ink-soft, #555);
-}
-.withheld__note code {
-  font-size: 0.68rem;
 }
