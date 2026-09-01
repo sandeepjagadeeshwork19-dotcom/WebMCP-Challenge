@@ -7,5 +7,8 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
     css: true,
+    // The default "forks" pool times out spawning workers on some Windows
+    // machines; "threads" runs the suite reliably everywhere.
+    pool: "threads",
   },
 });

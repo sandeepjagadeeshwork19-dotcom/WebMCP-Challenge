@@ -31,4 +31,30 @@ describe("tool contracts", () => {
       expect(typeof tool.description).toBe("string");
     }
   });
+
+  it("returns the MCP result shape: text content plus structuredContent", async () => {
+    const byName = Object.fromEntries(contracts().map((t) => [t.name, t]));
+    const ctx = { signal: new AbortController().signal };
+    const ok = await byName.get_budget_state.execute({}, ctx);
+    expect(Array.isArray(ok.content)).toBe(true);
+    expect(ok.content[0]).toMatchObject({ type: "text" });
+    expect(ok.structuredContent).toMatchObject({ budgetRevision: 0 });
+    expect(ok.isError).toBeUndefined();
+
+    const bad = await byName.simulate_allocation.execute(
+      { budgetRevision: 99, allocations: [] },
+      ctx,
+    );
+    expect(bad.isError).toBe(true);
+    expect(bad.structuredContent).toMatchObject({ error: { code: "stale_budget_revision" } });
+  });
+
+  it("get_budget_state declares the actions no tool can perform", async () => {
+    const byName = Object.fromEntries(contracts().map((t) => [t.name, t]));
+    const result = await byName.get_budget_state.execute({}, { signal: new AbortController().signal });
+    const limits = (result.structuredContent as { structuralLimits: { actions: string[] } })
+      .structuralLimits;
+    expect(limits.actions.join(" ")).toMatch(/adopt or finalise/i);
+    expect(limits.actions.join(" ")).toMatch(/priority weights/i);
+  });
 });

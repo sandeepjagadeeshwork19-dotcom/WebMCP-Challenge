@@ -6,6 +6,7 @@ import { useAppState } from "../state/store";
 import { selectStage } from "../state/selectors";
 import { Icon } from "./Icon";
 import { WebMcpActivity } from "./WebMcpActivity";
+import { WithheldTools } from "./WithheldTools";
 
 export function AssistantMargin() {
   const state = useAppState();
@@ -19,6 +20,7 @@ export function AssistantMargin() {
       <hr className="margin__rule" />
       <Body stage={stage} state={state} />
       <WebMcpActivity />
+      <WithheldTools />
     </aside>
   );
 }

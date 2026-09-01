@@ -1544,3 +1544,47 @@ select {
     animation: none !important;
   }
 }
+
+/* Tools deliberately not registered — the boundary made visible. */
+.withheld {
+  margin-top: 0.9rem;
+}
+.withheld__kicker {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.withheld__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.withheld__list li {
+  display: grid;
+  gap: 0.05rem;
+}
+.withheld__list code {
+  font-size: 0.72rem;
+  color: var(--ink);
+  text-decoration: line-through;
+  text-decoration-color: var(--accent);
+}
+.withheld__list span {
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: var(--ink-soft, #555);
+}
+.withheld__note {
+  margin-top: 0.55rem;
+  font-size: 0.72rem !important;
+  line-height: 1.45 !important;
+  color: var(--ink-soft, #555);
+}
+.withheld__note code {
+  font-size: 0.68rem;
+}

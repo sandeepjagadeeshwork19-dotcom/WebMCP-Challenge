@@ -5,6 +5,12 @@
  * Tools are registered on `document.modelContext` (not `navigator`).
  */
 
+export interface WebMcpToolResult {
+  content: Array<{ type: "text"; text: string }>;
+  structuredContent?: unknown;
+  isError?: boolean;
+}
+
 export interface WebMcpToolDefinition {
   name: string;
   title?: string;
@@ -12,12 +18,15 @@ export interface WebMcpToolDefinition {
   inputSchema?: Record<string, unknown>;
   annotations?: {
     readOnlyHint?: boolean;
+    destructiveHint?: boolean;
+    idempotentHint?: boolean;
+    openWorldHint?: boolean;
     [key: string]: unknown;
   };
   execute: (
     input: unknown,
     context: { signal: AbortSignal },
-  ) => unknown | Promise<unknown>;
+  ) => WebMcpToolResult | Promise<WebMcpToolResult>;
 }
 
 export interface ModelContext {

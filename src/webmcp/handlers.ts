@@ -69,18 +69,37 @@ export function createHandlers(store: Store): Handlers {
 
       const state = store.getState();
       const total = committedTotal(state.manualAllocations);
+      const manualValidation = validateAllocation(state.manualAllocations, {
+        lockedAllocations: state.lockedAllocations,
+      });
       return {
         datasetVersion: state.datasetVersion,
         fundLimit: state.fundLimit,
         budgetRevision: state.budgetRevision,
         priorities: { ...state.residentPriorities },
+        priorityScale: "0 (ignore) to 3 (weigh heavily)",
         lockedAllocations: state.lockedAllocations,
         manualAllocations: state.manualAllocations,
+        manualAllocationValidation: {
+          valid: manualValidation.valid,
+          issues: manualValidation.issues,
+        },
         committedTotal: total,
         remainingFunds: FUND_LIMIT - total,
         proposal: proposalSummary(store),
         reviewStatus: state.reviewStatus,
         finalised: state.proposalStatus === "finalised",
+        structuralLimits: {
+          note: "These actions are not exposed as tools. Only the resident performs them, through visible page controls.",
+          actions: [
+            "set or change priority weights",
+            "protect (lock) a work into every draft, or remove that protection",
+            "edit the resident's own allocation",
+            "accept, send back, or reject a proposal",
+            "adopt or finalise the resolution",
+            "reset the demonstration",
+          ],
+        },
         ...(includeRecentActivity
           ? {
               recentActivity: state.activityHistory
