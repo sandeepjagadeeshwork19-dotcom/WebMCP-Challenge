@@ -63,7 +63,7 @@ export function ScheduleOfWorks() {
             </span>
             <button
               type="button"
-              className="work-protect"
+              className="toggle work-protect"
               aria-pressed={locked.has(p.id)}
               onClick={() => toggleProtect(p.id, defaultAmount)}
             >

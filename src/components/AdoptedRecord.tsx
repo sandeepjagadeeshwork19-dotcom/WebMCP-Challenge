@@ -113,7 +113,7 @@ export function AdoptedRecord() {
             <p>Reset the whole demonstration? This clears the record and returns to the start.</p>
             <button
               type="button"
-              className="btn btn--danger"
+              className="btn btn--primary"
               onClick={() => {
                 dispatch({ type: "human/reset" });
                 setConfirming(false);
@@ -126,7 +126,7 @@ export function AdoptedRecord() {
             </button>
           </div>
         ) : (
-          <button type="button" className="btn btn--dark" onClick={() => setConfirming(true)}>
+          <button type="button" className="btn" onClick={() => setConfirming(true)}>
             <Icon name="rotate" size={14} /> Reset &mdash; run the demonstration again
           </button>
         )}

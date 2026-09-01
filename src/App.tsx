@@ -12,7 +12,6 @@ import { ReviewMode } from "./components/ReviewMode";
 import { AdoptedRecord } from "./components/AdoptedRecord";
 import { ScheduleOfWorks } from "./components/ScheduleOfWorks";
 import { NextActionDock } from "./components/NextActionDock";
-import { ResponsiveWebMcpStrip } from "./components/ResponsiveWebMcpStrip";
 
 function Stage() {
   const stage = selectStage(useAppState());
@@ -41,16 +40,7 @@ export function App() {
   const latest = state.activityHistory.at(-1);
   const webmcpAvailable = webmcp.status === "registered";
   const guidanceFirst = stage === "priorities" || stage === "compare";
-
-  const guidance = (
-    <>
-      <ResponsiveWebMcpStrip
-        connected={webmcpAvailable}
-        toolCount={webmcp.registeredTools.length}
-      />
-      <NextActionDock webmcpAvailable={webmcpAvailable} />
-    </>
-  );
+  const dock = <NextActionDock webmcpAvailable={webmcpAvailable} />;
 
   return (
     <div className="app">
@@ -75,9 +65,9 @@ export function App() {
       <LeftRail />
       <main className="layout">
         <div className={`stage stage--${stage}`} key={stage}>
-          {guidanceFirst && guidance}
+          {guidanceFirst && dock}
           <Stage />
-          {!guidanceFirst && guidance}
+          {!guidanceFirst && dock}
           {stage !== "adopted" && stage !== "review" && <ScheduleOfWorks />}
         </div>
         <AssistantMargin />

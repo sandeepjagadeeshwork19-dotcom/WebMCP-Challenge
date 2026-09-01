@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { PRIORITY_KEYS, getProject } from "../domain/projects";
 import type { PriorityKey, PriorityWeight } from "../domain/types";
 import { useAppState, useDispatch } from "../state/store";
-import { selectRecentActivity } from "../state/selectors";
 import { PRIORITY_LABELS, formatMoney } from "../format";
 
 const WEIGHTS: PriorityWeight[] = [0, 1, 2, 3];
@@ -47,7 +46,7 @@ function PriorityRow({ priorityKey, value }: { priorityKey: PriorityKey; value: 
               aria-checked={active}
               aria-label={`${PRIORITY_LABELS[priorityKey]} ${weight}`}
               tabIndex={active ? 0 : -1}
-              className="priority-chip"
+              className="toggle priority-chip"
               onClick={() => set(weight)}
             >
               {weight}
@@ -62,7 +61,6 @@ function PriorityRow({ priorityKey, value }: { priorityKey: PriorityKey; value: 
 export function LeftRail() {
   const state = useAppState();
   const dispatch = useDispatch();
-  const activity = selectRecentActivity(state, 12);
 
   return (
     <aside className="rail" aria-label="What the resident controls">
@@ -92,7 +90,7 @@ export function LeftRail() {
               </p>
               <button
                 type="button"
-                className="protected-item__unlock"
+                className="btn btn--quiet protected-item__unlock"
                 onClick={() =>
                   dispatch({ type: "human/unlockProject", projectId: lock.projectId })
                 }
@@ -104,23 +102,6 @@ export function LeftRail() {
         )}
       </section>
 
-      <section className="rail-block" aria-labelledby="rail-log">
-        <h2 className="rail-block__title" id="rail-log">
-          Activity
-        </h2>
-        {activity.length === 0 ? (
-          <p className="rail-block__note">Nothing yet.</p>
-        ) : (
-          <ol className="log-list">
-            {activity.map((e) => (
-              <li key={e.id}>
-                <span className={`log-actor log-actor--${e.actor}`}>{e.actor}</span>
-                <span>{e.summary}</span>
-              </li>
-            ))}
-          </ol>
-        )}
-      </section>
     </aside>
   );
 }

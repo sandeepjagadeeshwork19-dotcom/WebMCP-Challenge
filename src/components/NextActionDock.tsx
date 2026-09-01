@@ -43,7 +43,7 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
   if (stage === "compare") {
     return <Dock actor={webmcpAvailable ? "assistant" : "resident"} focusKey="compare" eyebrow={webmcpAvailable ? "ASSISTANT OPTION" : "CHOOSE A STARTING POINT"} title={webmcpAvailable ? "Ask for a tailored proposal" : "Open a ready-made example below"}>
       <p>{webmcpAvailable ? "After you paste and send this request, real WebMCP calls will appear in the evidence strip." : "Each example opens a draft; it is not the final decision."}</p>
-      {webmcpAvailable && <button className="btn btn--assistant" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Request copied" : "Copy planning request"}</button>}
+      {webmcpAvailable && <button className="btn btn--agent" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Request copied" : "Copy planning request"}</button>}
       <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
     </Dock>;
   }
@@ -51,8 +51,8 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
   if (stage === "draft") {
     return <Dock actor={webmcpAvailable ? "assistant" : "resident"} focusKey={`draft-${state.proposalRevision}`} eyebrow={webmcpAvailable ? "HAND OFF TO THE RESIDENT" : "YOUR NEXT MOVE"} title="Open this exact proposal for review">
       <p>Proposal {state.proposalRevision} will open in resident review. It will not be accepted or adopted.</p>
-      {webmcpAvailable ? <button className="btn btn--assistant" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Handoff request copied" : "Copy assistant handoff request"}</button> : <button className="btn btn--primary" type="button" onClick={() => dispatch({ type: "human/openReview" })}>Open resident review <Icon name="arrow" size={14} /></button>}
-      {webmcpAvailable && <button className="action-dock__link" type="button" onClick={() => dispatch({ type: "human/openReview" })}>Open review locally instead</button>}
+      {webmcpAvailable ? <button className="btn btn--agent" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Handoff request copied" : "Copy assistant handoff request"}</button> : <button className="btn btn--primary" type="button" onClick={() => dispatch({ type: "human/openReview" })}>Open resident review <Icon name="arrow" size={14} /></button>}
+      {webmcpAvailable && <button className="btn btn--quiet" type="button" onClick={() => dispatch({ type: "human/openReview" })}>Open review locally instead</button>}
       <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
     </Dock>;
   }
@@ -61,8 +61,8 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
     const invalid = stage === "invalid";
     return <Dock actor={webmcpAvailable ? "assistant" : "resident"} focusKey={`${stage}-${state.proposalRevision}`} eyebrow={webmcpAvailable ? "ASSISTANT’S NEXT MOVE" : "CONTINUE LOCALLY"} title={invalid ? "Correct the funding rules" : `Replan around ${protectedNames || "your protection"}`}>
       <p>After the next plan runs, expect a fresh validated proposal that preserves every protected work.</p>
-      {webmcpAvailable ? <button className="btn btn--assistant" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Request copied" : invalid ? "Copy fix request" : "Copy redraft request"}</button> : <button className="btn btn--primary" type="button" onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Rebuild locally <Icon name="arrow" size={14} /></button>}
-      {webmcpAvailable && <button className="action-dock__link" type="button" onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Continue locally without the assistant</button>}
+      {webmcpAvailable ? <button className="btn btn--agent" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Request copied" : invalid ? "Copy fix request" : "Copy redraft request"}</button> : <button className="btn btn--primary" type="button" onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Rebuild locally <Icon name="arrow" size={14} /></button>}
+      {webmcpAvailable && <button className="btn btn--quiet" type="button" onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Continue locally without the assistant</button>}
       <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
     </Dock>;
   }
@@ -70,8 +70,8 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
   if (state.proposalStatus === "rejected") {
     return <Dock actor={webmcpAvailable ? "assistant" : "resident"} focusKey="rejected" eyebrow="CHANGES REQUESTED" title={webmcpAvailable ? "Create a revised proposal" : "Change a priority or protection first"}>
       <p>The rejection remains in the activity record. Change a priority/protection above, or tell the assistant what must change.</p>
-      {webmcpAvailable ? <button className="btn btn--assistant" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Request copied" : "Copy redraft request"}</button> : <button className="btn btn--primary" type="button" disabled={!changedSinceRejection} onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Rebuild after my change</button>}
-      {webmcpAvailable && <button className="action-dock__link" type="button" disabled={!changedSinceRejection} onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Rebuild locally after changing a priority or protection</button>}
+      {webmcpAvailable ? <button className="btn btn--agent" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Request copied" : "Copy redraft request"}</button> : <button className="btn btn--primary" type="button" disabled={!changedSinceRejection} onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Rebuild after my change</button>}
+      {webmcpAvailable && <button className="btn btn--quiet" type="button" disabled={!changedSinceRejection} onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Rebuild locally after changing a priority or protection</button>}
       <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
     </Dock>;
   }
@@ -80,7 +80,7 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
     return <Dock actor="resident" focusKey="under-review" eyebrow="YOUR REVIEW" title="Decide on this proposal">
       <p>Accepting reveals the adoption acknowledgement. Requesting changes keeps the rejection in the activity record.</p>
       <button className="btn btn--primary" type="button" onClick={() => dispatch({ type: "human/acceptProposal" })}>Accept this proposal <Icon name="arrow" size={14} /></button>
-      <button className="action-dock__link" type="button" onClick={() => dispatch({ type: "human/rejectProposal" })}>Request changes</button>
+      <button className="btn btn--quiet" type="button" onClick={() => dispatch({ type: "human/rejectProposal" })}>Request changes</button>
     </Dock>;
   }
 
