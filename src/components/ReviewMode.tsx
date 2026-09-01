@@ -70,7 +70,7 @@ export function ReviewMode() {
 
       {rejected ? (
         <p className="sheet__validation" data-bad>
-          You sent this back. Ask the assistant for a different plan, or change your priorities.
+          Sent back. Change your priorities or protected works, then rebuild the plan.
         </p>
       ) : (
         <>
@@ -89,7 +89,7 @@ export function ReviewMode() {
               disabled={!underReview}
               onClick={() => dispatch({ type: "human/rejectProposal" })}
             >
-              Send back
+              Go back and change it
             </button>
           </div>
 

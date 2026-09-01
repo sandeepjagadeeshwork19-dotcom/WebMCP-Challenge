@@ -28,8 +28,9 @@ export function ResolutionSheet() {
   return (
     <section className="stage-block" aria-labelledby="draft-heading" ref={focusRef} tabIndex={-1}>
       <p className="compare__lead">
-        Here&rsquo;s a full plan{locked.size > 0 ? " that keeps what you protected" : ""}. Send it to
-        review, or ask for changes.
+        Here&rsquo;s a full plan{locked.size > 0 ? " that keeps what you protected" : ""}. Nothing is
+        locked &mdash; protect the works you want kept, adjust your priorities, and rebuild as many
+        times as you like. Send it to review when it&rsquo;s right.
       </p>
 
       <div className="sheet">

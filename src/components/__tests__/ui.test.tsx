@@ -52,9 +52,7 @@ describe("shell", () => {
     renderWithStore(<App />);
     expect(screen.getAllByText(/A demonstration with invented ward works/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/No assistant in this browser/i).length).toBeGreaterThan(0);
-    expect(
-      screen.getByText(/Decide which ward works should receive the ₹10 lakh/i),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
   });
 });
 

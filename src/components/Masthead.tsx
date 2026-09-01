@@ -21,18 +21,15 @@ export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
             {toolsText}
           </p>
         </div>
-        <p className="docket">WARD FUND · DRAFT WD-12</p>
+        <div className="masthead__proof"><b>{connected ? webmcp.registeredTools.length : 0} WEBMCP TOOLS</b><span>0 ADOPTION TOOLS</span></div>
       </div>
       <h1 className="masthead__headline">
-        Decide which ward works should receive the &#8377;10 lakh
+        &#8377;10 lakh. Eight works. One resident decision.
       </h1>
       <p className="masthead__standfirst">
-        You have &#8377;10,00,000 to split across eight ward works. The assistant can suggest and
-        draft plans. You pick, you decide.
+        The assistant can investigate, simulate and draft. Only you can protect a work and adopt the plan.
       </p>
-      <p className="disclosure" role="note">
-        {HYPOTHETICAL_DISCLOSURE}
-      </p>
+      <details className="masthead__about"><summary>About this demonstration</summary><p className="disclosure" role="note">{HYPOTHETICAL_DISCLOSURE}</p></details>
     </header>
   );
 }

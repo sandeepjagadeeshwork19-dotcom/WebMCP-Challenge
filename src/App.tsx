@@ -3,7 +3,6 @@ import { useAppState } from "./state/store";
 import { selectStage } from "./state/selectors";
 import { Masthead } from "./components/Masthead";
 import { CommandBar } from "./components/CommandBar";
-import { StateLine } from "./components/StateLine";
 import { LeftRail } from "./components/LeftRail";
 import { AssistantMargin } from "./components/AssistantMargin";
 import { CompareDirections } from "./components/CompareDirections";
@@ -52,16 +51,15 @@ export function App() {
         </aside>
       )}
 
-      <CommandBar />
-      <StateLine />
+      <CommandBar webmcpAvailable={webmcpAvailable} />
 
       <div aria-live="polite" className="visually-hidden">
         {latest ? `${latest.actor}: ${latest.summary}` : ""}
       </div>
 
+      <LeftRail />
       <main className="layout">
-        <LeftRail />
-        <div className="stage">
+        <div className={`stage stage--${stage}`} key={stage}>
           <Stage webmcpAvailable={webmcpAvailable} />
           {stage !== "adopted" && <ScheduleOfWorks />}
         </div>

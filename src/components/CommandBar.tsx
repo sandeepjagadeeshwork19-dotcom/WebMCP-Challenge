@@ -5,11 +5,17 @@ import { useAppState } from "../state/store";
 import { selectActiveAllocation, selectStatusLabel, selectTurn } from "../state/selectors";
 import { Icon } from "./Icon";
 
-export function CommandBar() {
+export function CommandBar({ webmcpAvailable }: { webmcpAvailable?: boolean }) {
   const state = useAppState();
   const allocated = committedTotal(selectActiveAllocation(state));
   const status = selectStatusLabel(state);
-  const turn = selectTurn(state);
+  let turn = selectTurn(state);
+
+  // With no assistant connected, never tell the resident it's "the assistant's
+  // move" — point them at the by-hand control instead.
+  if (webmcpAvailable === false && turn.actor === "assistant") {
+    turn = { actor: "you", text: "Your move — rebuild the plan below to fit your protected work" };
+  }
 
   return (
     <div className="commandbar">
@@ -28,7 +34,7 @@ export function CommandBar() {
         role="status"
         aria-live="polite"
       >
-        <Icon name={turn.actor === "assistant" ? "pen" : turn.actor === "done" ? "check" : "pen"} size={14} />
+        <Icon name={turn.actor === "done" ? "check" : "arrow"} size={13} />
         {turn.text}
       </p>
     </div>

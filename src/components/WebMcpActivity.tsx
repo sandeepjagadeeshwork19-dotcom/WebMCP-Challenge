@@ -29,8 +29,13 @@ export function WebMcpActivity() {
         </div>
       ) : (
         <ol className="tool-trace__list" aria-live="polite">
-          {events.map((event) => (
-            <li className="tool-trace__event" data-status={event.status} key={event.id}>
+          {[...events].slice(-4).reverse().map((event, index) => (
+            <li
+              className="tool-trace__event"
+              data-status={event.status}
+              data-current={index === 0 ? "true" : "false"}
+              key={event.id}
+            >
               <div className="tool-trace__event-head">
                 <code>{DISPLAY_NAMES[event.toolName] ?? event.toolName}</code>
                 <span>{event.mode.toUpperCase()}</span>

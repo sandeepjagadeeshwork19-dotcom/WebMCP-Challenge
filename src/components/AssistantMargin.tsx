@@ -11,9 +11,8 @@ export function AssistantMargin() {
   return (
     <aside className="margin" aria-label="The assistant's margin">
       <p className="margin__kicker">
-        THE ASSISTANT&rsquo;S MARGIN <Icon name="pen" size={13} />
+        LIVE SESSION <Icon name="pen" size={13} />
       </p>
-      <hr className="margin__rule" />
       <Body stage={stage} />
       <WebMcpActivity />
       <WithheldTools />
