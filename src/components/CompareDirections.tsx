@@ -2,12 +2,14 @@ import { STRATEGY_PRESETS, describeStrategy } from "../domain/strategies";
 import { formatMoney } from "../format";
 import { useAppState, useDispatch } from "../state/store";
 import { selectPrioritiesSet } from "../state/selectors";
+import { useStageFocus } from "./useStageFocus";
 
 const TAG = ["DIRECTION A", "DIRECTION B", "DIRECTION C"];
 
 export function CompareDirections() {
   const state = useAppState();
   const dispatch = useDispatch();
+  const focusRef = useStageFocus<HTMLElement>();
   const prioritiesSet = selectPrioritiesSet(state);
 
   // Choosing a direction loads its plan as a starting draft. It does NOT touch
@@ -18,7 +20,7 @@ export function CompareDirections() {
   };
 
   return (
-    <section className="compare" aria-labelledby="compare-heading">
+    <section className="compare" aria-labelledby="compare-heading" ref={focusRef} tabIndex={-1}>
       <h2 id="compare-heading" className="visually-hidden">
         Compare the three directions
       </h2>

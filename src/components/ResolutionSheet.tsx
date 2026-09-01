@@ -7,10 +7,12 @@ import {
   selectProposalTradeoffVsPrevious,
 } from "../state/selectors";
 import { Icon } from "./Icon";
+import { useStageFocus } from "./useStageFocus";
 
 export function ResolutionSheet() {
   const state = useAppState();
   const dispatch = useDispatch();
+  const focusRef = useStageFocus<HTMLElement>();
   const proposal = state.agentProposal;
   const cv = state.constraintValidation;
   if (!proposal || !cv) return null;
@@ -24,7 +26,7 @@ export function ResolutionSheet() {
     selectProposalTradeoffVsPrevious(state) ?? selectProposalTradeoffVsManual(state);
 
   return (
-    <section className="stage-block" aria-labelledby="draft-heading">
+    <section className="stage-block" aria-labelledby="draft-heading" ref={focusRef} tabIndex={-1}>
       <p className="compare__lead">
         A complete draft{locked.size > 0 ? ", keeping your protected work" : ""}. Take it into review,
         or send it back for changes.

@@ -3,6 +3,7 @@ import { committedTotal, validateAllocation } from "../domain/validation";
 import { formatMoney } from "../format";
 import { useAppState, useDispatch } from "../state/store";
 import { Icon } from "./Icon";
+import { useStageFocus } from "./useStageFocus";
 import type { Allocation, ProjectId } from "../domain/types";
 
 /**
@@ -12,6 +13,7 @@ import type { Allocation, ProjectId } from "../domain/types";
 export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
   const state = useAppState();
   const dispatch = useDispatch();
+  const focusRef = useStageFocus<HTMLElement>();
   const stale = state.agentProposal;
   if (!stale) return null;
 
@@ -43,7 +45,7 @@ export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
   });
 
   return (
-    <section className="stage-block" aria-labelledby="turn-heading">
+    <section className="stage-block" aria-labelledby="turn-heading" ref={focusRef} tabIndex={-1}>
       <h2 id="turn-heading" className="visually-hidden">
         The draft is stale
       </h2>

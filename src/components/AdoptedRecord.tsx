@@ -3,10 +3,12 @@ import { getProject } from "../domain/projects";
 import { formatMoney, PRIORITY_LABELS } from "../format";
 import { useAppState, useDispatch } from "../state/store";
 import { Icon } from "./Icon";
+import { useStageFocus } from "./useStageFocus";
 
 export function AdoptedRecord() {
   const state = useAppState();
   const dispatch = useDispatch();
+  const focusRef = useStageFocus<HTMLElement>();
   const record = state.finalAllocationRecord;
   const [copied, setCopied] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -24,7 +26,7 @@ export function AdoptedRecord() {
   };
 
   return (
-    <section className="stage-block" aria-labelledby="adopted-band">
+    <section className="stage-block" aria-labelledby="adopted-band" ref={focusRef} tabIndex={-1}>
       <div className="adopted-band" id="adopted-band">
         <strong>
           <Icon name="badge" size={18} /> RESOLUTION WD-12 &mdash; ADOPTED
