@@ -21,7 +21,8 @@ a function that was never registered on `document.modelContext`.
 
 - [x] Repo pushed to public GitHub; MIT auto-detected; URL filled in **Links** below
 - [ ] Video recorded in a real WebMCP runtime, uploaded public to YouTube, ≤ 3:00, audio on; URL filled in
-- [ ] Netlify redeployed from `main`; live URL re-verified end-to-end in a WebMCP browser
+- [x] Netlify wired to `main` for continuous deployment; live URL serves the latest build
+- [ ] Live URL re-verified end-to-end **in a real WebMCP browser** (tool discovery + one propose call)
 - [ ] This document's substance pasted into the Devpost form
 - [ ] Screenshot / transcript of the 7-tool chain in a real runtime linked from **Links**
 
