@@ -1,63 +1,53 @@
-# Agent-browser runtime verification checklist
+# Runtime verification — run before submitting
 
-Verify — do not infer — the seven tools, shared visible state, live WebMCP trace,
-and resident-controlled finalisation in a WebMCP-capable agent browser.
+Verify — do not infer — the seven tools, shared visible state, the live WebMCP
+trace, and resident-controlled adoption in a WebMCP-capable agent browser
+(ChatGPT desktop app in-app browser, or Chrome with the WebMCP flag).
 
-Record for each run: runtime + app version, date, exact steps, observed results.
+**Capture evidence:** for the run, record runtime + date, and save at least one
+screenshot of the tool list and one `propose_allocation` result as the runtime
+renders it. Link them from `docs/SUBMISSION.md`.
 
-## Local evidence already captured
+## Checklist
 
-Registration and handler execution were exercised in ChatGPT's in-app browser
-against the dev server at `http://localhost:5173`:
-
-- `registerWebMcpTools` registered exactly `get_budget_state, list_projects,
-  list_strategy_options, simulate_allocation, propose_allocation,
-  explain_tradeoffs, request_allocation_review` — each with an `inputSchema`, a
-  correct `readOnlyHint`, and the shared `AbortController` signal.
-- `get_budget_state` returned the documented keys; `propose_allocation` returned
-  `{ proposalRevision: 1, status: "valid", allocationHash, committedTotal,
-  remainingFunds, validationIssues: [] }` and mutated the same store the UI
-  reads; `list_projects` returned all 8.
-- Aborting the caller-owned signal unregisters the tools.
-
-## Checklist against a real agent runtime
-
-1. **Discovery** — the agent lists all and only the seven tools with the
-   descriptions from `PRODUCT_SPEC.md` §9. No `finalise*`, `set_priority`,
-   `lock*`, `accept*`, `reject*`, or `reset*` tool appears.
-2. **Read parity** — call `get_budget_state` and `list_projects`; compare
-   `budgetRevision`, `committedTotal`, `remainingFunds`, `priorities`,
-   `lockedAllocations` to the visible page. They must match exactly.
-   Confirm each call appears in the live trace while ordinary page clicks do not.
-3. **Simulate without mutation** — `simulate_allocation` with a valid and an
-   over-budget candidate. Valid returns `valid: true`; over-budget returns
-   `valid: false` with `budget_exceeded` and the exact overage. The page,
-   revision, and proposal panel do not change.
-4. **Propose** — `propose_allocation` with a valid plan bound to the current
-   `budgetRevision`. The Agent Proposal panel updates with attribution,
-   proposal revision, status, rationale, totals. Proposal revision increments;
-   budget revision does not.
-5. **Invalid proposal stays inspectable** — propose a rule-invalid plan; it is
-   stored visibly as `invalid` with issues and cannot enter review.
-6. **Human edit stales it** — on the page, fund + lock a project. The proposal
-   becomes `stale`; its review action is disabled. `get_budget_state` shows the
-   new `budgetRevision` and the locked entry.
-7. **Stale / fabricated revisions rejected** — `simulate_allocation`,
-   `propose_allocation`, `request_allocation_review` with the old or a
-   fabricated `budgetRevision`/`proposalRevision` return
-   `stale_budget_revision` / `proposal_revision_mismatch` / `stale_proposal`.
-8. **Re-propose preserving the lock** — a new valid proposal that keeps the
-   locked project; `explain_tradeoffs` deltas match the on-page comparison.
-9. **Review request** — `request_allocation_review` for the fresh valid
-   proposal opens the visible review region and moves focus there. It does not
-   accept or finalise.
-10. **No finalisation tool** — confirm none is discoverable; fabricated
-    arguments to any tool cannot produce a final record.
-11. **Human finalisation** — on the page: accept, tick the hypothetical-data
-    acknowledgement, finalise. A local record with revisions, validation and
-    `human_finalisation` attribution appears. Subsequent `get_budget_state`
+1. **Discovery** — the agent lists all and only: `get_budget_state`,
+   `list_projects`, `list_strategy_options`, `simulate_allocation`,
+   `propose_allocation`, `explain_tradeoffs`, `request_allocation_review`.
+   No `set_priorities`, `protect_work`, `accept_proposal`, `reject_proposal`,
+   `adopt_resolution`, or `reset` tool appears.
+2. **Result shape renders** — a tool call shows readable text *and* structured
+   data (the `{ content, structuredContent }` shape). If it renders as empty or
+   raw, stop and fix `present()` in `src/webmcp/contracts.ts`.
+3. **Read parity** — call `get_budget_state` and `list_projects`; `budgetRevision`,
+   `committedTotal`, `remainingFunds`, `priorities`, `lockedAllocations` match the
+   visible page exactly. `get_budget_state.structuralLimits` lists the actions no
+   tool performs. Each call appears in the LIVE WEBMCP TRACE; page clicks do not.
+4. **Simulate without mutation** — `simulate_allocation` with a valid and an
+   over-budget candidate. Over-budget returns `valid: false`, a `budget_exceeded`
+   issue with the exact overage, and a `fix: { action: "reduceBy", amount }`.
+   The page, revision and proposal panel do not change.
+5. **Propose** — `propose_allocation` with a valid plan bound to the current
+   `budgetRevision`. The draft panel updates with `WEBMCP ASSISTANT PROPOSAL`
+   attribution; `proposalRevision` increments, `budgetRevision` does not.
+6. **Invalid proposal stays inspectable** — a rule-invalid plan is stored
+   visibly as `invalid` with its issues and cannot enter review.
+7. **Human edit stales it** — on the page, protect a work. The proposal becomes
+   `stale`; `get_budget_state` shows the new `budgetRevision`.
+8. **Stale / fabricated revisions rejected** — old or fabricated revision numbers
+   return `stale_budget_revision` / `proposal_revision_mismatch` / `stale_proposal`
+   with `isError: true`.
+9. **Re-propose preserving the lock** — a new valid proposal keeps the protected
+   work; `explain_tradeoffs` deltas match the on-page comparison strip.
+10. **Review hand-off** — `request_allocation_review` opens the visible review
+    region and moves focus there. Ask the agent to accept or adopt: it cannot —
+    no such tool is registered.
+11. **Human adoption** — on the page: accept, tick the acknowledgement, adopt. A
+    local record with `human_finalisation` attribution appears; `get_budget_state`
     shows `finalised: true`.
-12. **Reset** — `Reset demo` → confirm. `get_budget_state` returns the initial
-    snapshot (`budgetRevision: 0`, `proposal: null`, `finalised: false`).
-13. Repeat 1–2 after a hard reload (no duplicate registrations) and in a browser
-    without WebMCP (fallback notice shown; manual flow still completes).
+12. **Reload + no-WebMCP** — after a hard reload, exactly seven tools register
+    once. In a browser without WebMCP, the fallback notice shows and the manual
+    flow (including "rebuild around protected work") completes.
+
+## Results
+
+_(paste runtime, date, and screenshot links here after the run)_

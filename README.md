@@ -26,19 +26,19 @@ workspace is not affiliated with any of them.
 ## Setup
 
 ```bash
-pnpm install
-pnpm dev        # http://localhost:5173
+npm install
+npm run dev        # http://localhost:5173
 ```
 
-Requires Node 20+ and pnpm 9+.
+Requires Node 20+. (`pnpm` works too.)
 
 ## Commands
 
 ```bash
-pnpm test       # Vitest unit / component / integration suite
-pnpm lint       # ESLint
-pnpm build      # tsc -b && vite build  ->  dist/
-pnpm preview    # serve the production build
+npm test          # Vitest unit / component / integration suite
+npm run lint      # ESLint
+npm run build     # tsc -b && vite build  ->  dist/
+npm run preview   # serve the production build
 ```
 
 ## Architecture
@@ -94,18 +94,30 @@ two state-changing, none that commits a decision**:
 
 | Tool | Mode | Purpose |
 | --- | --- | --- |
-| `get_budget_state` | read-only | Canonical snapshot: priorities, locks, allocation, proposal summary, revisions |
-| `list_projects` | read-only | The eight projects with costs, benefits, funding rules, dependencies |
+| `get_budget_state` | read-only | Canonical snapshot: priorities, locks, allocation + its validity, proposal summary, revisions, `structuralLimits` |
+| `list_projects` | read-only | The eight works with costs, benefit ratings, the numeric `scoringModel`, funding rules, dependencies |
 | `list_strategy_options` | read-only | Three valid budget directions, scored against the resident's current priorities |
-| `simulate_allocation` | read-only | Validate a candidate against the current revision without mutation |
+| `simulate_allocation` | read-only | Validate a candidate against the current revision; each issue carries a machine-readable `fix` |
 | `propose_allocation` | state-changing | Store an agent-attributed proposal after deterministic validation |
 | `explain_tradeoffs` | read-only | Canonical added/removed/funding/benefit deltas + opportunity costs |
 | `request_allocation_review` | state-changing | Open the visible resident review; does **not** accept or finalise |
 
-There is intentionally **no tool** for setting priorities, locking, manual
-editing, accepting, rejecting, finalising, or resetting. `PRODUCT_SPEC.md`
-specified six tools; the read-only `list_strategy_options` was added in Phase 3 —
-see [`docs/SPEC_AMENDMENTS.md`](docs/SPEC_AMENDMENTS.md).
+There is intentionally **no tool** — not a disabled one, an absent one — for
+`set_priorities`, `protect_work`, `accept_proposal`, `reject_proposal`,
+`adopt_resolution`, or `reset`. Those are the resident's, through visible page
+controls. The withheld list is shown in the app's assistant margin so the
+omission reads as a design choice, and `get_budget_state.structuralLimits`
+reports it to the agent.
+
+## Where this pattern generalizes
+
+The scenario is a vehicle. The pattern — *an agent does the preparatory work; the
+act of deciding stays human and attributable; both read the same validated
+state; the boundary is a tool that was never registered* — fits clinical
+informed consent, legal filing, lending decisions, hiring, and content
+moderation. In each, "enforced by omission" beats a confirmation dialog: no
+rubber-stamping, no injection target, and a decision record with a human author
+by construction. See [`docs/SUBMISSION.md`](docs/SUBMISSION.md).
 
 ## WebMCP compatibility notes
 
@@ -118,16 +130,20 @@ Verified against the WebMCP spec IDL and Chrome's imperative-API docs
   (which resolves to `undefined`) using a shared `AbortController`; aborting the
   signal unregisters every tool.
 - A tool definition carries `name`, optional `title`, `description`, optional
-  JSON Schema `inputSchema`, `async execute(input, { signal })`, and optional
-  `annotations` (`readOnlyHint`).
-- Tool callbacks return plain JSON-serializable values (the spec serializes the
-  result via `JSON.stringify`; no MCP-style `content` wrapper). Rule violations
-  are returned as `valid: false` / `status: "invalid"`; transport problems are
-  returned as `{ error: { code, message } }`.
-- No nonstandard confirmation API (`requestUserInput` / `requestUserInteraction`)
-  is used or assumed. WebMCP does not provide a native, non-bypassable
-  human-confirmation primitive. This application exposes no WebMCP finalisation
-  tool; general browser automation remains outside that tool boundary.
+  JSON Schema `inputSchema`, `async execute(input, { signal })`, and
+  `annotations` (`readOnlyHint`, `destructiveHint`, `idempotentHint`,
+  `openWorldHint`).
+- Tool callbacks return the MCP result shape:
+  `{ content: [{ type: "text", text }], structuredContent }`, with
+  `isError: true` for structured errors (`{ error: { code, message } }`). Rule
+  violations come back as `valid: false` / `status: "invalid"` inside
+  `structuredContent`, not as errors — an invalid proposal is still stored and
+  inspectable.
+- WebMCP's `requestUserInteraction()` hands one moment back to the human. This
+  project goes further: the decision-recording function is never registered, so
+  there is no code path — confirmed or not — by which the agent commits. That is
+  an API authority boundary, not a claim about general browser-automation
+  security.
 - When `document.modelContext` is absent the page shows
   *"Agent tools are unavailable in this browser; the full manual workspace still
   works"* and every manual flow remains fully functional.
@@ -137,7 +153,7 @@ Verified against the WebMCP spec IDL and Chrome's imperative-API docs
 Static SPA — any static HTTPS host works.
 
 ```bash
-pnpm build
+npm run build
 # deploy ./dist  (e.g. Netlify: `netlify deploy --prod --dir=dist`)
 ```
 
