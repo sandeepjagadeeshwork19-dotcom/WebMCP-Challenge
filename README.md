@@ -63,9 +63,9 @@ src/
     trace.ts        Per-store visible trace; observes calls without changing budget state
     register.ts     document.modelContext.registerTool(tool, { signal })
   components/  Accessible React UI — a "ward gazette":
-    Masthead · CommandBar (fund · revisions · whose-move indicator)
-    StateLine (Priorities → Compare → Draft → Review → Adopt)
-    LeftRail (you control this) · AssistantMargin + live WebMCP call trace
+    Masthead · CommandBar (fund · status · whose-move indicator)
+    NextActionDock (the single honest next step) · LeftRail (you control this)
+    AssistantMargin + live WebMCP call trace + the withheld-tools list
     CompareDirections · ResolutionSheet · TheTurn · ReviewMode · AdoptedRecord
     ScheduleOfWorks (the 8 works; protect any)
 ```

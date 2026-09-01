@@ -31,7 +31,7 @@ export function AdoptedRecord() {
         <strong>
           <Icon name="badge" size={18} /> RESOLUTION WD-12 &mdash; ADOPTED
         </strong>
-        <span>saved on this device only</span>
+        <span>available in this browser tab only</span>
       </div>
 
       <div className="record">

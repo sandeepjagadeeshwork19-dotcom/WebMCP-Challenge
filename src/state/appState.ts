@@ -62,6 +62,7 @@ export interface AppState {
   fundLimit: typeof FUND_LIMIT;
   budgetRevision: number;
   residentPriorities: ResidentPriorities;
+  prioritiesConfirmed: boolean;
   lockedAllocations: Allocation[];
   manualAllocations: Allocation[];
   agentProposal: AgentProposal | null;
@@ -90,6 +91,7 @@ export function createInitialState(): AppState {
     fundLimit: FUND_LIMIT,
     budgetRevision: 0,
     residentPriorities: { ...INITIAL_PRIORITIES },
+    prioritiesConfirmed: false,
     lockedAllocations: [],
     manualAllocations: [],
     agentProposal: null,

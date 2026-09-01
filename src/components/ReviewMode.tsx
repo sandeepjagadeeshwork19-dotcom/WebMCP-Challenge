@@ -2,10 +2,8 @@ import { useEffect, useRef } from "react";
 import { FUND_LIMIT, getProject } from "../domain/projects";
 import { committedTotal } from "../domain/validation";
 import { formatMoney } from "../format";
-import { useAppState, useDispatch } from "../state/store";
+import { useAppState } from "../state/store";
 import {
-  selectCanFinalise,
-  selectFinalisationBlockers,
   selectProposalTradeoffVsManual,
   selectProposalTradeoffVsPrevious,
 } from "../state/selectors";
@@ -13,15 +11,12 @@ import { Icon } from "./Icon";
 
 export function ReviewMode() {
   const state = useAppState();
-  const dispatch = useDispatch();
   const headingRef = useRef<HTMLDivElement>(null);
   const proposal = state.agentProposal;
 
   const accepted = state.proposalStatus === "accepted";
   const rejected = state.proposalStatus === "rejected";
   const underReview = state.proposalStatus === "under_review" || state.reviewStatus === "open";
-  const canFinalise = selectCanFinalise(state);
-  const blockers = selectFinalisationBlockers(state);
 
   useEffect(() => {
     headingRef.current?.focus();
@@ -70,61 +65,12 @@ export function ReviewMode() {
 
       {rejected ? (
         <p className="sheet__validation" data-bad>
-          Sent back. Change your priorities or protected works, then rebuild the plan.
+          Changes requested. Use the next action below to create a new proposal.
         </p>
       ) : (
-        <>
-          <div className="review-controls">
-            <button
-              type="button"
-              className="btn btn--dark"
-              disabled={!underReview}
-              onClick={() => dispatch({ type: "human/acceptProposal" })}
-            >
-              {accepted ? "Accepted" : "Accept"}
-            </button>
-            <button
-              type="button"
-              className="btn"
-              disabled={!underReview}
-              onClick={() => dispatch({ type: "human/rejectProposal" })}
-            >
-              Go back and change it
-            </button>
-          </div>
-
-          <div className="ack">
-            <input
-              type="checkbox"
-              id="ack-box"
-              checked={state.disclosureAcknowledged}
-              onChange={(e) =>
-                dispatch({ type: "human/setDisclosureAck", acknowledged: e.target.checked })
-              }
-            />
-            <label htmlFor="ack-box">
-              I understand this is a demo &mdash; adopting doesn&rsquo;t allocate any real money.
-            </label>
-          </div>
-
-          <div>
-            <button
-              type="button"
-              className="btn btn--primary"
-              disabled={!canFinalise}
-              onClick={() => dispatch({ type: "human/finalise" })}
-            >
-              Adopt resolution WD-12
-            </button>
-            {!canFinalise && (
-              <p className="adopt-hint" role="status">
-                {accepted
-                  ? "Tick the box above to adopt."
-                  : blockers[0] ?? "Accept the plan, then tick the box."}
-              </p>
-            )}
-          </div>
-        </>
+        <p className="review-summary__validation">
+          {accepted ? "Accepted. Complete the resident authority step below." : underReview ? "Ready for your decision below." : "Review state updated."}
+        </p>
       )}
     </section>
   );

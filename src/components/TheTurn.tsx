@@ -1,7 +1,7 @@
-import { FUND_LIMIT, getProject } from "../domain/projects";
+import { FUND_LIMIT, P06_ALLOWED_AMOUNTS, getProject } from "../domain/projects";
 import { committedTotal, validateAllocation } from "../domain/validation";
 import { formatMoney } from "../format";
-import { useAppState, useDispatch } from "../state/store";
+import { useAppState } from "../state/store";
 import { Icon } from "./Icon";
 import { useStageFocus } from "./useStageFocus";
 import type { Allocation, ProjectId } from "../domain/types";
@@ -10,9 +10,8 @@ import type { Allocation, ProjectId } from "../domain/types";
  * The turn: a human protect action has stalled the current draft. Show the
  * *problem* the assistant must now solve — not a re-plan that does not exist yet.
  */
-export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
+export function TheTurn() {
   const state = useAppState();
-  const dispatch = useDispatch();
   const focusRef = useStageFocus<HTMLElement>();
   const stale = state.agentProposal;
   if (!stale) return null;
@@ -31,7 +30,7 @@ export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
     }
     for (const dep of getProject(lock.projectId).dependencies) {
       const p = getProject(dep);
-      const amt = p.fundingRule.kind === "complete" ? p.fundingRule.cost : 60_000;
+      const amt = p.fundingRule.kind === "complete" ? p.fundingRule.cost : P06_ALLOWED_AMOUNTS[1];
       if (!required.has(dep)) {
         required.set(dep, amt);
         addedForProtection.push({ projectId: dep, amount: amt });
@@ -92,8 +91,8 @@ export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
           </p>
         </div>
         <p className="cost-hero__note">
-          Ask the assistant to redraft, or rebuild it here &mdash; either way your protected works
-          stay in.
+          The next action below shows whether the assistant or the local fallback performs the
+          rebuild. Either path must preserve your protected works.
         </p>
       </div>
 
@@ -120,16 +119,6 @@ export function TheTurn({ webmcpAvailable }: { webmcpAvailable: boolean }) {
         </span>
       </div>
 
-      <div className="stage-actions">
-        <button
-          type="button"
-          className="btn btn--primary"
-          onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
-        >
-          {webmcpAvailable ? "Rebuild the plan" : "Rebuild the plan around your protected works"}{" "}
-          <Icon name="arrow" size={15} />
-        </button>
-      </div>
     </section>
   );
 }

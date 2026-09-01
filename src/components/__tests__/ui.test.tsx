@@ -78,7 +78,7 @@ describe("priorities + compare", () => {
     await user.click(screen.getByRole("button", { name: /Start from Safety & access first/i }));
     expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
     expect(screen.getByText(/READY-MADE PLAN/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Send to review/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Open resident review/i })).toBeInTheDocument();
   });
 });
 
@@ -98,7 +98,7 @@ describe("the turn — protecting a work stales the draft", () => {
 });
 
 describe("review is human-only and gated", () => {
-  it("Adopt stays disabled until the resident accepts and acknowledges", async () => {
+  it("reveals Adopt only after acceptance and enables it after acknowledgement", async () => {
     const user = userEvent.setup();
     const { store } = renderWithStore(<App />);
     store.dispatch({ type: "human/setPriority", key: "safety", weight: 3 });
@@ -110,16 +110,16 @@ describe("review is human-only and gated", () => {
       ],
       rationale: "Two accessible-transport and health investments.",
     });
-    await user.click(await screen.findByRole("button", { name: /Send to review/i }));
+    await user.click(await screen.findByRole("button", { name: /Open resident review/i }));
 
     expect(
       screen.getByText(/The assistant can.t accept or adopt a plan/i),
     ).toBeInTheDocument();
 
-    const adopt = screen.getByRole("button", { name: /Adopt resolution WD-12/i });
-    expect(adopt).toBeDisabled();
+    expect(screen.queryByRole("button", { name: /Adopt resolution WD-12/i })).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: /^Accept$/i }));
+    await user.click(screen.getByRole("button", { name: /Accept this proposal/i }));
+    const adopt = screen.getByRole("button", { name: /Adopt resolution WD-12/i });
     expect(adopt).toBeDisabled();
 
     await user.click(screen.getByRole("checkbox"));

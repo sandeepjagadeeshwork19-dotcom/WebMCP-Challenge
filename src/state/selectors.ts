@@ -113,9 +113,7 @@ export type Stage =
   | "adopted";
 
 export function selectPrioritiesSet(state: AppState): boolean {
-  return (
-    Object.values(state.residentPriorities).some((w) => w > 0) || state.budgetRevision > 0
-  );
+  return state.prioritiesConfirmed;
 }
 
 export function selectStage(state: AppState): Stage {
@@ -176,6 +174,9 @@ export function selectTurn(state: AppState): TurnIndicator {
     case "invalid":
       return { actor: "assistant", text: "The draft breaks a rule — ask the assistant to fix it" };
     case "review":
+      if (state.proposalStatus === "rejected") {
+        return { actor: "assistant", text: "Changes requested — ask for a new proposal" };
+      }
       return state.proposalStatus === "accepted"
         ? { actor: "you", text: "Your move — tick the box, then adopt" }
         : { actor: "you", text: "Your move — accept or send back, then adopt" };

@@ -26,8 +26,8 @@ export function CompareDirections() {
       </h2>
       <p className="compare__lead">
         {prioritiesSet
-          ? "Three ready-made plans, scored against your priorities. Open one to start from it — you can change everything."
-          : "Set your priorities on the left first, or just open one of the plans below."}
+          ? "Three ready-made examples, scored against your priorities. Open one as a starting draft — this is not the final decision."
+          : "Set your priorities above first, or open a ready-made example below."}
       </p>
 
       <div className="compare__cards">
@@ -81,7 +81,7 @@ export function CompareDirections() {
                   aria-label={`Start from ${v.label}`}
                   onClick={() => choose(v.id)}
                 >
-                  Start from this plan
+                  Open ready-made example
                 </button>
               </div>
             </article>

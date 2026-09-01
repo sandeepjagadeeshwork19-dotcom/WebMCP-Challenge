@@ -134,6 +134,16 @@ export function reducer(state: AppState, action: AppAction): AppState {
       );
     }
 
+    case "human/confirmPriorities": {
+      if (state.prioritiesConfirmed) return state;
+      const next: AppState = { ...state, prioritiesConfirmed: true };
+      Object.assign(
+        next,
+        appendActivity(next, "human", "confirm_priorities", "Continued to plan comparison", timestamp),
+      );
+      return next;
+    }
+
     case "human/setAllocation": {
       if (isLocked(state, action.projectId)) {
         const locked = state.lockedAllocations.find((l) => l.projectId === action.projectId);

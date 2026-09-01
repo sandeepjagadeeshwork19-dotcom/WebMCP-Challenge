@@ -1,7 +1,7 @@
 import { FUND_LIMIT, getProject } from "../domain/projects";
 import { committedTotal } from "../domain/validation";
 import { formatMoney, formatSignedMoney } from "../format";
-import { useAppState, useDispatch } from "../state/store";
+import { useAppState } from "../state/store";
 import {
   selectProposalTradeoffVsManual,
   selectProposalTradeoffVsPrevious,
@@ -11,7 +11,6 @@ import { useStageFocus } from "./useStageFocus";
 
 export function ResolutionSheet() {
   const state = useAppState();
-  const dispatch = useDispatch();
   const focusRef = useStageFocus<HTMLElement>();
   const proposal = state.agentProposal;
   const cv = state.constraintValidation;
@@ -28,9 +27,8 @@ export function ResolutionSheet() {
   return (
     <section className="stage-block" aria-labelledby="draft-heading" ref={focusRef} tabIndex={-1}>
       <p className="compare__lead">
-        Here&rsquo;s a full plan{locked.size > 0 ? " that keeps what you protected" : ""}. Nothing is
-        locked &mdash; protect the works you want kept, adjust your priorities, and rebuild as many
-        times as you like. Send it to review when it&rsquo;s right.
+        Here&rsquo;s a full plan{locked.size > 0 ? " that keeps what you protected" : ""}. Protect the
+        works you want kept or open this exact revision for resident review.
       </p>
 
       <div className="sheet">
@@ -116,21 +114,6 @@ export function ResolutionSheet() {
         )}
       </div>
 
-      <div className="stage-actions">
-        {cv.valid ? (
-          <button
-            type="button"
-            className="btn btn--primary"
-            onClick={() => dispatch({ type: "human/openReview" })}
-          >
-            Send to review <Icon name="arrow" size={15} />
-          </button>
-        ) : (
-          <p className="sheet__validation" data-bad>
-            This plan breaks a funding rule. Ask the assistant to fix it.
-          </p>
-        )}
-      </div>
     </section>
   );
 }

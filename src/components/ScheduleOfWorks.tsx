@@ -1,4 +1,4 @@
-import { PROJECTS, getProject } from "../domain/projects";
+import { PROJECTS, P06_ALLOWED_AMOUNTS, getProject } from "../domain/projects";
 import { formatMoney } from "../format";
 import { useAppState, useDispatch } from "../state/store";
 
@@ -38,7 +38,7 @@ export function ScheduleOfWorks() {
               : phased
                 ? "can be partly funded"
                 : "";
-        const defaultAmount = phased ? 60_000 : p.cost;
+        const defaultAmount = phased ? P06_ALLOWED_AMOUNTS[1] : p.cost;
         return (
           <div
             className={`schedule__row${locked.has(p.id) ? " is-protected" : ""}`}

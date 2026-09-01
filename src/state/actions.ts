@@ -12,6 +12,7 @@ import type { StrategyId } from "../domain/strategies";
 
 export type HumanAction =
   | { type: "human/setPriority"; key: PriorityKey; weight: PriorityWeight; timestamp?: string }
+  | { type: "human/confirmPriorities"; timestamp?: string }
   | { type: "human/setAllocation"; projectId: ProjectId; amount: number; timestamp?: string }
   | { type: "human/removeAllocation"; projectId: ProjectId; timestamp?: string }
   | { type: "human/lockProject"; projectId: ProjectId; timestamp?: string }

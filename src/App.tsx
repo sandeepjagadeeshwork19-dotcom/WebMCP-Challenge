@@ -11,8 +11,10 @@ import { TheTurn } from "./components/TheTurn";
 import { ReviewMode } from "./components/ReviewMode";
 import { AdoptedRecord } from "./components/AdoptedRecord";
 import { ScheduleOfWorks } from "./components/ScheduleOfWorks";
+import { NextActionDock } from "./components/NextActionDock";
+import { ResponsiveWebMcpStrip } from "./components/ResponsiveWebMcpStrip";
 
-function Stage({ webmcpAvailable }: { webmcpAvailable: boolean }) {
+function Stage() {
   const stage = selectStage(useAppState());
   switch (stage) {
     case "priorities":
@@ -22,11 +24,13 @@ function Stage({ webmcpAvailable }: { webmcpAvailable: boolean }) {
     case "invalid":
       return <ResolutionSheet />;
     case "replanning":
-      return <TheTurn webmcpAvailable={webmcpAvailable} />;
+      return <TheTurn />;
     case "review":
       return <ReviewMode />;
     case "adopted":
       return <AdoptedRecord />;
+    default:
+      return null;
   }
 }
 
@@ -36,6 +40,17 @@ export function App() {
   const stage = selectStage(state);
   const latest = state.activityHistory.at(-1);
   const webmcpAvailable = webmcp.status === "registered";
+  const guidanceFirst = stage === "priorities" || stage === "compare";
+
+  const guidance = (
+    <>
+      <ResponsiveWebMcpStrip
+        connected={webmcpAvailable}
+        toolCount={webmcp.registeredTools.length}
+      />
+      <NextActionDock webmcpAvailable={webmcpAvailable} />
+    </>
+  );
 
   return (
     <div className="app">
@@ -60,8 +75,10 @@ export function App() {
       <LeftRail />
       <main className="layout">
         <div className={`stage stage--${stage}`} key={stage}>
-          <Stage webmcpAvailable={webmcpAvailable} />
-          {stage !== "adopted" && <ScheduleOfWorks />}
+          {guidanceFirst && guidance}
+          <Stage />
+          {!guidanceFirst && guidance}
+          {stage !== "adopted" && stage !== "review" && <ScheduleOfWorks />}
         </div>
         <AssistantMargin />
       </main>
