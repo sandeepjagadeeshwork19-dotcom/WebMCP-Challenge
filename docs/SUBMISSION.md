@@ -22,9 +22,9 @@ a function that was never registered on `document.modelContext`.
 - [x] Repo pushed to public GitHub; MIT auto-detected; URL filled in **Links** below
 - [ ] Video recorded in a real WebMCP runtime, uploaded public to YouTube, ≤ 3:00, audio on; URL filled in
 - [x] Netlify wired to `main` for continuous deployment; live URL serves the latest build
-- [ ] Live URL re-verified end-to-end **in a real WebMCP browser** (tool discovery + one propose call)
+- [x] Live URL re-verified end-to-end **in a real WebMCP browser** (full revision-bound journey)
 - [ ] This document's substance pasted into the Devpost form
-- [ ] Screenshot / transcript of the 7-tool chain in a real runtime linked from **Links**
+- [x] Screenshot evidence of the real-runtime journey linked below and from **Links**
 
 ---
 
@@ -51,10 +51,10 @@ nothing that commits. A cooperative agent has no function to call, and the
 withheld list is shown on screen so the omission reads as a design, not a gap.
 
 This is an **API authority boundary**, not a claim about browser security. A
-determined agent can still type into the DOM. What omission buys is the thing a
-runtime gate cannot: the decision record has a human author by construction, the
-division of labour is legible to the resident, and there is no confirmed-or-not
-code path by which the assistant commits.
+determined agent can still type into the DOM. What omission buys is resident-UI
+attribution within the WebMCP authority model, a legible division of labour, and
+no WebMCP code path by which the assistant commits. This does not authenticate
+who operates the browser UI.
 
 ## What it does *(judging: Execution / UX)*
 
@@ -169,6 +169,41 @@ layer down: which actions belong on the API.
 - Static SPA — deployable to any static HTTPS host.
 - Graceful, fully-functional fallback when WebMCP is unavailable.
 
+## Real WebMCP runtime evidence — 2026-09-01
+
+Verified against the public deployment in the **ChatGPT desktop in-app browser**
+at `https://neighbours-decide.netlify.app/`, using the page-discovered WebMCP
+tools rather than DOM automation for agent actions.
+
+Observed results:
+
+- Exactly seven WebMCP tools registered; no priority, protection, acceptance,
+  adoption or reset tool was exposed.
+- `get_budget_state` returned budget revision 2 with Safety 3 and Accessibility
+  3; `list_strategy_options` returned three structured directions.
+- `simulate_allocation` returned `valid: true`; `propose_allocation` stored
+  proposal revision 1 with `WEBMCP ASSISTANT PROPOSAL` attribution.
+- Protecting P-03 through the resident UI advanced the budget to revision 3 and
+  visibly staled proposal revision 1.
+- The agent re-read revision 3, simulated and stored proposal revision 2 while
+  preserving P-03 and its P-04 dependency; `explain_tradeoffs` reported P-01
+  removed; `request_allocation_review` opened resident review.
+- Adoption stayed disabled until the resident accepted and acknowledged the
+  disclosure, then produced the local adopted record. Browser console: no
+  warnings or errors.
+
+### Screenshots
+
+[![Seven tools registered; empty trace](evidence/webmcp-01-registered-tools.png)](evidence/webmcp-01-registered-tools.png)
+
+[![Valid proposal created through WebMCP](evidence/webmcp-02-agent-proposal.png)](evidence/webmcp-02-agent-proposal.png)
+
+[![Resident protection stales the agent proposal](evidence/webmcp-03-human-edit-stales-proposal.png)](evidence/webmcp-03-human-edit-stales-proposal.png)
+
+[![Re-planned proposal handed to resident review](evidence/webmcp-04-replanned-review-handoff.png)](evidence/webmcp-04-replanned-review-handoff.png)
+
+[![Resident-gated adopted record](evidence/webmcp-05-final-record.png)](evidence/webmcp-05-final-record.png)
+
 ## What's next
 
 - Adapt the dataset and rules to a published participatory-budget cycle, clearly
@@ -184,3 +219,4 @@ layer down: which actions belong on the API.
 - **Repo:** https://github.com/sandeepjagadeeshwork19-dotcom/WebMCP-Challenge
 - **Demo video:** _(add public YouTube URL on upload)_
 - **Demo script / shot list:** `docs/VIDEO.md`
+- **Real WebMCP runtime evidence:** [registered tools](evidence/webmcp-01-registered-tools.png) · [agent proposal](evidence/webmcp-02-agent-proposal.png) · [stale after resident edit](evidence/webmcp-03-human-edit-stales-proposal.png) · [review hand-off](evidence/webmcp-04-replanned-review-handoff.png) · [final record](evidence/webmcp-05-final-record.png)

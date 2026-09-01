@@ -50,4 +50,17 @@ renders it. Link them from `docs/SUBMISSION.md`.
 
 ## Results
 
-_(paste runtime, date, and screenshot links here after the run)_
+**PASS — 2026-09-01.** ChatGPT desktop in-app browser against
+`https://neighbours-decide.netlify.app/`.
+
+- Seven tools discovered with structured `{ content, structuredContent }`
+  results; withheld actions were absent.
+- Verified read parity, valid simulation, agent-attributed proposal, resident
+  edit → stale transition, revision-3 re-plan preserving P-03/P-04, canonical
+  P-01 removal, WebMCP review hand-off, gated resident adoption, and zero browser
+  warnings/errors.
+- Evidence: [registration](evidence/webmcp-01-registered-tools.png),
+  [proposal](evidence/webmcp-02-agent-proposal.png),
+  [stale transition](evidence/webmcp-03-human-edit-stales-proposal.png),
+  [review hand-off](evidence/webmcp-04-replanned-review-handoff.png),
+  [final record](evidence/webmcp-05-final-record.png).
