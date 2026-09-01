@@ -19,7 +19,7 @@ a function that was never registered on `document.modelContext`.
 
 ## Before submitting — checklist
 
-- [ ] Repo pushed to public GitHub; MIT auto-detected; URL filled in **Links** below
+- [x] Repo pushed to public GitHub; MIT auto-detected; URL filled in **Links** below
 - [ ] Video recorded in a real WebMCP runtime, uploaded public to YouTube, ≤ 3:00, audio on; URL filled in
 - [ ] Netlify redeployed from `main`; live URL re-verified end-to-end in a WebMCP browser
 - [ ] This document's substance pasted into the Devpost form
@@ -180,6 +180,6 @@ layer down: which actions belong on the API.
 ## Links
 
 - **Live demo:** https://neighbours-decide.netlify.app
-- **Repo:** _(add public GitHub URL on push)_
+- **Repo:** https://github.com/sandeepjagadeeshwork19-dotcom/WebMCP-Challenge
 - **Demo video:** _(add public YouTube URL on upload)_
 - **Demo script / shot list:** `docs/VIDEO.md`
