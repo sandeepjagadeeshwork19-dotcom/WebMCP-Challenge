@@ -65,7 +65,7 @@ export function ReviewMode() {
 
       {rejected ? (
         <p className="sheet__validation" data-bad>
-          Changes requested. Use the next action below to create a new proposal.
+          Changes requested. Use the next action below to rebuild the plan.
         </p>
       ) : (
         <p className="review-summary__validation">

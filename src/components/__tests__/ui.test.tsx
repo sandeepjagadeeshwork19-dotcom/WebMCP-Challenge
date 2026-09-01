@@ -78,7 +78,7 @@ describe("priorities + compare", () => {
     await user.click(screen.getByRole("button", { name: /Start from Safety & access first/i }));
     expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
     expect(screen.getByText(/READY-MADE PLAN/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Open resident review/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Send to review/i })).toBeInTheDocument();
   });
 });
 
@@ -110,7 +110,7 @@ describe("review is human-only and gated", () => {
       ],
       rationale: "Two accessible-transport and health investments.",
     });
-    await user.click(await screen.findByRole("button", { name: /Open resident review/i }));
+    await user.click(await screen.findByRole("button", { name: /Send to review/i }));
 
     expect(
       screen.getByText(/The assistant can.t accept or adopt a plan/i),
@@ -118,7 +118,7 @@ describe("review is human-only and gated", () => {
 
     expect(screen.queryByRole("button", { name: /Adopt resolution WD-12/i })).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: /Accept this proposal/i }));
+    await user.click(screen.getByRole("button", { name: /Accept this plan/i }));
     const adopt = screen.getByRole("button", { name: /Adopt resolution WD-12/i });
     expect(adopt).toBeDisabled();
 

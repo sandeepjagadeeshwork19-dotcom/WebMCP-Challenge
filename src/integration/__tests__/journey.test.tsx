@@ -92,7 +92,7 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
     expect(Object.keys(tools)).not.toContain("adopt_resolution");
 
     // 10. Resident accepts, acknowledges, adopts via visible controls only.
-    await user.click(screen.getByRole("button", { name: /Accept this proposal/i }));
+    await user.click(screen.getByRole("button", { name: /Accept this plan/i }));
     await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /Adopt resolution WD-12/i }));
     expect(screen.getByText(/RESOLUTION WD-12 — ADOPTED/i)).toBeInTheDocument();

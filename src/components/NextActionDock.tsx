@@ -4,22 +4,29 @@ import { selectCanFinalise, selectStage } from "../state/selectors";
 import { useAppState, useDispatch } from "../state/store";
 import { Icon } from "./Icon";
 
+/**
+ * One honest next step per decision state. The resident's actions are vermilion;
+ * the assistant's are slate. There is never more than one primary button.
+ */
 export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }) {
   const state = useAppState();
   const dispatch = useDispatch();
   const stage = selectStage(state);
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
-  const protectedNames = state.lockedAllocations.map((lock) => getProject(lock.projectId).shortName).join(", ");
-  const changedSinceRejection = (state.agentProposal?.basedOnBudgetRevision ?? state.budgetRevision) < state.budgetRevision;
+  const protectedNames = state.lockedAllocations
+    .map((lock) => getProject(lock.projectId).shortName)
+    .join(", ");
+  const changedSinceRejection =
+    (state.agentProposal?.basedOnBudgetRevision ?? state.budgetRevision) < state.budgetRevision;
 
   const assistantPrompt =
     stage === "review" && state.proposalStatus !== "rejected"
-      ? `Request resident review for the current fresh proposal at budget revision ${state.budgetRevision} and proposal revision ${state.proposalRevision}. Do not accept or adopt it.`
+      ? `Open resident review for the current fresh plan at budget revision ${state.budgetRevision}, plan revision ${state.proposalRevision}. Do not accept or adopt it.`
       : stage === "replanning" || state.proposalStatus === "rejected"
-        ? `Re-read the current budget at revision ${state.budgetRevision}. Preserve every protected work${protectedNames ? ` (${protectedNames})` : ""}, simulate a valid replacement, propose it, and explain what changed from proposal ${state.proposalRevision}.`
+        ? `Re-read the budget at revision ${state.budgetRevision}. Keep every protected work${protectedNames ? ` (${protectedNames})` : ""}, simulate a valid replacement, propose it, and explain what changed from plan ${state.proposalRevision}.`
         : stage === "invalid"
-          ? `Read the validation failures for proposal ${state.proposalRevision}. Simulate a valid corrected allocation, propose it, and explain every change.`
-          : "Read this budget, compare the valid directions, simulate the strongest allocation for my priorities, and propose it with the trade-offs.";
+          ? `Read the validation issues for plan ${state.proposalRevision}. Simulate a valid corrected plan, propose it, and explain every change.`
+          : "Read the budget, compare the valid plans, simulate the strongest one for my priorities, and propose it with the trade-offs.";
 
   const copyPrompt = async () => {
     try {
@@ -29,79 +36,261 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
       setCopyStatus("failed");
     }
   };
-  const copiedLabel = copyStatus === "copied" ? "Copied — paste into your browser assistant" : copyStatus === "failed" ? "Copy failed — select the request below" : null;
+  const copiedLabel =
+    copyStatus === "copied"
+      ? "Copied — paste into your browser assistant"
+      : copyStatus === "failed"
+        ? "Copy failed — select the request below"
+        : null;
+  const copyButtonLabel = copyStatus === "copied" ? "Request copied" : "Copy the request";
 
   if (stage === "adopted") return null;
 
   if (stage === "priorities") {
-    return <Dock actor="resident" focusKey="priorities" eyebrow="YOUR NEXT MOVE" title="Set what matters, then compare">
-      <p>0 = not weighted · 1 = consider · 2 = important · 3 = highest priority. Nothing is adopted.</p>
-      <button className="btn btn--primary" type="button" onClick={() => dispatch({ type: "human/confirmPriorities" })}>Compare plans <Icon name="arrow" size={14} /></button>
-    </Dock>;
+    return (
+      <Dock actor="resident" focusKey="priorities" title="Set what matters, then compare">
+        <p>0 = ignore · 1 = consider · 2 = important · 3 = highest. Nothing is adopted.</p>
+        <button
+          className="btn btn--primary"
+          type="button"
+          onClick={() => dispatch({ type: "human/confirmPriorities" })}
+        >
+          Compare plans <Icon name="arrow" size={14} />
+        </button>
+      </Dock>
+    );
   }
 
   if (stage === "compare") {
-    return <Dock actor={webmcpAvailable ? "assistant" : "resident"} focusKey="compare" eyebrow={webmcpAvailable ? "ASSISTANT OPTION" : "CHOOSE A STARTING POINT"} title={webmcpAvailable ? "Ask for a tailored proposal" : "Open a ready-made example below"}>
-      <p>{webmcpAvailable ? "After you paste and send this request, real WebMCP calls will appear in the evidence strip." : "Each example opens a draft; it is not the final decision."}</p>
-      {webmcpAvailable && <button className="btn btn--agent" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Request copied" : "Copy planning request"}</button>}
-      <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
-    </Dock>;
+    return (
+      <Dock
+        actor={webmcpAvailable ? "assistant" : "resident"}
+        focusKey="compare"
+        title={webmcpAvailable ? "Ask for a plan built for your priorities" : "Open one of the plans below"}
+      >
+        <p>
+          {webmcpAvailable
+            ? "The assistant's calls appear in the trace as it works."
+            : "Opening a plan starts a draft — it is not the final decision."}
+        </p>
+        {webmcpAvailable && (
+          <button className="btn btn--agent" type="button" onClick={copyPrompt}>
+            <Icon name="copy" size={14} /> {copyButtonLabel}
+          </button>
+        )}
+        <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
+      </Dock>
+    );
   }
 
   if (stage === "draft") {
-    return <Dock actor={webmcpAvailable ? "assistant" : "resident"} focusKey={`draft-${state.proposalRevision}`} eyebrow={webmcpAvailable ? "HAND OFF TO THE RESIDENT" : "YOUR NEXT MOVE"} title="Open this exact proposal for review">
-      <p>Proposal {state.proposalRevision} will open in resident review. It will not be accepted or adopted.</p>
-      {webmcpAvailable ? <button className="btn btn--agent" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Handoff request copied" : "Copy assistant handoff request"}</button> : <button className="btn btn--primary" type="button" onClick={() => dispatch({ type: "human/openReview" })}>Open resident review <Icon name="arrow" size={14} /></button>}
-      {webmcpAvailable && <button className="btn btn--quiet" type="button" onClick={() => dispatch({ type: "human/openReview" })}>Open review locally instead</button>}
-      <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
-    </Dock>;
+    return (
+      <Dock
+        actor={webmcpAvailable ? "assistant" : "resident"}
+        focusKey={`draft-${state.proposalRevision}`}
+        title="Send this plan to review"
+      >
+        <p>It opens in resident review. It will not be accepted or adopted.</p>
+        {webmcpAvailable ? (
+          <button className="btn btn--agent" type="button" onClick={copyPrompt}>
+            <Icon name="copy" size={14} /> {copyButtonLabel}
+          </button>
+        ) : (
+          <button
+            className="btn btn--primary"
+            type="button"
+            onClick={() => dispatch({ type: "human/openReview" })}
+          >
+            Send to review <Icon name="arrow" size={14} />
+          </button>
+        )}
+        {webmcpAvailable && (
+          <button
+            className="btn btn--quiet"
+            type="button"
+            onClick={() => dispatch({ type: "human/openReview" })}
+          >
+            Send to review yourself
+          </button>
+        )}
+        <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
+      </Dock>
+    );
   }
 
   if (stage === "invalid" || stage === "replanning") {
     const invalid = stage === "invalid";
-    return <Dock actor={webmcpAvailable ? "assistant" : "resident"} focusKey={`${stage}-${state.proposalRevision}`} eyebrow={webmcpAvailable ? "ASSISTANT’S NEXT MOVE" : "CONTINUE LOCALLY"} title={invalid ? "Correct the funding rules" : `Replan around ${protectedNames || "your protection"}`}>
-      <p>After the next plan runs, expect a fresh validated proposal that preserves every protected work.</p>
-      {webmcpAvailable ? <button className="btn btn--agent" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Request copied" : invalid ? "Copy fix request" : "Copy redraft request"}</button> : <button className="btn btn--primary" type="button" onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Rebuild locally <Icon name="arrow" size={14} /></button>}
-      {webmcpAvailable && <button className="btn btn--quiet" type="button" onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Continue locally without the assistant</button>}
-      <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
-    </Dock>;
+    return (
+      <Dock
+        actor={webmcpAvailable ? "assistant" : "resident"}
+        focusKey={`${stage}-${state.proposalRevision}`}
+        title={invalid ? "Fix the funding rules" : `Rebuild around ${protectedNames || "your protected work"}`}
+      >
+        <p>The next plan will be valid and keep every protected work.</p>
+        {webmcpAvailable ? (
+          <button className="btn btn--agent" type="button" onClick={copyPrompt}>
+            <Icon name="copy" size={14} /> {copyButtonLabel}
+          </button>
+        ) : (
+          <button
+            className="btn btn--primary"
+            type="button"
+            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+          >
+            Rebuild the plan <Icon name="arrow" size={14} />
+          </button>
+        )}
+        {webmcpAvailable && (
+          <button
+            className="btn btn--quiet"
+            type="button"
+            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+          >
+            Rebuild it yourself
+          </button>
+        )}
+        <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
+      </Dock>
+    );
   }
 
   if (state.proposalStatus === "rejected") {
-    return <Dock actor={webmcpAvailable ? "assistant" : "resident"} focusKey="rejected" eyebrow="CHANGES REQUESTED" title={webmcpAvailable ? "Create a revised proposal" : "Change a priority or protection first"}>
-      <p>The rejection remains in the activity record. Change a priority/protection above, or tell the assistant what must change.</p>
-      {webmcpAvailable ? <button className="btn btn--agent" type="button" onClick={copyPrompt}><Icon name="copy" size={14} /> {copyStatus === "copied" ? "Request copied" : "Copy redraft request"}</button> : <button className="btn btn--primary" type="button" disabled={!changedSinceRejection} onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Rebuild after my change</button>}
-      {webmcpAvailable && <button className="btn btn--quiet" type="button" disabled={!changedSinceRejection} onClick={() => dispatch({ type: "app/redraftAroundLocks" })}>Rebuild locally after changing a priority or protection</button>}
-      <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
-    </Dock>;
+    return (
+      <Dock
+        actor={webmcpAvailable ? "assistant" : "resident"}
+        focusKey="rejected"
+        title={webmcpAvailable ? "Ask for a revised plan" : "Change a priority or protection first"}
+      >
+        <p>Change a priority or protection above, or tell the assistant what should change.</p>
+        {webmcpAvailable ? (
+          <button className="btn btn--agent" type="button" onClick={copyPrompt}>
+            <Icon name="copy" size={14} /> {copyButtonLabel}
+          </button>
+        ) : (
+          <button
+            className="btn btn--primary"
+            type="button"
+            disabled={!changedSinceRejection}
+            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+          >
+            Rebuild after my change
+          </button>
+        )}
+        {webmcpAvailable && (
+          <button
+            className="btn btn--quiet"
+            type="button"
+            disabled={!changedSinceRejection}
+            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+          >
+            Rebuild it yourself after a change
+          </button>
+        )}
+        <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
+      </Dock>
+    );
   }
 
   if (state.proposalStatus !== "accepted") {
-    return <Dock actor="resident" focusKey="under-review" eyebrow="YOUR REVIEW" title="Decide on this proposal">
-      <p>Accepting reveals the adoption acknowledgement. Requesting changes keeps the rejection in the activity record.</p>
-      <button className="btn btn--primary" type="button" onClick={() => dispatch({ type: "human/acceptProposal" })}>Accept this proposal <Icon name="arrow" size={14} /></button>
-      <button className="btn btn--quiet" type="button" onClick={() => dispatch({ type: "human/rejectProposal" })}>Request changes</button>
-    </Dock>;
+    return (
+      <Dock actor="resident" focusKey="under-review" title="Decide on this plan">
+        <p>Accepting reveals the acknowledgement. Sending it back keeps a note in the record.</p>
+        <button
+          className="btn btn--primary"
+          type="button"
+          onClick={() => dispatch({ type: "human/acceptProposal" })}
+        >
+          Accept this plan <Icon name="arrow" size={14} />
+        </button>
+        <button
+          className="btn btn--quiet"
+          type="button"
+          onClick={() => dispatch({ type: "human/rejectProposal" })}
+        >
+          Go back and change it
+        </button>
+      </Dock>
+    );
   }
 
   const canFinalise = selectCanFinalise(state);
-  return <Dock actor="resident" focusKey={`accepted-${state.disclosureAcknowledged}`} eyebrow="RESIDENT AUTHORITY" title="Adopt the accepted resolution">
-    <label className="action-dock__ack"><input type="checkbox" checked={state.disclosureAcknowledged} onChange={(e) => dispatch({ type: "human/setDisclosureAck", acknowledged: e.target.checked })} /> I understand this is a demonstration and allocates no real money.</label>
-    <p>{canFinalise ? "Ready. No WebMCP tool can perform this action." : "Acknowledge the demonstration to enable adoption."}</p>
-    <button className="btn btn--primary" type="button" disabled={!canFinalise} onClick={() => dispatch({ type: "human/finalise" })}>Adopt resolution WD-12</button>
-  </Dock>;
+  return (
+    <Dock
+      actor="resident"
+      focusKey={`accepted-${state.disclosureAcknowledged}`}
+      title="Adopt Resolution WD-12"
+    >
+      <label className="action-dock__ack">
+        <input
+          type="checkbox"
+          checked={state.disclosureAcknowledged}
+          onChange={(e) => dispatch({ type: "human/setDisclosureAck", acknowledged: e.target.checked })}
+        />{" "}
+        I understand this is a demonstration and allocates no real money.
+      </label>
+      <p>
+        {canFinalise
+          ? "Ready. No WebMCP tool can do this — only you."
+          : "Tick the box to enable adoption."}
+      </p>
+      <button
+        className="btn btn--primary"
+        type="button"
+        disabled={!canFinalise}
+        onClick={() => dispatch({ type: "human/finalise" })}
+      >
+        Adopt resolution WD-12
+      </button>
+    </Dock>
+  );
 }
 
-function Dock({ actor, focusKey, eyebrow, title, children }: { actor: "resident" | "assistant"; focusKey: string; eyebrow: string; title: string; children: React.ReactNode }) {
+function Dock({
+  actor,
+  focusKey,
+  title,
+  children,
+}: {
+  actor: "resident" | "assistant";
+  focusKey: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   const ref = useRef<HTMLElement>(null);
-  const mounted = useRef(false);
+  const seen = useRef<string | null>(null);
   useEffect(() => {
-    if (mounted.current) ref.current?.focus({ preventScroll: true });
-    mounted.current = true;
+    if (seen.current !== null && seen.current !== focusKey) {
+      ref.current?.focus({ preventScroll: true });
+    }
+    seen.current = focusKey;
   }, [focusKey]);
-  return <section ref={ref} tabIndex={-1} className="action-dock" data-actor={actor} aria-label="Next action"><div><span>{eyebrow}</span><h2>{title}</h2></div><div className="action-dock__body">{children}</div></section>;
+  return (
+    <section ref={ref} tabIndex={-1} className="action-dock" data-actor={actor} aria-label="Next step">
+      <div>
+        <span>{actor === "assistant" ? "ASSISTANT'S MOVE" : "YOUR MOVE"}</span>
+        <h2>{title}</h2>
+      </div>
+      <div className="action-dock__body">{children}</div>
+    </section>
+  );
 }
 
 function CopyStatus({ status, prompt }: { status: string | null; prompt: string | null }) {
-  return <>{status && <p className="action-dock__status" role="status">{status}</p>}{prompt && <textarea className="action-dock__prompt" readOnly value={prompt} aria-label="Assistant request" />}</>;
+  return (
+    <>
+      {status && (
+        <p className="action-dock__status" role="status">
+          {status}
+        </p>
+      )}
+      {prompt && (
+        <textarea
+          className="action-dock__prompt"
+          readOnly
+          value={prompt}
+          aria-label="Assistant request"
+        />
+      )}
+    </>
+  );
 }

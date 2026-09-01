@@ -168,14 +168,14 @@ export function selectTurn(state: AppState): TurnIndicator {
     case "compare":
       return { actor: "you", text: "Your move — compare the plans and pick one" };
     case "draft":
-      return { actor: "you", text: "Your move — review the draft, or send it back for changes" };
+      return { actor: "you", text: "Your move — review the plan, or send it back for changes" };
     case "replanning":
       return { actor: "assistant", text: "Assistant's move — ask it to redraft the plan" };
     case "invalid":
       return { actor: "assistant", text: "The draft breaks a rule — ask the assistant to fix it" };
     case "review":
       if (state.proposalStatus === "rejected") {
-        return { actor: "assistant", text: "Changes requested — ask for a new proposal" };
+        return { actor: "assistant", text: "Changes requested — ask for a revised plan" };
       }
       return state.proposalStatus === "accepted"
         ? { actor: "you", text: "Your move — tick the box, then adopt" }

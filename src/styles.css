@@ -624,7 +624,7 @@ textarea {
   }
 }
 
-.direction-card {
+.plan-card {
   background: var(--surface);
   border: 1px solid var(--ink);
   border-top: 3px solid var(--ink);
@@ -634,39 +634,39 @@ textarea {
   gap: var(--sp-2);
 }
 
-.direction-card__tag {
+.plan-card__tag {
   font-size: var(--fs-micro);
   font-weight: 700;
   letter-spacing: 0.07em;
   color: var(--pencil);
 }
 
-.direction-card__name {
+.plan-card__name {
   font-family: var(--font-doc);
   font-size: var(--fs-title);
   font-weight: 600;
 }
 
-.direction-card__score {
+.plan-card__score {
   display: flex;
   align-items: flex-end;
   gap: 0.4rem;
 }
 
-.direction-card__score-num {
+.plan-card__score-num {
   font-family: var(--font-doc);
   font-size: var(--fs-figure);
   font-weight: 600;
 }
 
-.direction-card__score-label {
+.plan-card__score-label {
   font-size: var(--fs-micro);
   line-height: var(--lh-tight);
   color: var(--pencil);
   max-width: 9rem;
 }
 
-.direction-card__metrics {
+.plan-card__metrics {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.4rem;
@@ -687,24 +687,24 @@ textarea {
   color: var(--ink);
 }
 
-.direction-card__list {
+.plan-card__list {
   min-height: 2.7rem;
 }
 
-.direction-card__list p {
+.plan-card__list p {
   font-size: var(--fs-small);
   font-weight: 600;
   margin-top: 0.1rem;
 }
 
-.direction-card__prose {
+.plan-card__prose {
   font-family: var(--font-doc);
   font-size: var(--fs-small);
   line-height: var(--lh-tight);
 }
 
-.direction-card__prose .strongest,
-.direction-card__prose .sacrifice {
+.plan-card__prose .strongest,
+.plan-card__prose .sacrifice {
   display: block;
   font-family: var(--font-ui);
   font-size: var(--fs-micro);
@@ -712,20 +712,20 @@ textarea {
   letter-spacing: 0.06em;
 }
 
-.direction-card__prose .strongest {
+.plan-card__prose .strongest {
   color: var(--valid);
 }
 
-.direction-card__prose .sacrifice {
+.plan-card__prose .sacrifice {
   color: var(--warn);
   margin-top: var(--sp-1);
 }
 
-.direction-card__choose {
+.plan-card__choose {
   margin-top: auto;
 }
 
-.direction-card__choose .btn {
+.plan-card__choose .btn {
   width: 100%;
 }
 

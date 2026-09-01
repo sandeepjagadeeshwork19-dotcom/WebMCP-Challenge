@@ -5,7 +5,7 @@ import { Masthead } from "./components/Masthead";
 import { CommandBar } from "./components/CommandBar";
 import { LeftRail } from "./components/LeftRail";
 import { AssistantMargin } from "./components/AssistantMargin";
-import { CompareDirections } from "./components/CompareDirections";
+import { ComparePlans } from "./components/ComparePlans";
 import { ResolutionSheet } from "./components/ResolutionSheet";
 import { TheTurn } from "./components/TheTurn";
 import { ReviewMode } from "./components/ReviewMode";
@@ -18,7 +18,7 @@ function Stage() {
   switch (stage) {
     case "priorities":
     case "compare":
-      return <CompareDirections />;
+      return <ComparePlans />;
     case "draft":
     case "invalid":
       return <ResolutionSheet />;
