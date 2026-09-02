@@ -1524,10 +1524,25 @@ textarea {
   margin-top: var(--sp-1);
 }
 
+/* On the priorities screen the works ARE the content — not a secondary appendix. */
+.schedule--lead {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.schedule--lead .rail-block__title {
+  font-family: var(--font-doc);
+  font-size: var(--fs-title);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .schedule__note {
   font-size: var(--fs-small);
   color: var(--ink-soft);
   margin: var(--sp-1) 0 var(--sp-2);
+  max-width: 70ch;
 }
 
 .schedule__row {

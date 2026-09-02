@@ -1,12 +1,14 @@
 import { PROJECTS, P06_ALLOWED_AMOUNTS, getProject } from "../domain/projects";
 import { formatMoney } from "../format";
 import { useAppState, useDispatch } from "../state/store";
+import { selectStage } from "../state/selectors";
 
 /** The eight works before the ward — always visible; the resident can protect any. */
 export function ScheduleOfWorks() {
   const state = useAppState();
   const dispatch = useDispatch();
   const locked = new Set(state.lockedAllocations.map((l) => l.projectId));
+  const isPrioritiesStage = selectStage(state) === "priorities";
 
   const toggleProtect = (projectId: (typeof PROJECTS)[number]["id"], cost: number) => {
     if (locked.has(projectId)) {
@@ -19,13 +21,17 @@ export function ScheduleOfWorks() {
   };
 
   return (
-    <section className="schedule" aria-labelledby="schedule-heading">
+    <section
+      className={`schedule${isPrioritiesStage ? " schedule--lead" : ""}`}
+      aria-labelledby="schedule-heading"
+    >
       <h2 className="rail-block__title" id="schedule-heading">
         The eight works
       </h2>
       <p className="schedule__note">
-        Each work is all-or-nothing to fund, except the tree drive (which can be partly funded).
-        Protect any work to keep it in every plan.
+        {isPrioritiesStage
+          ? "These eight works are competing for the ₹10 lakh. Read them, weigh what matters on the left, then compare plans. Protect any work now to keep it in every plan."
+          : "Each work is all-or-nothing to fund, except the tree drive (which can be partly funded). Protect any work to keep it in every plan."}
       </p>
 
       {PROJECTS.map((p) => {

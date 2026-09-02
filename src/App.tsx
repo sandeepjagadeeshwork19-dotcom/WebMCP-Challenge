@@ -17,6 +17,9 @@ function Stage() {
   const stage = selectStage(useAppState());
   switch (stage) {
     case "priorities":
+      // The plans stay hidden until the resident has weighed their priorities —
+      // the eight works (rendered below) are the content of this screen.
+      return null;
     case "compare":
       return <ComparePlans />;
     case "draft":
@@ -39,8 +42,9 @@ export function App() {
   const stage = selectStage(state);
   const latest = state.activityHistory.at(-1);
   const webmcpAvailable = webmcp.status === "registered";
-  const guidanceFirst = stage === "priorities" || stage === "compare";
   const dock = <NextActionDock webmcpAvailable={webmcpAvailable} />;
+  const works = <ScheduleOfWorks />;
+  const drafting = stage === "draft" || stage === "invalid" || stage === "replanning";
 
   return (
     <div className="app">
@@ -65,10 +69,36 @@ export function App() {
       <LeftRail />
       <main className="layout">
         <div className={`stage stage--${stage}`} key={stage}>
-          {guidanceFirst && dock}
-          <Stage />
-          {!guidanceFirst && dock}
-          {stage !== "adopted" && stage !== "review" && <ScheduleOfWorks />}
+          {/* priorities: read the works, then compare. compare: plans lead, the
+              assistant option sits above them. drafting: act on the plan, then
+              the works for reference. review: decide. */}
+          {stage === "priorities" && (
+            <>
+              {works}
+              {dock}
+            </>
+          )}
+          {stage === "compare" && (
+            <>
+              {dock}
+              <Stage />
+              {works}
+            </>
+          )}
+          {drafting && (
+            <>
+              <Stage />
+              {dock}
+              {works}
+            </>
+          )}
+          {stage === "review" && (
+            <>
+              <Stage />
+              {dock}
+            </>
+          )}
+          {stage === "adopted" && <Stage />}
         </div>
         <AssistantMargin />
       </main>

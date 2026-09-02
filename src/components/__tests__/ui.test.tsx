@@ -57,16 +57,21 @@ describe("shell", () => {
 });
 
 describe("priorities + compare", () => {
-  it("setting a priority advances the budget revision and shows three plans", async () => {
+  it("the plans stay hidden until priorities are confirmed", async () => {
     const user = userEvent.setup();
     const { store } = renderWithStore(<App />);
 
     expect(screen.getByText(/incomplete/i)).toBeInTheDocument();
+    // priorities screen: the eight works, no plan cards
+    expect(screen.getByText(/These eight works are competing/i)).toBeInTheDocument();
+    expect(screen.queryAllByRole("article")).toHaveLength(0);
 
     const safety = screen.getByRole("radiogroup", { name: /Safety priority/i });
     await user.click(within(safety).getByRole("radio", { name: "Safety 3" }));
-
     expect(store.getState().budgetRevision).toBe(1);
+    expect(screen.queryAllByRole("article")).toHaveLength(0);
+
+    await user.click(screen.getByRole("button", { name: /Compare plans/i }));
     const cards = screen.getAllByRole("article");
     expect(cards.length).toBeGreaterThanOrEqual(3);
     expect(within(cards[0]).getByRole("heading", { name: /Safety & access first/i })).toBeInTheDocument();
@@ -74,8 +79,9 @@ describe("priorities + compare", () => {
 
   it("starting from a plan loads a draft resolution", async () => {
     const user = userEvent.setup();
-    renderWithStore(<App />);
-    await user.click(screen.getByRole("button", { name: /Start from Safety & access first/i }));
+    const { store } = renderWithStore(<App />);
+    store.dispatch({ type: "human/confirmPriorities" });
+    await user.click(await screen.findByRole("button", { name: /Start from Safety & access first/i }));
     expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
     expect(screen.getByText(/READY-MADE PLAN/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Send to review/i })).toBeInTheDocument();
@@ -86,7 +92,8 @@ describe("the turn — protecting a work stales the draft", () => {
   it("protecting the play area moves to the stale/re-plan state", async () => {
     const user = userEvent.setup();
     const { store } = renderWithStore(<App />);
-    await user.click(screen.getByRole("button", { name: /Start from Safety & access first/i }));
+    store.dispatch({ type: "human/confirmPriorities" });
+    await user.click(await screen.findByRole("button", { name: /Start from Safety & access first/i }));
     // P-03 is not in that plan; protecting it stales the draft
     const scheduleRow = screen.getByText("Riverside play area upgrade").closest(".schedule__row")!;
     await user.click(within(scheduleRow as HTMLElement).getByRole("button", { name: /Protect/i }));

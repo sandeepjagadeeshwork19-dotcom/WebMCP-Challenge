@@ -49,7 +49,10 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
   if (stage === "priorities") {
     return (
       <Dock actor="resident" focusKey="priorities" title="Set what matters, then compare">
-        <p>0 = ignore · 1 = consider · 2 = important · 3 = highest. Nothing is adopted.</p>
+        <p>
+          Weight each priority 0–3 on the left. Then three plans are scored against your choices and
+          shown here.
+        </p>
         <button
           className="btn btn--primary"
           type="button"
