@@ -12,7 +12,7 @@ Target ~2:45. The five reference images (`pz0DP`, `lOsN7`, `ii6Br`, `JcuSm`,
 
 ## Beat 1 — the stakes  · 0:00–0:18
 
-**On screen:** the masthead, the disclosure line, "7 assistant tools connected",
+**On screen:** the masthead, the disclosure line, "7 tools connected",
 resident priorities and the eight works.
 
 **You do:** nothing — just let it sit.
@@ -59,11 +59,11 @@ PROPOSAL** and *valid*.
 ## Beat 4 — the turn (hold this one)  · 1:02–1:45
 *(reference: `lOsN7`, then `ii6Br`)*
 
-**You do:** scroll to **The eight candidate works**. On *Riverside play area
+**You do:** scroll to **The eight works**. On *Riverside play area
 upgrade*, click **Protect**.
 
-**On screen:** the proposal is marked stale and the next action asks the
-assistant to rebuild around the protected play area. **Hold here 2–3 seconds.**
+**On screen:** the proposal is marked stale and the next action offers a local
+rebuild plus an optional assistant request. **Hold here 2–3 seconds.**
 
 **You say:**
 > Now the judgement the assistant can't make. The play area floods every
@@ -74,12 +74,11 @@ assistant to rebuild around the protected play area. **Hold here 2–3 seconds.*
 `I protected the play area. Redraft the plan around it.`
 
 **On screen:** a fresh **DRAFT RESOLUTION**, *valid*, with a **PROTECTED** badge
-on the play-area line and a *"compared with where you started"* strip
-(`+ play area · − road crossings`).
+on the play-area line and the live trade-off summary.
 
 **You say:**
-> It rebuilds around my choice — keeps the play area and its drain, drops the
-> road crossings to fit the fund.
+> It rebuilds around my choice — keeps the play area and its drain, and makes
+> the actual trade-off visible.
 
 ---
 
@@ -97,7 +96,7 @@ controls are visibly the next step.
 > The assistant handed it to me through WebMCP. That tool surface ends here, so
 > I use the visible resident controls to decide.
 
-**You do:** click **Accept the draft** → tick the acknowledgement checkbox →
+**You do:** click **Accept this plan** → tick the acknowledgement checkbox →
 click **Adopt resolution WD-12**.
 
 ---
@@ -105,8 +104,8 @@ click **Adopt resolution WD-12**.
 ## Beat 6 — the record  · 2:25–2:45
 *(reference: `WFRU1`)*
 
-**On screen:** **RESOLUTION WD-12 — ADOPTED**, green band, *"local record · not
-transmitted"*, *"Adopted by the resident … not by the assistant,"* the record
+**On screen:** **RESOLUTION WD-12 — ADOPTED**, green band, *"available in this
+browser tab only"*, *"Adopted by the resident … not by the assistant,"* the record
 ID, the works, and the attribution:
 *"human_finalisation — the assistant modelled options, pencilled drafts and
 explained trade-offs; the resident set the priorities, protected what mattered,

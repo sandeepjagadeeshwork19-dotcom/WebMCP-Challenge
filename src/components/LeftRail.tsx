@@ -69,7 +69,7 @@ export function LeftRail() {
           Your priorities
         </h2>
         <p className="rail-block__note">
-          What matters most to you? Higher = weigh it more heavily.
+          Choose your priorities. Higher = weigh it more heavily.
         </p>
         {PRIORITY_KEYS.map((key: PriorityKey) => (
           <PriorityRow key={key} priorityKey={key} value={state.residentPriorities[key]} />

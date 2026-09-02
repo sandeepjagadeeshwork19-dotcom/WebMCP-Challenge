@@ -1,7 +1,7 @@
 import type { Stage } from "../state/selectors";
 
 const STEPS = [
-  { label: "Set priorities", summary: "What matters most to you?" },
+  { label: "Set priorities", summary: "Choose your priorities." },
   { label: "Compare directions", summary: "See three valid starting points." },
   { label: "Build a draft", summary: "The assistant models a plan around your choices." },
   { label: "Resident review", summary: "Only you can accept the plan." },

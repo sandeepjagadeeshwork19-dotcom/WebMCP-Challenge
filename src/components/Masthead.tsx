@@ -23,7 +23,12 @@ export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
             {toolsText}
           </p>
         </div>
-        <div className="masthead__proof"><b>{connected ? webmcp.registeredTools.length : 0} WEBMCP TOOLS</b><span>0 ADOPTION TOOLS</span></div>
+        {connected && (
+          <div className="masthead__proof">
+            <b>{webmcp.registeredTools.length} WEBMCP TOOLS</b>
+            <span>0 ADOPTION TOOLS</span>
+          </div>
+        )}
       </div>
       <h1 className="masthead__headline">
         &#8377;10 lakh. Eight works. One resident decision.
