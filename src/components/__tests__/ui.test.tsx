@@ -56,7 +56,7 @@ describe("WebMCP registration under StrictMode", () => {
     };
     renderWithStore(<App />);
     await waitFor(() => expect(screen.getByText(/1 of 7 tools connected/i)).toBeInTheDocument());
-    expect(screen.getByText(/Assistant setup is incomplete/i)).toBeInTheDocument();
+    expect(screen.getByText(/only partly connected/i)).toBeInTheDocument();
   });
 });
 

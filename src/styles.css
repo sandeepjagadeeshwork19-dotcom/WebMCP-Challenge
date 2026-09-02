@@ -299,18 +299,15 @@ textarea {
 
 .masthead__proof {
   display: flex;
-  justify-content: center;
   align-items: center;
   align-self: center;
   gap: var(--sp-2);
-  align-items: center;
   font-size: var(--fs-micro);
   letter-spacing: 0.06em;
 }
 
 .masthead__proof b,
 .masthead__proof span {
-  text-align: center;
   padding: 0.3rem 0.5rem;
   border-radius: 999px;
   font-weight: 800;
@@ -325,6 +322,17 @@ textarea {
 .masthead__proof span {
   color: var(--accent);
   border: 1px solid var(--accent);
+}
+
+.masthead__proof--off b {
+  background: none;
+  color: var(--pencil);
+  border: 1px solid var(--rule);
+}
+
+.masthead__proof--off span {
+  color: var(--pencil);
+  border-color: var(--rule);
 }
 
 .masthead__headline {
@@ -343,25 +351,22 @@ textarea {
 }
 
 .masthead__about {
-  position: absolute;
-  right: var(--pad);
-  margin-top: -1.2rem;
+  margin-top: var(--sp-2);
   font-size: var(--fs-micro);
   color: var(--pencil);
 }
 
 .masthead__about summary {
   cursor: pointer;
+  font-weight: 600;
 }
 
 .masthead__about .disclosure {
-  position: absolute;
-  right: 0;
-  z-index: 9;
-  width: min(34rem, 80vw);
-  background: var(--surface);
+  max-width: 70ch;
+  margin-top: var(--sp-2);
   padding: var(--sp-3);
-  border: 2px solid var(--rule-strong);
+  background: var(--surface-alt);
+  border-left: 2px solid var(--rule-strong);
 }
 
 .disclosure {
@@ -1815,15 +1820,6 @@ textarea {
   }
   .rail-block:first-child {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .masthead__about {
-    position: static;
-    margin: var(--sp-2) 0 0;
-  }
-  .masthead__about .disclosure {
-    position: static;
-    width: auto;
-    margin-top: var(--sp-1);
   }
   .margin {
     position: static;

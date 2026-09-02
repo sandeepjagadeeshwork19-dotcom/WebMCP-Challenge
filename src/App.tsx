@@ -51,12 +51,17 @@ export function App() {
     <div className="app">
       <Masthead webmcp={webmcp} />
 
-      {(webmcp.status === "unsupported" || webmcp.status === "error" || webmcp.status === "degraded") && (
+      {/* A plain no-WebMCP browser is a normal case — the quiet masthead line
+          covers it. Only surface the banner for a genuine setup failure. */}
+      {(webmcp.status === "error" || webmcp.status === "degraded") && (
         <aside className="fallback-notice" role="note">
-          <h2>{webmcp.status === "degraded" ? "Assistant setup is incomplete" : "No assistant in this browser"}</h2>
+          <h2>
+            {webmcp.status === "degraded"
+              ? "The assistant is only partly connected"
+              : "The assistant failed to connect"}
+          </h2>
           <p>
-            That&rsquo;s fine &mdash; you can set priorities, compare plans, and adopt one entirely
-            by hand.
+            You can still set priorities, compare plans, and adopt one entirely by hand.
           </p>
         </aside>
       )}

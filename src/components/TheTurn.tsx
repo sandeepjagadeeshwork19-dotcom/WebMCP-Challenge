@@ -19,7 +19,7 @@ export function TheTurn() {
   const staleBecausePriorities = state.staleReason === "priority_change";
   const staleBecauseAllocation = state.staleReason === "allocation_change";
   const protectedIds = state.lockedAllocations.map((l) => l.projectId);
-  const protectedNames = protectedIds.map((id) => getProject(id).shortName).join(" and ");
+  const protectedNames = protectedIds.map((id) => `the ${getProject(id).shortName}`).join(" and ");
 
   // What the plan must now contain: the stale draft + every protected work + its deps.
   const required = new Map<ProjectId, number>();

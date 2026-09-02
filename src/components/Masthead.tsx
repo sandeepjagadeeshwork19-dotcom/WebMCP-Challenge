@@ -3,14 +3,15 @@ import type { WebMcpState } from "../webmcp/useWebMcp";
 
 export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
   const connected = webmcp.status === "registered";
+  const n = webmcp.registeredTools.length;
   const toolsText =
     webmcp.status === "registered"
-      ? `${webmcp.registeredTools.length} tools connected`
+      ? `${n} tools connected`
       : webmcp.status === "degraded"
-        ? `${webmcp.registeredTools.length} of 7 tools connected — retry this browser session`
-      : webmcp.status === "detecting"
-        ? "Looking for an assistant…"
-        : "No assistant in this browser — you can still do everything by hand.";
+        ? `${n} of 7 tools connected — retry this browser session`
+        : webmcp.status === "detecting"
+          ? "Looking for an assistant…"
+          : "No assistant in this browser — you can still do everything by hand.";
 
   return (
     <header className="masthead">
@@ -23,20 +24,24 @@ export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
             {toolsText}
           </p>
         </div>
-        {connected && (
-          <div className="masthead__proof">
-            <b>{webmcp.registeredTools.length} WEBMCP TOOLS</b>
-            <span>0 ADOPTION TOOLS</span>
-          </div>
-        )}
+        <div className={`masthead__proof${connected ? "" : " masthead__proof--off"}`}>
+          <b>{connected ? `${n} WEBMCP TOOLS` : "WEBMCP TOOLS —"}</b>
+          <span>0 ADOPTION TOOLS</span>
+        </div>
       </div>
       <h1 className="masthead__headline">
         &#8377;10 lakh. Eight works. One resident decision.
       </h1>
       <p className="masthead__standfirst">
-        The assistant can investigate, simulate and draft. Only you can protect a work and adopt the plan.
+        The assistant can investigate, simulate and draft. Only you can protect a work and adopt the
+        plan.
       </p>
-      <details className="masthead__about"><summary>About this demonstration</summary><p className="disclosure" role="note">{HYPOTHETICAL_DISCLOSURE}</p></details>
+      <details className="masthead__about">
+        <summary>About this demonstration</summary>
+        <p className="disclosure" role="note">
+          {HYPOTHETICAL_DISCLOSURE}
+        </p>
+      </details>
     </header>
   );
 }

@@ -50,7 +50,7 @@ export function ComparePlans() {
                   {prioritiesWeighted ? v.scoreAtResidentPriorities : "—"}
                 </span>
                 <span className="plan-card__score-label">
-                  {prioritiesWeighted ? "match with your priorities" : "choose a weight to score"}
+                  {prioritiesWeighted ? "priority score" : "choose a weight to score"}
                 </span>
               </div>
 

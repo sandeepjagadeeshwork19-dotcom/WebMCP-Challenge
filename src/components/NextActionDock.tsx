@@ -47,6 +47,7 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
   if (stage === "adopted") return null;
 
   if (stage === "priorities") {
+    const anyWeighted = Object.values(state.residentPriorities).some((weight) => weight > 0);
     return (
       <Dock actor="resident" focusKey="priorities" title="Choose your priorities, then compare">
         <p>
@@ -56,10 +57,12 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
         <button
           className="btn btn--primary"
           type="button"
+          disabled={!anyWeighted}
           onClick={() => dispatch({ type: "human/confirmPriorities" })}
         >
           Compare plans <Icon name="arrow" size={14} />
         </button>
+        {!anyWeighted && <p className="action-dock__status">Set at least one priority above.</p>}
       </Dock>
     );
   }
