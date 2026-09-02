@@ -15,7 +15,6 @@ export function ReviewMode() {
   const proposal = state.agentProposal;
 
   const accepted = state.proposalStatus === "accepted";
-  const rejected = state.proposalStatus === "rejected";
   const underReview = state.proposalStatus === "under_review" || state.reviewStatus === "open";
 
   useEffect(() => {
@@ -63,15 +62,13 @@ export function ReviewMode() {
         </p>
       </div>
 
-      {rejected ? (
-        <p className="sheet__validation" data-bad>
-          Changes requested. Use the next action below to rebuild the plan.
-        </p>
-      ) : (
-        <p className="review-summary__validation">
-          {accepted ? "Accepted. Complete the resident authority step below." : underReview ? "Ready for your decision below." : "Review state updated."}
-        </p>
-      )}
+      <p className="review-summary__validation">
+        {accepted
+          ? "Accepted. Complete the resident authority step below."
+          : underReview
+            ? "Ready for your decision below."
+            : "Review state updated."}
+      </p>
     </section>
   );
 }

@@ -25,6 +25,7 @@ function Stage() {
       return <ComparePlans />;
     case "draft":
     case "invalid":
+    case "rejected":
       return <ResolutionSheet />;
     case "replanning":
       return <TheTurn />;
@@ -45,7 +46,8 @@ export function App() {
   const webmcpAvailable = webmcp.status === "registered";
   const dock = <NextActionDock webmcpAvailable={webmcpAvailable} />;
   const works = <ScheduleOfWorks />;
-  const drafting = stage === "draft" || stage === "invalid" || stage === "replanning";
+  const drafting =
+    stage === "draft" || stage === "invalid" || stage === "replanning" || stage === "rejected";
 
   return (
     <div className="app">

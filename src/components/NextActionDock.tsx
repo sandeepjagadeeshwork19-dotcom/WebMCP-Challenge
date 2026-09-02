@@ -155,14 +155,17 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
         focusKey="rejected"
         title="Change something, then rebuild"
       >
-        <p>Change a priority or protection above, then build another valid draft.</p>
+        <p>
+          You sent this plan back. Adjust a priority on the left or protect a work below, then build
+          a fresh draft around the change.
+        </p>
         <button
           className="btn btn--primary"
           type="button"
           disabled={!changedSinceRejection}
           onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
         >
-          Rebuild after my change
+          {changedSinceRejection ? "Rebuild around my change" : "Rebuild after my change"}
         </button>
         {webmcpAvailable && (
           <button

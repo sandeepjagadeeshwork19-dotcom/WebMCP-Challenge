@@ -14,7 +14,8 @@ function stepIndex(stage: Stage): number {
     case "compare": return 1;
     case "draft":
     case "invalid":
-    case "replanning": return 2;
+    case "replanning":
+    case "rejected": return 2;
     case "review": return 3;
     case "adopted": return 4;
   }

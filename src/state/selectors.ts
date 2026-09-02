@@ -109,6 +109,7 @@ export type Stage =
   | "draft"
   | "replanning"
   | "invalid"
+  | "rejected"
   | "review"
   | "adopted";
 
@@ -118,11 +119,13 @@ export function selectPrioritiesSet(state: AppState): boolean {
 
 export function selectStage(state: AppState): Stage {
   if (state.proposalStatus === "finalised") return "adopted";
+  // A sent-back plan is the resident's to revise — its own editable step, not a
+  // review the resident is somehow still inside.
+  if (state.proposalStatus === "rejected") return "rejected";
   if (
     state.reviewStatus === "open" ||
     state.proposalStatus === "under_review" ||
-    state.proposalStatus === "accepted" ||
-    state.proposalStatus === "rejected"
+    state.proposalStatus === "accepted"
   ) {
     return "review";
   }
@@ -145,6 +148,8 @@ export function selectStatusLabel(state: AppState): string {
       return state.proposalStatus === "accepted" ? "accepted" : "under review";
     case "replanning":
       return "needs redraft";
+    case "rejected":
+      return "sent back";
     case "invalid":
       return "breaks a rule";
     case "draft":
@@ -174,10 +179,9 @@ export function selectTurn(state: AppState): TurnIndicator {
       return { actor: "assistant", text: "Assistant's move — ask it to redraft the plan" };
     case "invalid":
       return { actor: "assistant", text: "The draft breaks a rule — ask the assistant to fix it" };
+    case "rejected":
+      return { actor: "you", text: "Your move — change a priority or protection, then rebuild" };
     case "review":
-      if (state.proposalStatus === "rejected") {
-        return { actor: "assistant", text: "Changes requested — ask for a revised plan" };
-      }
       return state.proposalStatus === "accepted"
         ? { actor: "you", text: "Your move — tick the box, then adopt" }
         : { actor: "you", text: "Your move — accept or send back, then adopt" };
