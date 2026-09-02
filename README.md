@@ -124,15 +124,15 @@ by construction. See [`docs/SUBMISSION.md`](docs/SUBMISSION.md).
 Verified against the WebMCP spec IDL and Chrome's imperative-API docs
 (<https://developer.chrome.com/docs/ai/webmcp/imperative-api>) on 2026-08-31.
 
-- Uses `document.modelContext` (`navigator.modelContext` is deprecated as of
-  Chrome 150).
-- Each tool is registered with `await document.modelContext.registerTool(tool, { signal })`
-  (which resolves to `undefined`) using a shared `AbortController`; aborting the
-  signal unregisters every tool.
+- Registers against whichever the runtime provides — `navigator.modelContext`
+  (Chrome's early-preview build) or `document.modelContext` (the editor's draft
+  and ChatGPT's in-app browser). `getModelContext()` prefers `navigator`.
+- Each tool is registered with `await modelContext.registerTool(tool, { signal })`
+  using a shared `AbortController`; aborting the signal unregisters every tool.
 - A tool definition carries `name`, optional `title`, `description`, optional
-  JSON Schema `inputSchema`, `async execute(input, { signal })`, and
-  `annotations` (`readOnlyHint`, `destructiveHint`, `idempotentHint`,
-  `openWorldHint`).
+  JSON Schema `inputSchema`, `async execute(input, { signal })`, and WebMCP
+  `annotations` — `readOnlyHint`, plus `untrustedContentHint` on the tools whose
+  results echo resident- or agent-authored text.
 - Tool callbacks return the MCP result shape:
   `{ content: [{ type: "text", text }], structuredContent }`, with
   `isError: true` for structured errors (`{ error: { code, message } }`). Rule
@@ -141,12 +141,16 @@ Verified against the WebMCP spec IDL and Chrome's imperative-API docs
   inspectable.
 - WebMCP's `requestUserInteraction()` hands one moment back to the human. This
   project goes further: the decision-recording function is never registered, so
-  there is no code path — confirmed or not — by which the agent commits. That is
-  an API authority boundary, not a claim about general browser-automation
-  security.
-- When `document.modelContext` is absent the page shows
-  *"Agent tools are unavailable in this browser; the full manual workspace still
-  works"* and every manual flow remains fully functional.
+  there is no code path — confirmed or not — by which the agent commits.
+- **Scope of the boundary.** This governs the *structured tool surface* an
+  MCP-style agent negotiates with the page. It is not a privilege boundary: a
+  computer-use agent driving the raw DOM could still click the resident's
+  buttons. Sandboxing the agent from the page is a separate, unsolved,
+  spec-level concern. What omission buys is that a *cooperative* agent has no
+  function to call, and the decision record has a human author by construction.
+- When no model context is present the page shows *"No assistant in this
+  browser — you can still do everything by hand"* and every manual flow remains
+  fully functional.
 
 ## Deployment
 

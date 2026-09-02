@@ -70,7 +70,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       title: "Get budget state",
       description:
         "Read the canonical on-page state: the ₹10,00,000 fund, resident priorities, protected works, resident starting selections, the full active proposal (allocations, totals and validation), revision numbers, whose turn it is, and the list of actions no tool can perform. Call this first; pass the returned budgetRevision to simulate_allocation and propose_allocation. Changes nothing.",
-      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+      annotations: { readOnlyHint: true, untrustedContentHint: true },
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -85,7 +85,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       title: "List projects",
       description:
         "List the eight candidate works with costs, benefit ratings, the numeric scoring model, funding rules, dependencies and incompatibilities. Changes nothing.",
-      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+      annotations: { readOnlyHint: true },
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -105,7 +105,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       title: "List strategy options",
       description:
         "Return three deterministically valid budget directions (safety & access, climate resilience, broad coverage), each scored against the resident's current priorities and its own lens. These are comparison options; this tool changes nothing and does not load a draft.",
-      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+      annotations: { readOnlyHint: true },
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -118,7 +118,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       title: "Simulate allocation",
       description:
         "Run the shared validator on a hypothetical allocation. Returns every constraint issue at once, each with a machine-readable fix, plus the benefit summary at the resident's priorities. Changes nothing.",
-      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+      annotations: { readOnlyHint: true },
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -135,7 +135,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       title: "Propose allocation",
       description:
         "Record a draft allocation with your rationale as a visible, agent-attributed proposal for the given budgetRevision. Runs the shared validator; an invalid allocation is still stored as a visible rejected draft. This is never the decision — any resident edit stales it and you must re-read and redraft. There is no tool to accept, adopt, or finalise.",
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+      annotations: { readOnlyHint: false, untrustedContentHint: true },
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -153,7 +153,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       title: "Explain trade-offs",
       description:
         "Compare the active proposal with the resident's current allocation or the previous proposal: added and removed works, funding changes, per-priority benefit deltas and opportunity costs. Directional and illustrative only; changes nothing.",
-      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+      annotations: { readOnlyHint: true, untrustedContentHint: true },
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -173,7 +173,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       title: "Request allocation review",
       description:
         "Open a visible resident review of the current fresh, valid proposal and step back. This does not accept, adopt or finalise it — only the resident can, and no tool exposes those steps.",
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+      annotations: { readOnlyHint: false },
       inputSchema: {
         type: "object",
         additionalProperties: false,

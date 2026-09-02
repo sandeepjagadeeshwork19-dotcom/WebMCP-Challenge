@@ -46,10 +46,11 @@ prompt-injection and goal-drift; and an approval click leaves a thin audit trail
 informed by the agent."
 
 Neighbors Decide draws the boundary differently. The deciding actions are simply
-**not present** in the agent's tool surface — not gated, absent. `document.modelContext`
-carries seven tools that read, model, simulate, draft and hand off; it carries
-nothing that commits. A cooperative agent has no function to call, and the
-withheld list is shown on screen so the omission reads as a design, not a gap.
+**not present** in the agent's tool surface — not gated, absent. The page
+registers seven tools (on `navigator.modelContext` or `document.modelContext`,
+whichever the runtime provides) that read, model, simulate, draft and hand off;
+it registers nothing that commits. A cooperative agent has no function to call,
+and the withheld list is shown on screen so the omission reads as a design.
 
 This is an **API authority boundary**, not a claim about browser security. A
 determined agent can still type into the DOM. What omission buys is resident-UI
