@@ -42,7 +42,7 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
       : copyStatus === "failed"
         ? "Copy failed — select the request below"
         : null;
-  const copyButtonLabel = copyStatus === "copied" ? "Request copied" : "Copy the request";
+  const copyButtonLabel = copyStatus === "copied" ? "Request copied" : "Get an assistant request";
 
   if (stage === "adopted") return null;
 
@@ -67,13 +67,13 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
   if (stage === "compare") {
     return (
       <Dock
-        actor={webmcpAvailable ? "assistant" : "resident"}
+        actor="resident"
         focusKey="compare"
-        title={webmcpAvailable ? "Ask for a plan built for your priorities" : "Open one of the plans below"}
+        title="Choose a starting plan"
       >
         <p>
           {webmcpAvailable
-            ? "The assistant's calls appear in the trace as it works."
+            ? "Open a plan below, or optionally ask the assistant to model one. Its calls appear in the trace."
             : "Opening a plan starts a draft — it is not the final decision."}
         </p>
         {webmcpAvailable && (
@@ -89,31 +89,25 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
   if (stage === "draft") {
     return (
       <Dock
-        actor={webmcpAvailable ? "assistant" : "resident"}
+        actor="resident"
         focusKey={`draft-${state.proposalRevision}`}
         title="Send this plan to review"
       >
         <p>It opens in resident review. It will not be accepted or adopted.</p>
-        {webmcpAvailable ? (
-          <button className="btn btn--agent" type="button" onClick={copyPrompt}>
-            <Icon name="copy" size={14} /> {copyButtonLabel}
-          </button>
-        ) : (
-          <button
-            className="btn btn--primary"
-            type="button"
-            onClick={() => dispatch({ type: "human/openReview" })}
-          >
-            Send to review <Icon name="arrow" size={14} />
-          </button>
-        )}
+        <button
+          className="btn btn--primary"
+          type="button"
+          onClick={() => dispatch({ type: "human/openReview" })}
+        >
+          Send to review <Icon name="arrow" size={14} />
+        </button>
         {webmcpAvailable && (
           <button
             className="btn btn--quiet"
             type="button"
-            onClick={() => dispatch({ type: "human/openReview" })}
+            onClick={copyPrompt}
           >
-            Send to review yourself
+            <Icon name="copy" size={14} /> {copyButtonLabel}
           </button>
         )}
         <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
@@ -125,31 +119,25 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
     const invalid = stage === "invalid";
     return (
       <Dock
-        actor={webmcpAvailable ? "assistant" : "resident"}
+        actor="resident"
         focusKey={`${stage}-${state.proposalRevision}`}
         title={invalid ? "Fix the funding rules" : `Rebuild around ${protectedNames || "your protected work"}`}
       >
         <p>The next plan will be valid and keep every protected work.</p>
-        {webmcpAvailable ? (
-          <button className="btn btn--agent" type="button" onClick={copyPrompt}>
-            <Icon name="copy" size={14} /> {copyButtonLabel}
-          </button>
-        ) : (
-          <button
-            className="btn btn--primary"
-            type="button"
-            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
-          >
-            Rebuild the plan <Icon name="arrow" size={14} />
-          </button>
-        )}
+        <button
+          className="btn btn--primary"
+          type="button"
+          onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+        >
+          Rebuild the plan <Icon name="arrow" size={14} />
+        </button>
         {webmcpAvailable && (
           <button
             className="btn btn--quiet"
             type="button"
-            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+            onClick={copyPrompt}
           >
-            Rebuild it yourself
+            <Icon name="copy" size={14} /> {copyButtonLabel}
           </button>
         )}
         <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />
@@ -160,33 +148,26 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
   if (state.proposalStatus === "rejected") {
     return (
       <Dock
-        actor={webmcpAvailable ? "assistant" : "resident"}
+        actor="resident"
         focusKey="rejected"
-        title={webmcpAvailable ? "Ask for a revised plan" : "Change a priority or protection first"}
+        title="Change something, then rebuild"
       >
-        <p>Change a priority or protection above, or tell the assistant what should change.</p>
-        {webmcpAvailable ? (
-          <button className="btn btn--agent" type="button" onClick={copyPrompt}>
-            <Icon name="copy" size={14} /> {copyButtonLabel}
-          </button>
-        ) : (
-          <button
-            className="btn btn--primary"
-            type="button"
-            disabled={!changedSinceRejection}
-            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
-          >
-            Rebuild after my change
-          </button>
-        )}
+        <p>Change a priority or protection above, then build another valid draft.</p>
+        <button
+          className="btn btn--primary"
+          type="button"
+          disabled={!changedSinceRejection}
+          onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+        >
+          Rebuild after my change
+        </button>
         {webmcpAvailable && (
           <button
             className="btn btn--quiet"
             type="button"
-            disabled={!changedSinceRejection}
-            onClick={() => dispatch({ type: "app/redraftAroundLocks" })}
+            onClick={copyPrompt}
           >
-            Rebuild it yourself after a change
+            <Icon name="copy" size={14} /> {copyButtonLabel}
           </button>
         )}
         <CopyStatus status={copiedLabel} prompt={copyStatus === "failed" ? assistantPrompt : null} />

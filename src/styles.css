@@ -459,6 +459,120 @@ textarea {
   color: var(--valid);
 }
 
+/* ---------- resident journey: five real stages, never fake navigation ---------- */
+
+.journey {
+  margin: var(--sp-3) var(--pad) 0;
+  padding: var(--sp-3);
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 2.2fr);
+  gap: var(--sp-4);
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--rule-strong);
+}
+
+.journey__kicker {
+  color: var(--accent);
+  font-size: var(--fs-micro);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.journey__now {
+  display: grid;
+  gap: 0.1rem;
+  margin-top: var(--sp-1);
+  font-family: var(--font-doc);
+  line-height: var(--lh-tight);
+}
+
+.journey__now span {
+  color: var(--pencil);
+  font-family: var(--font-ui);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.journey__now b {
+  font-size: var(--fs-title);
+  font-weight: 600;
+}
+
+.journey__now small {
+  color: var(--ink-soft);
+  font-size: var(--fs-small);
+}
+
+.journey__steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journey__steps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.35rem;
+  align-items: center;
+  min-width: 0;
+  color: var(--pencil);
+  font-size: var(--fs-tiny);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+}
+
+.journey__steps li::after {
+  position: absolute;
+  top: 0.62rem;
+  left: calc(1.25rem + var(--sp-2));
+  right: calc(var(--sp-2) * -1);
+  height: 1px;
+  background: var(--rule);
+  content: "";
+}
+
+.journey__steps li:last-child::after {
+  display: none;
+}
+
+.journey__number {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 1.25rem;
+  height: 1.25rem;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: var(--surface);
+  font-size: var(--fs-micro);
+}
+
+.journey__steps li[data-state="complete"] {
+  color: var(--valid);
+}
+
+.journey__steps li[data-state="complete"]::after {
+  background: var(--valid);
+}
+
+.journey__steps li[data-state="current"] {
+  color: var(--accent);
+}
+
+.journey__steps li[data-state="current"] .journey__number {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
 /* ---------- left rail (full-width evidence band) ---------- */
 
 .rail {
@@ -517,10 +631,10 @@ textarea {
 }
 
 .priority-chip {
-  width: 1.35rem;
-  height: 1.35rem;
-  min-width: 20px;
-  min-height: 20px;
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 40px;
+  min-height: 40px;
   padding: 0;
   border-radius: 999px;
   font-size: var(--fs-micro);
@@ -528,6 +642,13 @@ textarea {
 
 .work-protect {
   white-space: nowrap;
+}
+
+.schedule__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--sp-1);
 }
 
 .protected-item {
@@ -1545,6 +1666,15 @@ textarea {
   max-width: 70ch;
 }
 
+.schedule__notice {
+  margin: 0 0 var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 3px solid var(--accent);
+  background: var(--accent-tint);
+  color: var(--ink);
+  font-weight: 650;
+}
+
 .schedule__row {
   display: grid;
   grid-template-columns: 2.5rem minmax(0, 1fr) auto auto;
@@ -1640,15 +1770,42 @@ textarea {
 /* ---------- narrow screens: single column, margin stacks below ---------- */
 
 @media (max-width: 1099px) {
+  .journey {
+    grid-template-columns: 1fr;
+  }
   .rail {
     grid-template-columns: 1fr;
   }
   .masthead__about {
-    display: none;
+    position: static;
+    margin: var(--sp-2) 0 0;
+  }
+  .masthead__about .disclosure {
+    position: static;
+    width: auto;
+    margin-top: var(--sp-1);
   }
   .margin {
     position: static;
     max-height: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .journey__steps {
+    grid-template-columns: 1fr;
+    gap: var(--sp-1);
+  }
+  .journey__steps li {
+    grid-template-columns: 1.25rem minmax(0, 1fr);
+  }
+  .journey__steps li::after {
+    top: 1.25rem;
+    bottom: calc(var(--sp-1) * -1);
+    left: 0.6rem;
+    right: auto;
+    width: 1px;
+    height: auto;
   }
 }
 

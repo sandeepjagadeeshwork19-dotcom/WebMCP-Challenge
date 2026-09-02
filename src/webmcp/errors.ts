@@ -11,7 +11,11 @@ export type ToolErrorCode =
   | "proposal_not_valid"
   | "stale_proposal"
   | "review_already_open"
-  | "comparison_unavailable";
+  | "comparison_unavailable"
+  | "finalised_state"
+  | "resident_review_in_progress"
+  | "priorities_not_confirmed"
+  | "empty_allocation";
 
 export interface ToolError {
   error: {

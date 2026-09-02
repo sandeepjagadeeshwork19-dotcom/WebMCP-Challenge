@@ -6,7 +6,11 @@
 
 import { HYPOTHETICAL_DISCLOSURE } from "../domain/disclosure";
 import { DATASET_VERSION, FUND_LIMIT, getProject, PROJECT_IDS } from "../domain/projects";
-import { STRATEGY_PRESETS, strategyNeighbourhoods } from "../domain/strategies";
+import {
+  STRATEGY_PRESETS,
+  strategyForResident,
+  strategyNeighbourhoods,
+} from "../domain/strategies";
 import { fixHintForIssue } from "../domain/fixHints";
 import {
   benefitSummary,
@@ -51,6 +55,7 @@ export interface Handlers {
 function proposalSummary(store: Store) {
   const state = store.getState();
   if (!state.agentProposal) return null;
+  const total = committedTotal(state.agentProposal.allocations);
   return {
     createdBy: state.agentProposal.createdBy,
     proposalRevision: state.agentProposal.proposalRevision,
@@ -58,6 +63,13 @@ function proposalSummary(store: Store) {
     basedOnBudgetRevision: state.agentProposal.basedOnBudgetRevision,
     allocationHash: state.agentProposal.allocationHash,
     rationale: state.agentProposal.rationale,
+    allocations: state.agentProposal.allocations,
+    committedTotal: total,
+    remainingFunds: FUND_LIMIT - total,
+    selectedProjectIds: selectedProjectIds(state.agentProposal.allocations),
+    validation: state.constraintValidation
+      ? { valid: state.constraintValidation.valid, issues: state.constraintValidation.issues }
+      : null,
   };
 }
 
@@ -100,7 +112,7 @@ export function createHandlers(store: Store): Handlers {
           actions: [
             "set or change priority weights",
             "protect (lock) a work into every draft, or remove that protection",
-            "edit the resident's own allocation",
+            "choose or remove a resident starting allocation from visible page controls",
             "accept, send back, or reject a proposal",
             "adopt or finalise the resolution",
             "reset the demonstration",
@@ -168,16 +180,29 @@ export function createHandlers(store: Store): Handlers {
         datasetVersion: DATASET_VERSION,
         residentPriorities: { ...state.residentPriorities },
         note:
-          "These are structured comparison options. Calling this tool changes nothing; the page can separately load an application example draft.",
-        strategies: STRATEGY_PRESETS.map((s) => {
+          state.lockedAllocations.length > 0
+            ? "These structured comparison options have been rebuilt around the resident's protected works. Calling this tool changes nothing; the page can separately load an application example draft."
+            : "These are structured comparison options. Calling this tool changes nothing; the page can separately load an application example draft.",
+        strategies: STRATEGY_PRESETS.map((preset) => {
+          const s = strategyForResident(
+            preset,
+            state.lockedAllocations,
+            state.residentPriorities,
+          );
           const total = committedTotal(s.allocations);
           const funded = selectedProjectIds(s.allocations);
           return {
             id: s.id,
             label: s.label,
             blurb: s.blurb,
-            mainBenefit: s.mainBenefit,
-            mainSacrifice: s.mainSacrifice,
+            mainBenefit:
+              state.lockedAllocations.length > 0
+                ? "Rebuilt around the resident's protected works."
+                : s.mainBenefit,
+            mainSacrifice:
+              state.lockedAllocations.length > 0
+                ? "May differ from this direction's unprotected example."
+                : s.mainSacrifice,
             lensPriorities: s.priorities,
             allocations: s.allocations,
             committedTotal: total,
@@ -250,6 +275,18 @@ export function createHandlers(store: Store): Handlers {
       if (!rationale.ok) return rationale.error;
 
       const state = store.getState();
+      if (state.proposalStatus === "finalised") {
+        return toolError("finalised_state", "This demonstration record is final. Only the resident can reset it to begin again.");
+      }
+      if (state.proposalStatus === "under_review" || state.proposalStatus === "accepted") {
+        return toolError("resident_review_in_progress", "A resident review is in progress. Do not replace the plan; wait for a resident edit or rejection.");
+      }
+      if (!state.prioritiesConfirmed) {
+        return toolError("priorities_not_confirmed", "The resident has not confirmed their priorities yet. Wait for them to compare plans before proposing one.");
+      }
+      if (allocations.value.length === 0) {
+        return toolError("empty_allocation", "A proposal must fund at least one work.");
+      }
       if (revision.value !== state.budgetRevision) {
         return toolError(
           "stale_budget_revision",
@@ -311,6 +348,9 @@ export function createHandlers(store: Store): Handlers {
       }
 
       const state = store.getState();
+      if (state.proposalStatus === "finalised") {
+        return toolError("finalised_state", "This demonstration record is final. Only the resident can reset it to begin again.");
+      }
       if (!state.agentProposal) {
         return toolError("no_active_proposal", "There is no active proposal to explain.");
       }
@@ -361,6 +401,9 @@ export function createHandlers(store: Store): Handlers {
       if (!proposalRevision.ok) return proposalRevision.error;
 
       const state = store.getState();
+      if (state.proposalStatus === "finalised") {
+        return toolError("finalised_state", "This demonstration record is final. Only the resident can reset it to begin again.");
+      }
       if (!state.agentProposal) {
         return toolError("no_active_proposal", "There is no active proposal.");
       }

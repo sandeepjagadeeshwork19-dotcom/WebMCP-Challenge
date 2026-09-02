@@ -13,7 +13,7 @@ Target ~2:45. The five reference images (`pz0DP`, `lOsN7`, `ii6Br`, `JcuSm`,
 ## Beat 1 — the stakes  · 0:00–0:18
 
 **On screen:** the masthead, the disclosure line, "7 assistant tools connected",
-three direction cards below.
+resident priorities and the eight works.
 
 **You do:** nothing — just let it sit.
 
@@ -28,8 +28,9 @@ three direction cards below.
 ## Beat 2 — you set priorities, the assistant models options  · 0:18–0:48
 *(reference: `pz0DP`)*
 
-**You do:** in the left rail, click **Safety → 3**, then **Accessibility → 3**.
-The state line moves to *Comparing directions*; the three cards re-score.
+**You do:** in the left rail, click **Safety → 3**, then **Accessibility → 3**,
+then click **Compare plans**. The three cards appear and score against the
+resident's priorities.
 
 **You type to the assistant:**
 `Call list_strategy_options and tell me which direction fits my priorities.`
@@ -61,10 +62,8 @@ PROPOSAL** and *valid*.
 **You do:** scroll to **The eight candidate works**. On *Riverside play area
 upgrade*, click **Protect**.
 
-**On screen:** a red **BUDGET REV 1 → N** chip in the bar; the state line reads
-**Re-planning — draft stale**; a **STALE** stamp over the old draft; the hero:
-*"must now include the play area · over the fund by ₹1,70,000 · the assistant
-must drop about ₹1,70,000 of other works."* **Hold here 2–3 seconds.**
+**On screen:** the proposal is marked stale and the next action asks the
+assistant to rebuild around the protected play area. **Hold here 2–3 seconds.**
 
 **You say:**
 > Now the judgement the assistant can't make. The play area floods every
@@ -90,10 +89,9 @@ on the play-area line and a *"compared with where you started"* strip
 **You type to the assistant:**
 `Open this resolution for review.`
 
-**On screen:** a black **REVIEW — RESOLUTION WD-12 · this step is the resident's
-alone** band, the disclosure repeated, the **request review WRITE** trace event,
-and the notice that no WebMCP tool can accept, revise, reject or adopt. The notice
-also states that general browser automation is outside the WebMCP tool boundary.
+**On screen:** **REVIEW — RESOLUTION WD-12**, the **request review WRITE** trace
+event, and the notice that no WebMCP tool can accept or adopt. The resident
+controls are visibly the next step.
 
 **You say:**
 > The assistant handed it to me through WebMCP. That tool surface ends here, so

@@ -4,16 +4,15 @@ Record in a WebMCP-capable agent browser (ChatGPT browser, or Chrome with WebMCP
 enabled) at the deployed URL, 1280×720+, audio on. Do a full dry run first so
 `Reset` leaves a clean start. Narration is ~155 wpm — trim, don't rush.
 
-The look: a black-and-vermilion **ward gazette** — "NEIGHBORS DECIDE", docket
-"NO. WD-12", a state line reading *Priorities set → Comparing directions → Draft
-ready → Reviewed → Adopted*, and a right-hand **assistant's margin**.
+The look: a black-and-vermilion **ward gazette** — "NEIGHBORS DECIDE", the
+resident-journey rail, and a right-hand **assistant's margin**.
 
 ---
 
 ## 0:00 – 0:18 · Hook
 
-**Screen:** the loaded page — masthead, the disclosure line, the "7 assistant
-tools connected" indicator, three direction cards below.
+**Screen:** the loaded page — masthead, fund status, the disclosure line, the
+"7 tools connected" indicator, resident priorities and the eight works.
 
 **Say:**
 > In India, a ward's development money is meant to be decided *in the ward* —
@@ -23,7 +22,7 @@ tools connected" indicator, three direction cards below.
 
 ## 0:18 – 0:33 · The tools, and what's missing
 
-**Screen:** point to "7 assistant tools connected — read state, list works,
+**Screen:** point to "7 tools connected — read state, list works,
 compare, simulate, propose, explain, request review," then the empty **LIVE
 WEBMCP TRACE** in the right margin.
 
@@ -34,9 +33,9 @@ WEBMCP TRACE** in the right margin.
 
 ## 0:33 – 0:55 · Priorities, then three modelled directions
 
-**Screen:** in the left rail, click **Safety 3** and **Accessibility 3**. The
-budget revision ticks; the state line moves to *Comparing directions*. The three
-cards re-score.
+**Screen:** in the left rail, click **Safety 3** and **Accessibility 3**, then
+click **Compare plans**. The budget revision ticks, the three cards appear and
+score against those priorities.
 
 **Type to the assistant:** `Call list_strategy_options and walk me through the three directions.`
 
@@ -51,7 +50,7 @@ RESOLUTION — WD-12** appears, marked **WEBMCP ASSISTANT PROPOSAL** and *valid*
 
 ## 0:55 – 1:35 · The turn — a human choice stales the plan
 
-**Screen:** scroll to **The eight candidate works**. On *Riverside play area
+**Screen:** scroll to **The eight works**. On *Riverside play area
 upgrade*, click **Protect**.
 
 **Say:**
@@ -59,22 +58,19 @@ upgrade*, click **Protect**.
 > block, and it floods every monsoon. It isn't in the "efficient" plan — I
 > protect it anyway.
 
-**Screen:** the command bar shows a red **BUDGET REV 1 → N** chip; the state line
-reads **Re-planning — draft stale**; a **STALE** stamp sits over the superseded
-draft; the hero reads *PROTECTING PLAY AREA CHANGES THE PLAN — must now include
-the play area — over the fund by ₹1,70,000 — the assistant must drop about
-₹1,70,000 of other works.*
+**Screen:** the status changes to **needs redraft** and the resident-facing text
+explains that the draft must be rebuilt around the protected play area.
 
 **Say:**
-> The WebMCP proposal is now stale. Protecting the play area pushes it
-> over the fund — something has to give. That's the assistant's problem to solve,
-> not mine.
+> The WebMCP proposal is now stale. It must be rebuilt around my protected work
+> and re-checked against every funding rule. That's a modelling job; choosing the
+> protected work was mine.
 
 **Type to the assistant:** `I protected the play area. Redraft around it.`
 
 **Screen:** a fresh **DRAFT RESOLUTION** appears — *valid*, proposal rev 2, the
-play area line carrying a **PROTECTED** badge, and a *"compared with where you
-started"* strip: `+ play area · − road crossings`.
+play area line carrying a **PROTECTED** badge. Point to the live trade-off
+summary and describe the actual added and removed works shown in this run.
 
 ## 1:35 – 1:52 · The engine says no
 
@@ -93,24 +89,22 @@ both be funded; alternative designs for the same stretch of MG Road."*
 
 **Type to the assistant:** `Request resident review of this valid proposal.`
 
-**Screen:** the trace adds **request review WRITE**. A black **REVIEW — RESOLUTION
-WD-12 · this step is the resident's alone** band; the disclosure repeated; then
-the notice: *"WebMCP hands control back here … no WebMCP tool to accept, revise,
-reject or adopt. General browser automation is outside that WebMCP tool
-boundary."*
+**Screen:** the trace adds **request review WRITE**. **REVIEW — RESOLUTION
+WD-12** opens with the explicit notice that the assistant cannot accept or adopt
+the plan and the resident controls are the next step.
 
 **Say:**
 > The assistant requested this review through WebMCP. That tool surface ends
-> here. I accept the draft, acknowledge this is a demonstration, and adopt with
+> here. I accept this plan, acknowledge this is a demonstration, and adopt with
 > the visible resident controls.
 
-**Screen:** click **Accept the draft** (Adopt still disabled) → tick the
+**Screen:** click **Accept this plan** (Adopt still disabled) → tick the
 acknowledgement checkbox (Adopt enables) → click **Adopt resolution WD-12**.
 
 ## 2:35 – 2:55 · The record, and the point
 
-**Screen:** **RESOLUTION WD-12 — ADOPTED**, green band, *"local record · not
-transmitted"*, *"Adopted by the resident … not by the assistant,"* the record ID,
+**Screen:** **RESOLUTION WD-12 — ADOPTED**, green band, *"available in this
+browser tab only"*, the record ID,
 the works, and the attribution: *human_finalisation — the assistant modelled
 options through WebMCP; the resident set priorities, protected what mattered,
 reviewed, acknowledged and adopted.*
@@ -126,14 +120,14 @@ reviewed, acknowledged and adopted.*
 
 ## Shot-list checklist
 
-- [ ] "7 assistant tools connected" line legible
+- [ ] "7 tools connected" line legible
 - [ ] Empty live trace before the first tool call; read/write events appear as the assistant works
-- [ ] State line visible and advancing each beat
+- [ ] Resident-journey rail visible and advancing each beat
 - [ ] Three direction cards, scores at your priorities, "the score won't decide this"
 - [ ] `simulate` → `propose` in trace; draft labelled **WEBMCP ASSISTANT PROPOSAL**
-- [ ] **Protect** on the play area → red **BUDGET REV → chip** + **STALE stamp** on screen ≥ 2s  ← key frame
-- [ ] Cost hero: "over the fund by ₹1,70,000 · drop about ₹1,70,000 of other works"
-- [ ] Redraft: **PROTECTED** badge on the play-area line; "compared with where you started" strip
+- [ ] **Protect** on the play area → proposal marked stale and a clear replan prompt on screen ≥ 2s  ← key frame
+- [ ] Replan copy explains that every protected work must be kept in the next valid plan
+- [ ] Redraft: **PROTECTED** badge on the play-area line and the live trade-off summary
 - [ ] Draft rejected state for P-01 + P-08, with the reason
 - [ ] `request review` in trace + precise WebMCP/general-browser boundary notice
 - [ ] Adopt disabled → enabled only after Accept + acknowledgement

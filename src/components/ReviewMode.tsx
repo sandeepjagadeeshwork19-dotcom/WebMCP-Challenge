@@ -38,7 +38,7 @@ export function ReviewMode() {
 
       <div className="review-summary">
         <p className="review-summary__lead">
-          Fund {formatMoney(FUND_LIMIT)} to {works.length} works:{" "}
+          Allocate up to {formatMoney(FUND_LIMIT)} across {works.length} works:{" "}
           {works.map((w) => getProject(w.projectId).shortName).join(", ")}. {formatMoney(total)}{" "}
           spent, {formatMoney(FUND_LIMIT - total)} left.
         </p>

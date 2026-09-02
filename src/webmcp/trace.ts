@@ -65,7 +65,22 @@ export function getWebMcpTrace(store: Store): ToolTraceStore {
 
   let events: readonly ToolTraceEvent[] = [];
   let sequence = 0;
+  let resetVersion = store.getState().demoResetVersion;
   const listeners = new Set<() => void>();
+  const notify = () => {
+    for (const listener of listeners) listener();
+  };
+
+  // The trace belongs to one demonstration run. It intentionally resets with
+  // the shared state rather than showing calls from an earlier decision.
+  store.subscribe(() => {
+    const nextResetVersion = store.getState().demoResetVersion;
+    if (nextResetVersion === resetVersion) return;
+    resetVersion = nextResetVersion;
+    events = [];
+    sequence = 0;
+    notify();
+  });
   const trace: ToolTraceStore = {
     getSnapshot: () => events,
     subscribe: (listener) => {
@@ -87,7 +102,7 @@ export function getWebMcpTrace(store: Store): ToolTraceStore {
         timestamp: new Date().toISOString(),
       };
       events = [...events, event].slice(-7);
-      for (const listener of listeners) listener();
+      notify();
     },
   };
   traces.set(store, trace);

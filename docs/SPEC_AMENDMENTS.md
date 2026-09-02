@@ -15,7 +15,7 @@ The spec fixes "exactly six" tools. A seventh **read-only** tool was added:
   priorities.
 
 It mutates nothing and dispatches nothing. The "no tool may set priorities,
-lock, edit the allocation, accept, reject, finalise, or reset" rule is unchanged
+lock, choose or remove a resident starting allocation, accept, reject, finalise, or reset" rule is unchanged
 — still exactly two state-changing tools (`propose_allocation`,
 `request_allocation_review`), still no finalisation tool.
 
@@ -26,7 +26,7 @@ value") without touching the decision.
 ## 2. Application example directions
 
 The shipped interface does not apply a strategy's lens priorities. The resident's
-four weights remain exactly as set. A visible **Load example Direction** control
+four weights remain exactly as set. A visible **Start from this plan** control
 dispatches `app/loadDirectionDraft`, placing the direction's allocation into the
 shared validator as an application-attributed example. This normal page action
 is deliberately labelled as distinct from a WebMCP assistant proposal.
@@ -71,8 +71,9 @@ The spec's §12 page hierarchy (a scrolling stack of panels) was rebuilt as a
 **staged decision board**, after two senior-design-director reviews:
 
 - A persistent **command bar** (fund figures · revision stamp · a *whose-move*
-  indicator) and a **state line** (`Priorities → Comparing → Draft → Reviewed →
-  Adopted`, a non-locking indicator, not a wizard).
+  indicator) and a **resident-journey rail** (`Set priorities → Compare
+  directions → Build a draft → Resident review → Your record`, a non-locking
+  indicator, not a wizard).
 - A stable three-zone split: **left** = "you control this" (priorities,
   protected works, log); **centre** = the current stage (compare / draft / the
   turn / review / record); **right** = the **assistant's margin** with a live

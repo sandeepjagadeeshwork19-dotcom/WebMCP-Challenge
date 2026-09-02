@@ -8,6 +8,7 @@
  */
 
 import { PROJECT_IDS, getProject } from "./projects";
+import { redraftAroundLocks } from "./redraft";
 import { benefitSummary } from "./tradeoffs";
 import { committedTotal, remainingFunds } from "./validation";
 import type { Allocation, ProjectId, ResidentPriorities } from "./types";
@@ -84,6 +85,23 @@ export function getStrategy(id: StrategyId): StrategyPreset {
   const preset = STRATEGY_PRESETS.find((s) => s.id === id);
   if (!preset) throw new Error(`Unknown strategy id: ${id}`);
   return preset;
+}
+
+/**
+ * Keep the direction's seed allocation, but rebuild it around the resident's
+ * protected works. This is shared by the cards, the loaded starting draft and
+ * the WebMCP comparison response so they always describe the same candidate.
+ */
+export function strategyForResident(
+  preset: StrategyPreset,
+  lockedAllocations: Allocation[],
+  residentPriorities: ResidentPriorities,
+): StrategyPreset {
+  if (lockedAllocations.length === 0) return preset;
+  return {
+    ...preset,
+    allocations: redraftAroundLocks(preset.allocations, lockedAllocations, residentPriorities),
+  };
 }
 
 /** Distinct neighbourhoods touched by a strategy's selected projects. */

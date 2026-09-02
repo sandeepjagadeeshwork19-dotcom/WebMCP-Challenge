@@ -26,6 +26,9 @@ export type ProposalStatus =
 
 export type ReviewStatus = "none" | "open" | "rejected" | "accepted" | "completed";
 
+/** The last resident edit that made the active draft stale. */
+export type StaleReason = "priority_change" | "protection_change" | "allocation_change" | null;
+
 export type Actor = "human" | "agent" | "system";
 
 export interface AgentProposal {
@@ -64,6 +67,9 @@ export interface AppState {
   residentPriorities: ResidentPriorities;
   prioritiesConfirmed: boolean;
   lockedAllocations: Allocation[];
+  /** Visible explanation when a resident tries to protect an infeasible set. */
+  protectionError: string | null;
+  staleReason: StaleReason;
   manualAllocations: Allocation[];
   agentProposal: AgentProposal | null;
   previousProposal: AgentProposal | null;
@@ -93,6 +99,8 @@ export function createInitialState(): AppState {
     residentPriorities: { ...INITIAL_PRIORITIES },
     prioritiesConfirmed: false,
     lockedAllocations: [],
+    protectionError: null,
+    staleReason: null,
     manualAllocations: [],
     agentProposal: null,
     previousProposal: null,

@@ -18,6 +18,7 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
     await user.click(within(safety).getByRole("radio", { name: "Safety 3" }));
     await user.click(within(access).getByRole("radio", { name: "Accessibility 3" }));
     expect(store.getState().budgetRevision).toBe(2);
+    await user.click(screen.getByRole("button", { name: /Compare plans/i }));
 
     // 2. Agent reads the same revision the page shows.
     expect((tools.get_budget_state({}) as { budgetRevision: number }).budgetRevision).toBe(2);

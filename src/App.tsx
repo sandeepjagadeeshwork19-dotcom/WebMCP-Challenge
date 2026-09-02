@@ -12,6 +12,7 @@ import { ReviewMode } from "./components/ReviewMode";
 import { AdoptedRecord } from "./components/AdoptedRecord";
 import { ScheduleOfWorks } from "./components/ScheduleOfWorks";
 import { NextActionDock } from "./components/NextActionDock";
+import { JourneyProgress } from "./components/JourneyProgress";
 
 function Stage() {
   const stage = selectStage(useAppState());
@@ -50,9 +51,9 @@ export function App() {
     <div className="app">
       <Masthead webmcp={webmcp} />
 
-      {(webmcp.status === "unsupported" || webmcp.status === "error") && (
+      {(webmcp.status === "unsupported" || webmcp.status === "error" || webmcp.status === "degraded") && (
         <aside className="fallback-notice" role="note">
-          <h2>No assistant in this browser</h2>
+          <h2>{webmcp.status === "degraded" ? "Assistant setup is incomplete" : "No assistant in this browser"}</h2>
           <p>
             That&rsquo;s fine &mdash; you can set priorities, compare plans, and adopt one entirely
             by hand.
@@ -61,6 +62,8 @@ export function App() {
       )}
 
       <CommandBar webmcpAvailable={webmcpAvailable} />
+
+      <JourneyProgress stage={stage} />
 
       <div aria-live="polite" className="visually-hidden">
         {latest ? `${latest.actor}: ${latest.summary}` : ""}

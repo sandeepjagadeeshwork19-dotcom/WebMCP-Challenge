@@ -13,14 +13,14 @@ export function AssistantMargin() {
       <p className="margin__kicker">
         LIVE SESSION <Icon name="pen" size={13} />
       </p>
-      <Body stage={stage} />
+      <Body stage={stage} protectedCount={state.lockedAllocations.length} />
       <WebMcpActivity />
       <WithheldTools />
     </aside>
   );
 }
 
-function Body({ stage }: { stage: string }) {
+function Body({ stage, protectedCount }: { stage: string; protectedCount: number }) {
   switch (stage) {
     case "priorities":
       return (
@@ -45,7 +45,9 @@ function Body({ stage }: { stage: string }) {
     case "draft":
       return (
         <p className="lede">
-          Done. Your protected works are in and everything&rsquo;s valid.
+          {protectedCount > 0
+            ? "Done. Your protected works are in and everything’s valid."
+            : "Done. This draft is valid and ready for your review."}
         </p>
       );
 

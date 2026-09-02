@@ -45,6 +45,19 @@ describe("WebMCP registration under StrictMode", () => {
     // no duplicate-registration rejections logged for a tool that stayed live
     expect(attempts.length).toBe(TOOL_NAMES.length);
   });
+
+  it("reports partial tool registration as degraded instead of connected", async () => {
+    let attempts = 0;
+    (document as { modelContext?: unknown }).modelContext = {
+      registerTool: () => {
+        attempts += 1;
+        return attempts === 1 ? Promise.resolve() : Promise.reject(new Error("unavailable"));
+      },
+    };
+    renderWithStore(<App />);
+    await waitFor(() => expect(screen.getByText(/1 of 7 tools connected/i)).toBeInTheDocument());
+    expect(screen.getByText(/Assistant setup is incomplete/i)).toBeInTheDocument();
+  });
 });
 
 describe("shell", () => {
@@ -62,6 +75,7 @@ describe("priorities + compare", () => {
     const { store } = renderWithStore(<App />);
 
     expect(screen.getByText(/incomplete/i)).toBeInTheDocument();
+    expect(screen.getByText(/Step 1 of 5/i)).toBeInTheDocument();
     // priorities screen: the eight works, no plan cards
     expect(screen.getByText(/These eight works are competing/i)).toBeInTheDocument();
     expect(screen.queryAllByRole("article")).toHaveLength(0);
@@ -72,6 +86,7 @@ describe("priorities + compare", () => {
     expect(screen.queryAllByRole("article")).toHaveLength(0);
 
     await user.click(screen.getByRole("button", { name: /Compare plans/i }));
+    expect(screen.getByText(/Step 2 of 5/i)).toBeInTheDocument();
     const cards = screen.getAllByRole("article");
     expect(cards.length).toBeGreaterThanOrEqual(3);
     expect(within(cards[0]).getByRole("heading", { name: /Safety & access first/i })).toBeInTheDocument();

@@ -62,6 +62,28 @@ describe("agent proposals", () => {
     expect(after.proposalStatus).toBe("invalid");
     expect(after.reviewStatus).toBe("none");
   });
+
+  it("loads a direction rebuilt around protected works", () => {
+    const s = run(
+      createInitialState(),
+      { type: "human/lockProjectAt", projectId: "P-03", amount: 210_000 },
+      { type: "app/loadDirectionDraft", strategyId: "safety_access" },
+    );
+    expect(s.proposalStatus).toBe("valid");
+    expect(s.agentProposal?.allocations).toContainEqual({ projectId: "P-03", amount: 210_000 });
+  });
+
+  it("rejects a protection that makes the protected set infeasible", () => {
+    const s = run(
+      createInitialState(),
+      { type: "human/lockProjectAt", projectId: "P-01", amount: 180_000 },
+      { type: "human/lockProjectAt", projectId: "P-08", amount: 260_000 },
+    );
+    expect(s.budgetRevision).toBe(1);
+    expect(s.lockedAllocations).toEqual([{ projectId: "P-01", amount: 180_000 }]);
+    expect(s.protectionError).toMatch(/cannot both be funded/i);
+    expect(s.activityHistory.at(-1)?.action).toBe("protect_blocked");
+  });
 });
 
 describe("staleness", () => {
@@ -115,6 +137,27 @@ describe("review and finalisation", () => {
     expect(s.finalAllocationRecord?.actor).toBe("human_finalisation");
     expect(s.finalAllocationRecord?.validation.valid).toBe(true);
     expect(s.activityHistory.at(-1)?.actor).toBe("human");
+  });
+
+  it("makes adoption terminal until the resident explicitly resets", () => {
+    let s = toAccepted();
+    s = run(s, { type: "human/setDisclosureAck", acknowledged: true }, { type: "human/finalise" });
+    const finalRecord = s.finalAllocationRecord;
+    s = run(
+      s,
+      { type: "human/setPriority", key: "safety", weight: 3 },
+      {
+        type: "agent/proposeAllocation",
+        allocations: [
+          { projectId: "P-02", amount: 150_000 },
+          { projectId: "P-05", amount: 160_000 },
+        ],
+        rationale: "Replace it.",
+      },
+    );
+    expect(s.proposalStatus).toBe("finalised");
+    expect(s.finalAllocationRecord).toBe(finalRecord);
+    expect(s.residentPriorities.safety).toBe(0);
   });
 });
 

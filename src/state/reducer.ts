@@ -10,8 +10,8 @@ import { buildFinalRecord } from "../domain/finalRecord";
 import { allocationHash } from "../domain/hash";
 import { inr } from "../domain/money";
 import { getProject } from "../domain/projects";
-import { redraftAroundLocks } from "../domain/redraft";
-import { getStrategy } from "../domain/strategies";
+import { redraftAroundLocks, validateProtectedWorks } from "../domain/redraft";
+import { getStrategy, strategyForResident } from "../domain/strategies";
 import { committedTotal, validateAllocation } from "../domain/validation";
 import { PRIORITY_LABELS } from "../format";
 import type { Allocation, PriorityKey, ProjectId } from "../domain/types";
@@ -21,6 +21,7 @@ import {
   type ActivityEvent,
   type AppState,
   type ConstraintValidation,
+  type StaleReason,
 } from "./appState";
 
 const PRIORITY_KEYS: PriorityKey[] = ["safety", "accessibility", "climate", "communitySupport"];
@@ -58,15 +59,28 @@ function appendActivity(
 }
 
 /** Apply the automatic staleness rule after a human-owned budget change. */
-function staleAfterHumanEdit(state: AppState): Pick<AppState, "proposalStatus" | "reviewStatus"> {
+function staleAfterHumanEdit(
+  state: AppState,
+  staleReason: StaleReason,
+): Pick<AppState, "proposalStatus" | "reviewStatus" | "staleReason"> {
   if (
     state.proposalStatus === "valid" ||
     state.proposalStatus === "under_review" ||
     state.proposalStatus === "accepted"
   ) {
-    return { proposalStatus: "stale", reviewStatus: "none" };
+    return { proposalStatus: "stale", reviewStatus: "none", staleReason };
   }
-  return { proposalStatus: state.proposalStatus, reviewStatus: state.reviewStatus };
+  return {
+    proposalStatus: state.proposalStatus,
+    reviewStatus: state.reviewStatus,
+    staleReason: state.staleReason,
+  };
+}
+
+function staleReasonFor(action: string): StaleReason {
+  if (action === "set_priority") return "priority_change";
+  if (action === "lock_project" || action === "unlock_project") return "protection_change";
+  return "allocation_change";
 }
 
 /** A human-owned budget change: bump revision, stale proposal, log one event. */
@@ -81,10 +95,12 @@ function commitHumanBudgetChange(
     ...state,
     ...patch,
     budgetRevision: state.budgetRevision + 1,
+    protectionError: null,
   };
-  const staled = staleAfterHumanEdit(next);
+  const staled = staleAfterHumanEdit(next, staleReasonFor(action));
   next.proposalStatus = staled.proposalStatus;
   next.reviewStatus = staled.reviewStatus;
+  next.staleReason = staled.staleReason;
   Object.assign(next, appendActivity(next, "human", action, summary, timestamp));
   return next;
 }
@@ -97,6 +113,45 @@ function upsertAllocation(
   const filtered = allocations.filter((a) => a.projectId !== projectId);
   return [...filtered, { projectId, amount }].sort((a, b) =>
     a.projectId.localeCompare(b.projectId),
+  );
+}
+
+function protectProject(
+  state: AppState,
+  projectId: ProjectId,
+  amount: number,
+  timestamp: string,
+): AppState {
+  const candidateLocks = [
+    ...state.lockedAllocations,
+    { projectId, amount },
+  ].sort((a, b) => a.projectId.localeCompare(b.projectId));
+  const feasibility = validateProtectedWorks(candidateLocks, state.residentPriorities);
+
+  if (!feasibility.valid) {
+    const reason = feasibility.issues[0]?.message ?? "Those protected works cannot fit in a valid plan.";
+    const error = `Could not protect ${getProject(projectId).shortName}: ${reason}`;
+    const next: AppState = {
+      ...state,
+      protectionError: error,
+    };
+    Object.assign(
+      next,
+      appendActivity(next, "human", "protect_blocked", error, timestamp),
+    );
+    return next;
+  }
+
+  const projectName = getProject(projectId).name;
+  return commitHumanBudgetChange(
+    state,
+    {
+      manualAllocations: upsertAllocation(state.manualAllocations, projectId, amount),
+      lockedAllocations: candidateLocks,
+    },
+    "lock_project",
+    `Protected ${projectName} (${money(amount)})`,
+    timestamp,
   );
 }
 
@@ -114,6 +169,10 @@ function currentConstraintMatches(state: AppState): boolean {
 export function reducer(state: AppState, action: AppAction): AppState {
   const timestamp = action.timestamp ?? "1970-01-01T00:00:00.000Z";
   const actor = actorForAction(action);
+
+  // Adoption writes the immutable local record. Nothing can amend that decision;
+  // a resident must explicitly reset the demonstration to begin another one.
+  if (state.proposalStatus === "finalised" && action.type !== "human/reset") return state;
 
   switch (action.type) {
     case "human/setPriority": {
@@ -181,41 +240,13 @@ export function reducer(state: AppState, action: AppAction): AppState {
       const entry = state.manualAllocations.find((a) => a.projectId === action.projectId);
       if (!entry || entry.amount <= 0) return state;
       if (isLocked(state, action.projectId)) return state;
-      return commitHumanBudgetChange(
-        state,
-        {
-          lockedAllocations: [
-            ...state.lockedAllocations,
-            { projectId: action.projectId, amount: entry.amount },
-          ].sort((a, b) => a.projectId.localeCompare(b.projectId)),
-        },
-        "lock_project",
-        `Protected ${getProject(action.projectId).name} (${money(entry.amount)})`,
-        timestamp,
-      );
+      return protectProject(state, action.projectId, entry.amount, timestamp);
     }
 
     case "human/lockProjectAt": {
       if (!Number.isFinite(action.amount) || action.amount <= 0) return state;
       if (isLocked(state, action.projectId)) return state;
-      const projectName = getProject(action.projectId).name;
-      return commitHumanBudgetChange(
-        state,
-        {
-          manualAllocations: upsertAllocation(
-            state.manualAllocations,
-            action.projectId,
-            action.amount,
-          ),
-          lockedAllocations: [
-            ...state.lockedAllocations,
-            { projectId: action.projectId, amount: action.amount },
-          ].sort((a, b) => a.projectId.localeCompare(b.projectId)),
-        },
-        "lock_project",
-        `Protected ${projectName} (${money(action.amount)})`,
-        timestamp,
-      );
+      return protectProject(state, action.projectId, action.amount, timestamp);
     }
 
     case "human/unlockProject": {
@@ -347,13 +378,23 @@ export function reducer(state: AppState, action: AppAction): AppState {
     }
 
     case "agent/proposeAllocation":
+      // The resident owns an open or accepted review. The agent must wait for
+      // a rejection or a resident edit before it can submit another draft.
+      if (state.proposalStatus === "under_review" || state.proposalStatus === "accepted") {
+        return state;
+      }
       return storeProposal(state, action.allocations, action.rationale, "agent", timestamp);
 
     case "app/loadDirectionDraft": {
       const preset = getStrategy(action.strategyId);
+      const residentStrategy = strategyForResident(
+        preset,
+        state.lockedAllocations,
+        state.residentPriorities,
+      );
       return storeProposal(
         state,
-        preset.allocations,
+        residentStrategy.allocations,
         `Starting point: the "${preset.label}" plan.`,
         "system",
         timestamp,
@@ -442,6 +483,7 @@ function storeProposal(
     proposalStatus: validation.valid ? "valid" : "invalid",
     constraintValidation,
     reviewStatus: "none",
+    staleReason: null,
   };
   Object.assign(
     next,

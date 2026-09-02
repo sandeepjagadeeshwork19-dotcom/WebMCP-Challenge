@@ -13,7 +13,7 @@
 import { FUND_LIMIT, getProject, P06_ALLOWED_AMOUNTS } from "./projects";
 import { benefitSummary } from "./tradeoffs";
 import { committedTotal, validateAllocation } from "./validation";
-import type { Allocation, ProjectId, ResidentPriorities } from "./types";
+import type { Allocation, ProjectId, ResidentPriorities, ValidationResult } from "./types";
 
 function defaultAmount(id: ProjectId): number {
   const project = getProject(id);
@@ -98,4 +98,17 @@ export function redraftIsValid(
   lockedAllocations: Allocation[],
 ): boolean {
   return validateAllocation(allocations, { lockedAllocations }).valid;
+}
+
+/**
+ * Check whether the protected set can be honoured by at least one valid plan.
+ * Dependencies are supplied by the same deterministic rebuild used by the app;
+ * protected works themselves are never silently removed or altered.
+ */
+export function validateProtectedWorks(
+  lockedAllocations: Allocation[],
+  priorities: ResidentPriorities,
+): ValidationResult {
+  const rebuilt = redraftAroundLocks([], lockedAllocations, priorities);
+  return validateAllocation(rebuilt, { lockedAllocations });
 }

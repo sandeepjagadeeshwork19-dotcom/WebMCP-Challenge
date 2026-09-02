@@ -6,6 +6,8 @@ export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
   const toolsText =
     webmcp.status === "registered"
       ? `${webmcp.registeredTools.length} tools connected`
+      : webmcp.status === "degraded"
+        ? `${webmcp.registeredTools.length} of 7 tools connected — retry this browser session`
       : webmcp.status === "detecting"
         ? "Looking for an assistant…"
         : "No assistant in this browser — you can still do everything by hand.";

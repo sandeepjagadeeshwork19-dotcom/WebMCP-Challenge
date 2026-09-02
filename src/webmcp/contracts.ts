@@ -1,6 +1,6 @@
 /**
  * The seven WebMCP tool contracts. Exactly these tools are registered — there is
- * no tool for setting priorities, locking, manual editing, acceptance,
+ * no tool for setting priorities, locking, resident selections, acceptance,
  * rejection, finalisation, or reset. That omission is the human/agent boundary:
  * a withheld capability is a function that was never put on `document.modelContext`.
  */
@@ -69,7 +69,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       name: "get_budget_state",
       title: "Get budget state",
       description:
-        "Read the canonical on-page state: the ₹10,00,000 fund, resident priorities, protected works, the resident's manual allocation, the active proposal, revision numbers, whose turn it is, and the list of actions no tool can perform. Call this first; pass the returned budgetRevision to simulate_allocation and propose_allocation. Changes nothing.",
+        "Read the canonical on-page state: the ₹10,00,000 fund, resident priorities, protected works, resident starting selections, the full active proposal (allocations, totals and validation), revision numbers, whose turn it is, and the list of actions no tool can perform. Call this first; pass the returned budgetRevision to simulate_allocation and propose_allocation. Changes nothing.",
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
       inputSchema: {
         type: "object",

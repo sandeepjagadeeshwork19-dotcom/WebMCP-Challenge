@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 import { createHandlers } from "../handlers";
 import { isToolError } from "../errors";
 import { createStore } from "../../state/store";
+import { getWebMcpTrace } from "../trace";
 
 function setup() {
   const store = createStore(undefined, () => "2026-08-31T12:00:00.000Z");
+  store.dispatch({ type: "human/confirmPriorities" });
   const handlers = createHandlers(store);
   return { store, handlers };
 }
@@ -23,6 +25,17 @@ describe("read handlers", () => {
     expect(result.fundLimit).toBe(1_000_000);
     expect(result.datasetVersion).toBe("demo-budget-v1");
     expect(JSON.stringify(store.getState())).toBe(before);
+  });
+
+  it("includes the complete active proposal so a later assistant can continue safely", () => {
+    const { handlers } = setup();
+    handlers.propose_allocation({ budgetRevision: 0, allocations: plan, rationale: "A valid start." });
+    const result = handlers.get_budget_state({}) as {
+      proposal: { allocations: unknown[]; committedTotal: number; validation: { valid: boolean } };
+    };
+    expect(result.proposal.allocations).toEqual(plan);
+    expect(result.proposal.committedTotal).toBe(310_000);
+    expect(result.proposal.validation.valid).toBe(true);
   });
 
   it("get_budget_state rejects unknown keys", () => {
@@ -113,6 +126,21 @@ describe("state-changing handlers", () => {
     ).toBe(true);
   });
 
+  it("requires a resident journey start and a non-empty proposal", () => {
+    const store = createStore();
+    const handlers = createHandlers(store);
+    const beforeJourney = handlers.propose_allocation({
+      budgetRevision: 0,
+      allocations: plan,
+      rationale: "Too early.",
+    });
+    expect(isToolError(beforeJourney) && beforeJourney.error.code).toBe("priorities_not_confirmed");
+
+    store.dispatch({ type: "human/confirmPriorities" });
+    const empty = handlers.propose_allocation({ budgetRevision: 0, allocations: [], rationale: "Empty." });
+    expect(isToolError(empty) && empty.error.code).toBe("empty_allocation");
+  });
+
   it("request_allocation_review opens review only for a fresh valid proposal", () => {
     const { store, handlers } = setup();
     handlers.propose_allocation({
@@ -141,6 +169,38 @@ describe("state-changing handlers", () => {
     store.dispatch({ type: "human/setPriority", key: "safety", weight: 2 });
     const result = handlers.request_allocation_review({ budgetRevision: 1, proposalRevision: 1 });
     expect(isToolError(result) && result.error.code).toBe("stale_proposal");
+  });
+
+  it("does not let an assistant replace a plan during resident review or after adoption", () => {
+    const { store, handlers } = setup();
+    handlers.propose_allocation({ budgetRevision: 0, allocations: plan, rationale: "A valid plan." });
+    handlers.request_allocation_review({ budgetRevision: 0, proposalRevision: 1 });
+    const inReview = handlers.propose_allocation({
+      budgetRevision: 0,
+      allocations: [{ projectId: "P-04", amount: 240_000 }],
+      rationale: "Interrupt the review.",
+    });
+    expect(isToolError(inReview) && inReview.error.code).toBe("resident_review_in_progress");
+    expect(store.getState().proposalRevision).toBe(1);
+
+    store.dispatch({ type: "human/acceptProposal" });
+    store.dispatch({ type: "human/setDisclosureAck", acknowledged: true });
+    store.dispatch({ type: "human/finalise" });
+    const afterAdoption = handlers.propose_allocation({
+      budgetRevision: 0,
+      allocations: plan,
+      rationale: "Replace a final record.",
+    });
+    expect(isToolError(afterAdoption) && afterAdoption.error.code).toBe("finalised_state");
+    expect(store.getState().proposalStatus).toBe("finalised");
+  });
+
+  it("clears the visible WebMCP trace when the resident resets the demonstration", () => {
+    const { store, handlers } = setup();
+    handlers.get_budget_state({});
+    expect(getWebMcpTrace(store).getSnapshot()).toHaveLength(1);
+    store.dispatch({ type: "human/reset" });
+    expect(getWebMcpTrace(store).getSnapshot()).toHaveLength(0);
   });
 });
 

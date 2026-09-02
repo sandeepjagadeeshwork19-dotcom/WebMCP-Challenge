@@ -16,6 +16,8 @@ export function TheTurn() {
   const stale = state.agentProposal;
   if (!stale) return null;
 
+  const staleBecausePriorities = state.staleReason === "priority_change";
+  const staleBecauseAllocation = state.staleReason === "allocation_change";
   const protectedIds = state.lockedAllocations.map((l) => l.projectId);
   const protectedNames = protectedIds.map((id) => getProject(id).shortName).join(" and ");
 
@@ -52,7 +54,11 @@ export function TheTurn() {
       <div className="turn-alert" role="alert">
         <Icon name="alert" size={18} />
         <p>
-          You protected {protectedNames || "a work"}, so this plan needs to be redrawn to fit it in.
+          {staleBecausePriorities
+            ? "You changed what matters most, so this plan needs to be recalculated against your priorities."
+            : staleBecauseAllocation
+              ? "You changed your starting allocation, so this plan needs to be recalculated."
+              : `You protected ${protectedNames || "a work"}, so this plan needs to be redrawn to fit it in.`}
         </p>
       </div>
 
@@ -60,21 +66,27 @@ export function TheTurn() {
         <p className="cost-hero__kicker">WHAT CHANGES</p>
         <div className="cost-changes">
           <p className="cost-change cost-change--added">
-            <span>MUST NOW INCLUDE</span>
+            <span>{staleBecausePriorities ? "RECALCULATE" : staleBecauseAllocation ? "RECHECK" : "MUST NOW INCLUDE"}</span>
             <b>
-              {addedForProtection.length
+              {staleBecausePriorities
+                ? "your plan's priority match"
+                : staleBecauseAllocation
+                  ? "your resident starting point"
+                  : addedForProtection.length
                 ? addedForProtection.map((a) => getProject(a.projectId).shortName).join(", ")
                 : protectedNames}
             </b>
           </p>
           <p className="cost-change">
-            <span>THAT COSTS</span>
-            <b>{formatMoney(addedForProtection.reduce((s, a) => s + a.amount, 0))}</b>
+            <span>{staleBecausePriorities ? "NEW WEIGHTS" : staleBecauseAllocation ? "CHANGED BY" : "THAT COSTS"}</span>
+            <b>{staleBecausePriorities ? "resident choice" : staleBecauseAllocation ? "resident choice" : formatMoney(addedForProtection.reduce((s, a) => s + a.amount, 0))}</b>
           </p>
           <p className="cost-change cost-change--dropped">
-            <span>{over > 0 ? "OVER THE FUND BY" : "STATUS"}</span>
+            <span>{staleBecausePriorities || staleBecauseAllocation ? "OLD PLAN" : over > 0 ? "OVER THE FUND BY" : "STATUS"}</span>
             <b>
-              {over > 0
+              {staleBecausePriorities || staleBecauseAllocation
+                ? "needs a fresh check"
+                : over > 0
                 ? formatMoney(over)
                 : staleValidation.valid
                   ? "still fits"
@@ -82,17 +94,19 @@ export function TheTurn() {
             </b>
           </p>
           <p className="cost-change">
-            <span>TO FIT, DROP</span>
+            <span>{staleBecausePriorities || staleBecauseAllocation ? "NEXT STEP" : "TO FIT, DROP"}</span>
             <b>
-              {over > 0
+              {staleBecausePriorities || staleBecauseAllocation
+                ? "build a fresh draft"
+                : over > 0
                 ? `about ${formatMoney(over)} of other works`
                 : "nothing — just re-check"}
             </b>
           </p>
         </div>
         <p className="cost-hero__note">
-          The next action below shows whether the assistant or the local fallback performs the
-          rebuild. Either path must preserve your protected works.
+          The next action below can build a fresh draft locally or help you ask the assistant.
+          {state.lockedAllocations.length > 0 ? " Either path must preserve your protected works." : ""}
         </p>
       </div>
 

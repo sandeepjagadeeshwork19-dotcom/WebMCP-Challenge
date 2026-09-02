@@ -150,6 +150,7 @@ export function selectStatusLabel(state: AppState): string {
     case "draft":
       return "valid";
     default: {
+      if (state.lockedAllocations.length > 0) return "protected choice pending";
       if (state.manualAllocations.length === 0) return "incomplete";
       return selectManualValidation(state).valid ? "valid" : "has issues";
     }

@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useStore } from "../state/store";
+import { TOOL_NAMES } from "./contracts";
 import { registerWebMcpTools } from "./register";
 import { isWebMcpSupported } from "./types";
 
-export type WebMcpStatus = "detecting" | "unsupported" | "registered" | "error";
+export type WebMcpStatus = "detecting" | "unsupported" | "registered" | "degraded" | "error";
 
 export interface WebMcpState {
   status: WebMcpStatus;
@@ -34,7 +35,7 @@ export function useWebMcp(): WebMcpState {
         .then((names) => {
           if (controller.signal.aborted) return;
           setState({
-            status: names.length > 0 ? "registered" : "error",
+            status: names.length === TOOL_NAMES.length ? "registered" : names.length > 0 ? "degraded" : "error",
             registeredTools: names,
           });
         })
