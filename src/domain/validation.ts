@@ -4,7 +4,7 @@
  * The same function is used by the manual UI, the reducer, and every WebMCP
  * handler. It never rounds, repairs, adds dependencies, or drops projects.
  *
- * Issues are returned in the stable order defined by PRODUCT_SPEC section 6.2:
+ * Issues are returned in a stable order:
  *   1. Shape (known ids, unique entries, integer amounts, no unknown fields)
  *   2. Non-negative amount
  *   3. Funding rule
