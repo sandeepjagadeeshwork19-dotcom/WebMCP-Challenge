@@ -1,6 +1,7 @@
 # Neighbors Decide — Ward Participatory-Budgeting Workspace
 
 **Live demo:** https://sandeepjagadeeshwork19-dotcom.github.io/WebMCP-Challenge/
+&nbsp;·&nbsp; **Video:** https://youtu.be/99Zj8M8DXXY
 &nbsp;·&nbsp; open it in ChatGPT's browser or Chrome with WebMCP enabled to drive
 it with an agent; it also works fully as a manual workspace.
 

@@ -20,10 +20,10 @@ a function that was never registered on `document.modelContext`.
 ## Before submitting — checklist
 
 - [x] Repo pushed to public GitHub; MIT auto-detected; URL filled in **Links** below
-- [ ] Video recorded in a real WebMCP runtime, uploaded public to YouTube, ≤ 3:00, audio on; URL filled in
+- [x] Video recorded in a real WebMCP runtime, uploaded public to YouTube (2:58, audio on): https://youtu.be/99Zj8M8DXXY
 - [x] GitHub Pages wired to `main` for continuous deployment; live URL serves the latest build
-- [x] Live URL run end-to-end **in the ChatGPT in-app browser** (agent actions via WebMCP tools) — app-side screenshots below
-- [ ] Agent-side evidence (ChatGPT conversation + tool calls) captured — in the video
+- [x] Live URL run end-to-end in a WebMCP runtime (agent actions via the page-registered WebMCP tools) — app-side screenshots below
+- [x] Agent-side evidence (browser-agent conversation + live tool-call trace) captured — in the video
 - [ ] This document's substance pasted into the Devpost form
 - [ ] Deadline re-checked on the Devpost rules page (Sept 3 — confirm the exact PT time)
 
@@ -227,6 +227,6 @@ the assistant unable to adopt).
 
 - **Live demo:** https://sandeepjagadeeshwork19-dotcom.github.io/WebMCP-Challenge/
 - **Repo:** https://github.com/sandeepjagadeeshwork19-dotcom/WebMCP-Challenge
-- **Demo video:** _(add public YouTube URL on upload)_
+- **Demo video:** https://youtu.be/99Zj8M8DXXY
 - **Demo script / shot list:** `docs/VIDEO.md`
 - **Real WebMCP runtime evidence:** [registered tools](evidence/webmcp-01-registered-tools.png) · [agent proposal](evidence/webmcp-02-agent-proposal.png) · [stale after resident edit](evidence/webmcp-03-human-edit-stales-proposal.png) · [review hand-off](evidence/webmcp-04-replanned-review-handoff.png) · [final record](evidence/webmcp-05-final-record.png)
