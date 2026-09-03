@@ -198,21 +198,21 @@ Observed:
 
 ### Screenshots (app-side record of that run)
 
-Each screenshot is the workspace's own record — note the activity **Log** with
-interleaved `AGENT` / `HUMAN` entries. An `AGENT` entry is written only by a
-WebMCP tool handler; no visible control produces one. The **video** shows the
-same run from the agent's side (the ChatGPT conversation, the tool calls, and
-the assistant unable to adopt).
+Each screenshot is from the live deployment, driven by a browser agent in a real
+WebMCP runtime. The right-margin **LIVE WEBMCP TRACE** logs every tool call,
+labelled read or write; the **video** shows the same run from the agent's side.
 
-[![Seven tools registered](evidence/webmcp-01-registered-tools.png)](evidence/webmcp-01-registered-tools.png)
+[![Seven tools connected; the withheld-tools list](evidence/webmcp-01-registered-tools.png)](evidence/webmcp-01-registered-tools.png)
 
-[![Agent proposal with rationale; AGENT log entry](evidence/webmcp-02-agent-proposal.png)](evidence/webmcp-02-agent-proposal.png)
+[![Three directions scored against the resident's priorities](evidence/webmcp-06-compare-directions.png)](evidence/webmcp-06-compare-directions.png)
+
+[![Agent proposal, valid, with rationale and the tool-call trace](evidence/webmcp-02-agent-proposal.png)](evidence/webmcp-02-agent-proposal.png)
 
 [![Resident protection stales the agent proposal](evidence/webmcp-03-human-edit-stales-proposal.png)](evidence/webmcp-03-human-edit-stales-proposal.png)
 
-[![Re-planned proposal handed to resident review; adoption gated](evidence/webmcp-04-replanned-review-handoff.png)](evidence/webmcp-04-replanned-review-handoff.png)
+[![Re-planned proposal handed to resident review; the assistant cannot accept or adopt](evidence/webmcp-04-replanned-review-handoff.png)](evidence/webmcp-04-replanned-review-handoff.png)
 
-[![Adopted record with the full AGENT / HUMAN log](evidence/webmcp-05-final-record.png)](evidence/webmcp-05-final-record.png)
+[![Adopted record: the assistant was never able to adopt anything](evidence/webmcp-05-final-record.png)](evidence/webmcp-05-final-record.png)
 
 ## What's next
 
