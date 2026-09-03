@@ -18,7 +18,11 @@ export type StrategyId = "safety_access" | "climate_resilience" | "broad_coverag
 export interface StrategyPreset {
   id: StrategyId;
   label: string;
-  blurb: string;
+  /**
+   * The priority intent this direction expresses. Describes the *lens*, never
+   * the specific works funded — so it stays true after a rebuild around locks.
+   */
+  lens: string;
   /** One line: what this direction is strongest at. */
   mainBenefit: string;
   /** One line: what it gives up. */
@@ -32,8 +36,7 @@ export const STRATEGY_PRESETS: readonly StrategyPreset[] = [
   {
     id: "safety_access",
     label: "Safety & access first",
-    blurb:
-      "Prioritise reduced injury risk and step-free, inclusive design. Funds the road crossings, bus shelters, the storm-water drain, PHC equipment and the study room.",
+    lens: "Reduce injury risk and prioritise step-free, inclusive access.",
     mainBenefit: "Safest junctions and step-free access, ward-wide.",
     mainSacrifice: "No riverside play area; no cycle track.",
     priorities: { safety: 3, accessibility: 3, climate: 1, communitySupport: 1 },
@@ -49,8 +52,7 @@ export const STRATEGY_PRESETS: readonly StrategyPreset[] = [
   {
     id: "climate_resilience",
     label: "Climate resilience",
-    blurb:
-      "Prioritise heat relief, drainage and lower-emission travel. Funds the storm-water drain, the protected cycle track, the full tree drive, bus shelters and PHC equipment.",
+    lens: "Prioritise heat relief, drainage and lower-emission travel.",
     mainBenefit: "Built for the monsoon and the heat — the drain, full tree drive, clean travel.",
     mainSacrifice: "No play area, no road crossings, no study room.",
     priorities: { safety: 2, accessibility: 1, climate: 3, communitySupport: 1 },
@@ -65,8 +67,7 @@ export const STRATEGY_PRESETS: readonly StrategyPreset[] = [
   {
     id: "broad_coverage",
     label: "Broad ward coverage",
-    blurb:
-      "Spread the fund across the most localities. Funds bus shelters, the play area and its required drain, PHC equipment, the study room and a starter tree phase.",
+    lens: "Spread the fund across as many localities as possible.",
     mainBenefit: "The widest spread — and the only direction that funds the riverside play area.",
     mainSacrifice: "No road crossings, no cycle track; smallest tree phase.",
     priorities: { safety: 2, accessibility: 2, climate: 2, communitySupport: 3 },
@@ -116,7 +117,7 @@ export function strategyNeighbourhoods(preset: StrategyPreset): string[] {
 export interface StrategyView {
   id: StrategyId;
   label: string;
-  blurb: string;
+  lens: string;
   mainBenefit: string;
   mainSacrifice: string;
   lensPriorities: ResidentPriorities;
@@ -144,7 +145,7 @@ export function describeStrategy(
   return {
     id: preset.id,
     label: preset.label,
-    blurb: preset.blurb,
+    lens: preset.lens,
     mainBenefit: preset.mainBenefit,
     mainSacrifice: preset.mainSacrifice,
     lensPriorities: preset.priorities,

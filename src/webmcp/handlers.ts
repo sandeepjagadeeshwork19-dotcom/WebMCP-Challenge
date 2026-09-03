@@ -191,24 +191,31 @@ export function createHandlers(store: Store): Handlers {
           );
           const total = committedTotal(s.allocations);
           const funded = selectedProjectIds(s.allocations);
+          const omitted = PROJECT_IDS.filter((id) => !funded.includes(id));
+          const rebuilt = state.lockedAllocations.length > 0;
+          // Describe the allocation actually returned — never the preset's
+          // canonical one, which a lock can have reshaped.
+          const summary = `Funds ${funded.map((id) => getProject(id).shortName).join(", ")}. Leaves out ${omitted.map((id) => getProject(id).shortName).join(", ")}.`;
           return {
             id: s.id,
             label: s.label,
-            blurb: s.blurb,
-            mainBenefit:
-              state.lockedAllocations.length > 0
-                ? "Rebuilt around the resident's protected works."
-                : s.mainBenefit,
-            mainSacrifice:
-              state.lockedAllocations.length > 0
-                ? "May differ from this direction's unprotected example."
-                : s.mainSacrifice,
+            // `lens` is the priority intent and stays true after a rebuild;
+            // `summary` is computed from the returned allocation every call.
+            lens: s.lens,
+            summary,
+            rebuiltAroundLocks: rebuilt,
+            mainBenefit: rebuilt
+              ? "Rebuilt around the resident's protected works — see `summary` for what it funds."
+              : s.mainBenefit,
+            mainSacrifice: rebuilt
+              ? "May differ from this direction's unprotected example."
+              : s.mainSacrifice,
             lensPriorities: s.priorities,
             allocations: s.allocations,
             committedTotal: total,
             remainingFunds: FUND_LIMIT - total,
             selectedProjectIds: funded,
-            unfundedProjectIds: PROJECT_IDS.filter((id) => !funded.includes(id)),
+            unfundedProjectIds: omitted,
             neighbourhoods: strategyNeighbourhoods(s),
             valid: validateAllocation(s.allocations, {
               lockedAllocations: state.lockedAllocations,

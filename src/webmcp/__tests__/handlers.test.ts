@@ -74,6 +74,31 @@ describe("read handlers", () => {
     ]);
   });
 
+  it("list_strategy_options describes the rebuilt allocation, not a stale preset blurb", () => {
+    const { store, handlers } = setup();
+    // Protecting the cycle track forces P-08 in and the incompatible P-01 out.
+    store.dispatch({ type: "human/setAllocation", projectId: "P-08", amount: 260_000 });
+    store.dispatch({ type: "human/lockProject", projectId: "P-08" });
+    const result = handlers.list_strategy_options({}) as {
+      strategies: {
+        id: string;
+        summary: string;
+        rebuiltAroundLocks: boolean;
+        selectedProjectIds: string[];
+      }[];
+    };
+    const safety = result.strategies.find((s) => s.id === "safety_access")!;
+    expect(safety.rebuiltAroundLocks).toBe(true);
+    expect(safety.selectedProjectIds).toContain("P-08");
+    expect(safety.selectedProjectIds).not.toContain("P-01");
+    // The prose describes what it now funds — the cycle track — and does not
+    // claim to fund the road crossings it dropped.
+    const [funds, leavesOut] = safety.summary.split("Leaves out");
+    expect(funds).toContain("cycle track");
+    expect(funds).not.toContain("road crossings");
+    expect(leavesOut).toContain("road crossings");
+  });
+
   it("simulate_allocation validates without mutating and rejects a stale revision", () => {
     const { store, handlers } = setup();
     const ok = handlers.simulate_allocation({ budgetRevision: 0, allocations: plan }) as {
