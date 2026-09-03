@@ -8,10 +8,10 @@ export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
     webmcp.status === "registered"
       ? `${n} tools connected`
       : webmcp.status === "degraded"
-        ? `${n} of 7 tools connected — retry this browser session`
+        ? `${n} of 7 tools connected - retry this browser session`
         : webmcp.status === "detecting"
           ? "Looking for an assistant…"
-          : "No assistant in this browser — you can still do everything by hand.";
+          : "No assistant in this browser - you can still do everything by hand.";
 
   return (
     <header className="masthead">
@@ -25,7 +25,7 @@ export function Masthead({ webmcp }: { webmcp: WebMcpState }) {
           </p>
         </div>
         <div className={`masthead__proof${connected ? "" : " masthead__proof--off"}`}>
-          <b>{connected ? `${n} WEBMCP TOOLS` : "WEBMCP TOOLS —"}</b>
+          <b>{connected ? `${n} WEBMCP TOOLS` : "WEBMCP TOOLS -"}</b>
           <span>0 ADOPTION TOOLS</span>
         </div>
       </div>

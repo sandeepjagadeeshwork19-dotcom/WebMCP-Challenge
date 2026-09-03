@@ -38,9 +38,9 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
   };
   const copiedLabel =
     copyStatus === "copied"
-      ? "Copied — paste into your browser assistant"
+      ? "Copied - paste into your browser assistant"
       : copyStatus === "failed"
-        ? "Copy failed — select the request below"
+        ? "Copy failed - select the request below"
         : null;
   const copyButtonLabel = copyStatus === "copied" ? "Request copied" : "Get an assistant request";
 
@@ -77,7 +77,7 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
         <p>
           {webmcpAvailable
             ? "Open a plan below, or optionally ask the assistant to model one. Its calls appear in the trace."
-            : "Opening a plan starts a draft — it is not the final decision."}
+            : "Opening a plan starts a draft - it is not the final decision."}
         </p>
         {webmcpAvailable && (
           <button className="btn btn--agent" type="button" onClick={copyPrompt}>
@@ -220,7 +220,7 @@ export function NextActionDock({ webmcpAvailable }: { webmcpAvailable: boolean }
       </label>
       <p>
         {canFinalise
-          ? "Ready. No WebMCP tool can do this — only you."
+          ? "Ready. No WebMCP tool can do this - only you."
           : "Tick the box to enable adoption."}
       </p>
       <button

@@ -36,7 +36,7 @@ export type AgentAction =
 
 /**
  * Application-owned actions. `app/loadDirectionDraft` places one of the canonical
- * direction plans as a starting draft — used when the resident chooses a
+ * direction plans as a starting draft - used when the resident chooses a
  * direction, and as the WebMCP-absent fallback for "load an example proposal".
  * It is attributed to the application (`system`), never to the agent.
  */

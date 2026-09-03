@@ -12,9 +12,9 @@ export function CommandBar({ webmcpAvailable }: { webmcpAvailable?: boolean }) {
   let turn = selectTurn(state);
 
   // With no assistant connected, never tell the resident it's "the assistant's
-  // move" — point them at the by-hand control instead.
+  // move" - point them at the by-hand control instead.
   if (webmcpAvailable === false && turn.actor === "assistant") {
-    turn = { actor: "you", text: "Your move — rebuild the plan below to fit your protected work" };
+    turn = { actor: "you", text: "Your move - rebuild the plan below to fit your protected work" };
   }
 
   return (

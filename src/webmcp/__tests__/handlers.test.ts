@@ -91,7 +91,7 @@ describe("read handlers", () => {
     expect(safety.rebuiltAroundLocks).toBe(true);
     expect(safety.selectedProjectIds).toContain("P-08");
     expect(safety.selectedProjectIds).not.toContain("P-01");
-    // The prose describes what it now funds — the cycle track — and does not
+    // The prose describes what it now funds - the cycle track - and does not
     // claim to fund the road crossings it dropped.
     const [funds, leavesOut] = safety.summary.split("Leaves out");
     expect(funds).toContain("cycle track");

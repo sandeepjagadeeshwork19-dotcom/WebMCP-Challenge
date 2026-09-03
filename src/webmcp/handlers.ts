@@ -193,7 +193,7 @@ export function createHandlers(store: Store): Handlers {
           const funded = selectedProjectIds(s.allocations);
           const omitted = PROJECT_IDS.filter((id) => !funded.includes(id));
           const rebuilt = state.lockedAllocations.length > 0;
-          // Describe the allocation actually returned — never the preset's
+          // Describe the allocation actually returned - never the preset's
           // canonical one, which a lock can have reshaped.
           const summary = `Funds ${funded.map((id) => getProject(id).shortName).join(", ")}. Leaves out ${omitted.map((id) => getProject(id).shortName).join(", ")}.`;
           return {
@@ -205,7 +205,7 @@ export function createHandlers(store: Store): Handlers {
             summary,
             rebuiltAroundLocks: rebuilt,
             mainBenefit: rebuilt
-              ? "Rebuilt around the resident's protected works — see `summary` for what it funds."
+              ? "Rebuilt around the resident's protected works - see `summary` for what it funds."
               : s.mainBenefit,
             mainSacrifice: rebuilt
               ? "May differ from this direction's unprotected example."
@@ -332,8 +332,8 @@ export function createHandlers(store: Store): Handlers {
           next.residentPriorities,
         ),
         recordedAs: valid
-          ? "A visible, agent-attributed draft proposal — not the decision."
-          : "A visible rejected draft — the resident can see why the engine rejected it.",
+          ? "A visible, agent-attributed draft proposal - not the decision."
+          : "A visible rejected draft - the resident can see why the engine rejected it.",
         nextStep: valid
           ? `Call request_allocation_review with budgetRevision=${proposal.basedOnBudgetRevision}, proposalRevision=${proposal.proposalRevision} when ready. Any resident edit stales this and you must redraft.`
           : "Fix the validationIssues (each has a machine-readable `fix`) and propose again.",

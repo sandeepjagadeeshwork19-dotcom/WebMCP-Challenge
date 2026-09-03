@@ -97,13 +97,13 @@ describe("priorities + compare", () => {
     const { store } = renderWithStore(<App />);
     store.dispatch({ type: "human/confirmPriorities" });
     await user.click(await screen.findByRole("button", { name: /Start from Safety & access first/i }));
-    expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
+    expect(await screen.findByText(/DRAFT RESOLUTION: WD-12/i)).toBeInTheDocument();
     expect(screen.getByText(/READY-MADE PLAN/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Send to review/i })).toBeInTheDocument();
   });
 });
 
-describe("the turn — protecting a work stales the draft", () => {
+describe("the turn - protecting a work stales the draft", () => {
   it("protecting the play area moves to the stale/re-plan state", async () => {
     const user = userEvent.setup();
     const { store } = renderWithStore(<App />);
@@ -148,7 +148,7 @@ describe("review is human-only and gated", () => {
     expect(adopt).toBeEnabled();
 
     await user.click(adopt);
-    expect(screen.getByText(/RESOLUTION WD-12 — ADOPTED/i)).toBeInTheDocument();
+    expect(screen.getByText(/RESOLUTION WD-12: ADOPTED/i)).toBeInTheDocument();
     expect(screen.getAllByText(/human_finalisation/).length).toBeGreaterThan(0);
   });
 });

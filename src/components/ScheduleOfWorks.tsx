@@ -3,7 +3,7 @@ import { formatMoney } from "../format";
 import { useAppState, useDispatch } from "../state/store";
 import { selectStage } from "../state/selectors";
 
-/** The eight works before the ward — always visible; protections must remain feasible. */
+/** The eight works before the ward - always visible; protections must remain feasible. */
 export function ScheduleOfWorks() {
   const state = useAppState();
   const dispatch = useDispatch();

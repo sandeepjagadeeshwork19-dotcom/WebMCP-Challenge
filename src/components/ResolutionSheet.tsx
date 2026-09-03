@@ -29,14 +29,14 @@ export function ResolutionSheet() {
     <section className="stage-block" aria-labelledby="draft-heading" ref={focusRef} tabIndex={-1}>
       <p className="compare__lead">
         {sentBack
-          ? "You sent this plan back. It stays here as a starting point — adjust priorities or protect works, then rebuild it below."
-          : `Here’s a full plan${locked.size > 0 ? " that keeps what you protected" : ""}. Nothing is locked — protect works you want kept, adjust priorities, and rebuild as many times as you like. Send it to review when it’s right.`}
+          ? "You sent this plan back. It stays here as a starting point - adjust priorities or protect works, then rebuild it below."
+          : `Here’s a full plan${locked.size > 0 ? " that keeps what you protected" : ""}. Nothing is locked - protect works you want kept, adjust priorities, and rebuild as many times as you like. Send it to review when it’s right.`}
       </p>
 
       <div className="sheet">
         <div className="sheet__head">
           <h2 className="sheet__title" id="draft-heading">
-            DRAFT RESOLUTION &mdash; WD-12
+            DRAFT RESOLUTION: WD-12
           </h2>
           <p className="sheet__status" data-bad={!cv.valid || sentBack || undefined}>
             {sentBack ? "Sent back" : cv.valid ? "Valid" : "Breaks a rule"}

@@ -8,7 +8,7 @@ const full = (projectId: Allocation["projectId"], amount: number): Allocation =>
   amount,
 });
 
-describe("validateAllocation — fund limit", () => {
+describe("validateAllocation - fund limit", () => {
   it("accepts a total at or below the fund limit", () => {
     // 260 + 240 + 160 + 150 + 140 = 950,000 (<= 1,000,000)
     const result = validateAllocation([
@@ -42,7 +42,7 @@ describe("validateAllocation — fund limit", () => {
   });
 });
 
-describe("validateAllocation — shape and amounts", () => {
+describe("validateAllocation - shape and amounts", () => {
   it("rejects negative, zero, fractional, unknown and duplicate entries", () => {
     const result = validateAllocation([
       { projectId: "P-99", amount: 10 } as unknown as Allocation,
@@ -67,7 +67,7 @@ describe("validateAllocation — shape and amounts", () => {
   });
 });
 
-describe("validateAllocation — funding rules", () => {
+describe("validateAllocation - funding rules", () => {
   it("rejects a partial amount for a complete project", () => {
     const result = validateAllocation([full("P-01", 100_000)]);
     expect(result.issues[0].code).toBe("funding_rule");
@@ -82,7 +82,7 @@ describe("validateAllocation — funding rules", () => {
   });
 });
 
-describe("validateAllocation — dependencies and incompatibilities", () => {
+describe("validateAllocation - dependencies and incompatibilities", () => {
   it("P-03 without full P-04 fails; both at full funding pass", () => {
     expect(validateAllocation([full("P-03", 210_000)]).issues[0].code).toBe(
       "missing_dependency",
@@ -99,7 +99,7 @@ describe("validateAllocation — dependencies and incompatibilities", () => {
   });
 });
 
-describe("validateAllocation — lock preservation", () => {
+describe("validateAllocation - lock preservation", () => {
   it("fails when a locked project is removed or changed, passes when preserved", () => {
     const locked = [full("P-03", 210_000)];
     expect(
@@ -120,7 +120,7 @@ describe("validateAllocation — lock preservation", () => {
   });
 });
 
-describe("validateAllocation — stable issue order", () => {
+describe("validateAllocation - stable issue order", () => {
   it("returns issues in spec order", () => {
     const result = validateAllocation(
       [

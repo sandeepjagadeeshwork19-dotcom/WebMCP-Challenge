@@ -29,7 +29,7 @@ export function AdoptedRecord() {
     <section className="stage-block" aria-labelledby="adopted-band" ref={focusRef} tabIndex={-1}>
       <div className="adopted-band" id="adopted-band">
         <strong>
-          <Icon name="badge" size={18} /> RESOLUTION WD-12 &mdash; ADOPTED
+          <Icon name="badge" size={18} /> RESOLUTION WD-12: ADOPTED
         </strong>
         <span>available in this browser tab only</span>
       </div>
@@ -95,7 +95,7 @@ export function AdoptedRecord() {
 
         <p className="record__attribution">
           You set the priorities, protected works, reviewed and adopted this. The assistant only
-          modelled and drafted &mdash; it was never able to adopt anything.
+          modelled and drafted; it was never able to adopt anything.
         </p>
 
         <details className="record-json">
@@ -127,7 +127,7 @@ export function AdoptedRecord() {
           </div>
         ) : (
           <button type="button" className="btn" onClick={() => setConfirming(true)}>
-            <Icon name="rotate" size={14} /> Reset &mdash; run the demonstration again
+          <Icon name="rotate" size={14} /> Reset: run the demonstration again
           </button>
         )}
       </div>

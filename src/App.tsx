@@ -18,7 +18,7 @@ function Stage() {
   const stage = selectStage(useAppState());
   switch (stage) {
     case "priorities":
-      // The plans stay hidden until the resident has weighed their priorities —
+      // The plans stay hidden until the resident has weighed their priorities -
       // the eight works (rendered below) are the content of this screen.
       return null;
     case "compare":
@@ -53,7 +53,7 @@ export function App() {
     <div className="app">
       <Masthead webmcp={webmcp} />
 
-      {/* A plain no-WebMCP browser is a normal case — the quiet masthead line
+      {/* A plain no-WebMCP browser is a normal case - the quiet masthead line
           covers it. Only surface the banner for a genuine setup failure. */}
       {(webmcp.status === "error" || webmcp.status === "degraded") && (
         <aside className="fallback-notice" role="note">
@@ -114,7 +114,7 @@ export function App() {
       </main>
 
       <footer className="app-footer">
-        <p>A demo &mdash; no real money, no real vote.</p>
+        <p>A demo: no real money, no real vote.</p>
       </footer>
     </div>
   );

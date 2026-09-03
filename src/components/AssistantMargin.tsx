@@ -27,7 +27,7 @@ function Body({ stage, protectedCount }: { stage: string; protectedCount: number
         <>
           <p className="lede">Tell me what matters to you and I&rsquo;ll draft some plans.</p>
           <p className="muted">
-            I can read the budget, model options, and draft a plan &mdash; but setting priorities,
+            I can read the budget, model options, and draft a plan. Setting priorities,
             protecting a work, and adopting are yours. There&rsquo;s no button here for me to press
             and no function for me to call.
           </p>
@@ -37,7 +37,7 @@ function Body({ stage, protectedCount }: { stage: string; protectedCount: number
     case "compare":
       return (
         <p className="lede">
-          Each plan trades off something different &mdash; the cards show what. Protect a work first
+          Each plan trades off something different. The cards show what. Protect a work first
           if you want me to build around it.
         </p>
       );
@@ -61,7 +61,7 @@ function Body({ stage, protectedCount }: { stage: string; protectedCount: number
     case "replanning":
       return (
         <p className="lede">
-          Working on it &mdash; keeping your protected works, rebalancing the rest.
+          Working on it: keeping your protected works, rebalancing the rest.
         </p>
       );
 
@@ -70,14 +70,14 @@ function Body({ stage, protectedCount }: { stage: string; protectedCount: number
         <>
           <p className="lede">This part&rsquo;s yours. I&rsquo;ll wait.</p>
           <hr className="margin__rule" />
-          <p className="waiting">&mdash; waiting for you &mdash;</p>
+          <p className="waiting">Waiting for you</p>
         </>
       );
 
     case "adopted":
       return (
         <p className="lede">
-          Recorded. I did the sums &mdash; the decision was yours.
+          Recorded. I did the sums; the decision was yours.
         </p>
       );
 

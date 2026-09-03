@@ -491,7 +491,7 @@ function storeProposal(
       next,
       actor,
       actor === "agent" ? "propose_allocation" : "load_direction_draft",
-      `${actor === "agent" ? "Drafted a plan" : "Loaded a plan"} — ${
+      `${actor === "agent" ? "Drafted a plan" : "Loaded a plan"} - ${
         validation.valid ? "valid" : "breaks a rule"
       }, ${money(committedTotal(allocations))}`,
       timestamp,

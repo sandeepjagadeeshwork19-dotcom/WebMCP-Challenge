@@ -1,7 +1,7 @@
 /**
  * Machine-readable "how to satisfy this rule" hints, derived from a validation
  * issue plus the allocation that produced it. These describe *what the engine
- * requires* — they do not decide what the plan should be. Pure and deterministic.
+ * requires* - they do not decide what the plan should be. Pure and deterministic.
  */
 
 import { FUND_LIMIT, getProject } from "./projects";

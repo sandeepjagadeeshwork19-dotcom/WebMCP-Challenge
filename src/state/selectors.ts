@@ -119,7 +119,7 @@ export function selectPrioritiesSet(state: AppState): boolean {
 
 export function selectStage(state: AppState): Stage {
   if (state.proposalStatus === "finalised") return "adopted";
-  // A sent-back plan is the resident's to revise — its own editable step, not a
+  // A sent-back plan is the resident's to revise - its own editable step, not a
   // review the resident is somehow still inside.
   if (state.proposalStatus === "rejected") return "rejected";
   if (
@@ -170,21 +170,21 @@ export interface TurnIndicator {
 export function selectTurn(state: AppState): TurnIndicator {
   switch (selectStage(state)) {
     case "priorities":
-      return { actor: "you", text: "Your move — set what you value, or ask the assistant to suggest a plan" };
+      return { actor: "you", text: "Your move - set what you value, or ask the assistant to suggest a plan" };
     case "compare":
-      return { actor: "you", text: "Your move — compare the plans and pick one" };
+      return { actor: "you", text: "Your move - compare the plans and pick one" };
     case "draft":
-      return { actor: "you", text: "Your move — review the plan, or send it back for changes" };
+      return { actor: "you", text: "Your move - review the plan, or send it back for changes" };
     case "replanning":
-      return { actor: "assistant", text: "Assistant's move — ask it to redraft the plan" };
+      return { actor: "assistant", text: "Assistant's move - ask it to redraft the plan" };
     case "invalid":
-      return { actor: "assistant", text: "The draft breaks a rule — ask the assistant to fix it" };
+      return { actor: "assistant", text: "The draft breaks a rule - ask the assistant to fix it" };
     case "rejected":
-      return { actor: "you", text: "Your move — change a priority or protection, then rebuild" };
+      return { actor: "you", text: "Your move - change a priority or protection, then rebuild" };
     case "review":
       return state.proposalStatus === "accepted"
-        ? { actor: "you", text: "Your move — tick the box, then adopt" }
-        : { actor: "you", text: "Your move — accept or send back, then adopt" };
+        ? { actor: "you", text: "Your move - tick the box, then adopt" }
+        : { actor: "you", text: "Your move - accept or send back, then adopt" };
     case "adopted":
       return { actor: "done", text: "Adopted. The assistant modelled the options; you made the call." };
   }

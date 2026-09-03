@@ -53,7 +53,7 @@ function usable(candidate: unknown): candidate is ModelContext {
   );
 }
 
-/** The runtime's model context — `navigator.modelContext` (Chrome preview) or
+/** The runtime's model context - `navigator.modelContext` (Chrome preview) or
  *  `document.modelContext` (editor draft / ChatGPT in-app browser). */
 export function getModelContext(): ModelContext | null {
   if (typeof navigator !== "undefined" && usable(navigator.modelContext)) {

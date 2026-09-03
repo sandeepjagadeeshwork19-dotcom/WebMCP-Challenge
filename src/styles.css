@@ -1,5 +1,5 @@
 /* ============================================================================
-   Neighbors Decide — "ward gazette" visual system
+   Neighbors Decide - "ward gazette" visual system
    Newsprint ground, hard rules, one vermilion accent + one slate for the
    assistant's voice, a news serif for the document. Not a card dashboard.
 
@@ -19,10 +19,10 @@
   --rule-strong: #1a1a1a;
 
   /* ---- the two identities ---- */
-  --accent: #a82d1b; /* resident authority — AA on --paper */
+  --accent: #a82d1b; /* resident authority - AA on --paper */
   --accent-bright: #c8402b; /* fills / large type only */
   --accent-tint: #f8e5e0;
-  --agent: #46556e; /* the assistant / WebMCP — one colour, one token */
+  --agent: #46556e; /* the assistant / WebMCP - one colour, one token */
   --agent-strong: #39465c;
   --agent-tint: #eef1f5;
 
@@ -35,9 +35,9 @@
   --focus: #0b5cff;
 
   /* ---- type ---- */
-  --font-display: "Bricolage Grotesque", "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-ui: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-doc: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-doc: Georgia, "Times New Roman", serif;
 
   --fs-micro: 0.62rem; /* uppercase kickers, ids, tags, badges */
   --fs-tiny: 0.72rem; /* meta, captions, trace body, notes */
@@ -124,7 +124,7 @@ textarea {
   border: 0;
 }
 
-/* One label style — small, bold, uppercase, letter-spaced. Used everywhere a
+/* One label style - small, bold, uppercase, letter-spaced. Used everywhere a
    field needs a caption. */
 .kicker {
   font-size: var(--fs-micro);
@@ -135,7 +135,7 @@ textarea {
 }
 
 /* ============================================================================
-   Buttons — one base, three modifiers, nothing else.
+   Buttons - one base, three modifiers, nothing else.
    .btn         neutral / secondary (outline)
    .btn--primary  the resident's committing action (vermilion)
    .btn--agent    the assistant's action (slate)
@@ -210,7 +210,7 @@ textarea {
   opacity: 0.5;
 }
 
-/* One toggle style — priority chips and the protect button. */
+/* One toggle style - priority chips and the protect button. */
 .toggle {
   font-family: var(--font-ui);
   font-size: var(--fs-tiny);
@@ -431,7 +431,7 @@ textarea {
   color: var(--warn);
 }
 
-/* A status annotation — deliberately NOT a button, so it never competes with
+/* A status annotation - deliberately NOT a button, so it never competes with
    the real primary action on the page. */
 .commandbar__turn {
   justify-self: end;
@@ -633,7 +633,7 @@ textarea {
   letter-spacing: 0.07em;
 }
 
-/* Keep the band compact — the priority scale is explained in the dock; only the
+/* Keep the band compact - the priority scale is explained in the dock; only the
    "Protected" empty-state note earns a line. */
 .rail-block:first-child .rail-block__note {
   display: none;
@@ -1522,7 +1522,7 @@ textarea {
   margin-top: var(--sp-1);
 }
 
-/* The actions with no tool — collapsed by default. */
+/* The actions with no tool - collapsed by default. */
 .withheld {
   margin-top: var(--sp-2);
   border-top: 1px solid var(--rule);
@@ -1567,7 +1567,7 @@ textarea {
 }
 
 /* ============================================================================
-   Next-action dock — one honest next step per stage
+   Next-action dock - one honest next step per stage
    ========================================================================== */
 
 .action-dock {
@@ -1687,7 +1687,7 @@ textarea {
   margin-top: var(--sp-1);
 }
 
-/* On the priorities screen the works ARE the content — not a secondary appendix. */
+/* On the priorities screen the works ARE the content - not a secondary appendix. */
 .schedule--lead {
   border-top: 0;
   padding-top: 0;

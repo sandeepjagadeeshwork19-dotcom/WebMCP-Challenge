@@ -3,7 +3,7 @@
  * AbortSignal. Aborting that signal unregisters every tool.
  *
  * The caller (`useWebMcp`) owns the signal so it can abort synchronously in an
- * effect cleanup — important under React StrictMode, which runs the effect
+ * effect cleanup - important under React StrictMode, which runs the effect
  * setup / cleanup / setup. The loop also checks `signal.aborted` between tools so
  * a cancelled pass stops immediately instead of racing a second one.
  */

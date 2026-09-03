@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-/** Flips true once any stage has mounted — the very first paint must not scroll. */
+/** Flips true once any stage has mounted - the very first paint must not scroll. */
 let appHasMounted = false;
 
 /**

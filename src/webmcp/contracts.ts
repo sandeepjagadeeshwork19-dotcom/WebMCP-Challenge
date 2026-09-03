@@ -1,5 +1,5 @@
 /**
- * The seven WebMCP tool contracts. Exactly these tools are registered — there is
+ * The seven WebMCP tool contracts. Exactly these tools are registered - there is
  * no tool for setting priorities, locking, resident selections, acceptance,
  * rejection, finalisation, or reset. That omission is the human/agent boundary:
  * a withheld capability is a function that was never put on `document.modelContext`.
@@ -134,7 +134,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       name: "propose_allocation",
       title: "Propose allocation",
       description:
-        "Record a draft allocation with your rationale as a visible, agent-attributed proposal for the given budgetRevision. Runs the shared validator; an invalid allocation is still stored as a visible rejected draft. This is never the decision — any resident edit stales it and you must re-read and redraft. There is no tool to accept, adopt, or finalise.",
+        "Record a draft allocation with your rationale as a visible, agent-attributed proposal for the given budgetRevision. Runs the shared validator; an invalid allocation is still stored as a visible rejected draft. This is never the decision - any resident edit stales it and you must re-read and redraft. There is no tool to accept, adopt, or finalise.",
       annotations: { readOnlyHint: false, untrustedContentHint: true },
       inputSchema: {
         type: "object",
@@ -172,7 +172,7 @@ export function createToolContracts(handlers: Handlers): WebMcpToolDefinition[] 
       name: "request_allocation_review",
       title: "Request allocation review",
       description:
-        "Open a visible resident review of the current fresh, valid proposal and step back. This does not accept, adopt or finalise it — only the resident can, and no tool exposes those steps.",
+        "Open a visible resident review of the current fresh, valid proposal and step back. This does not accept, adopt or finalise it - only the resident can, and no tool exposes those steps.",
       annotations: { readOnlyHint: false },
       inputSchema: {
         type: "object",

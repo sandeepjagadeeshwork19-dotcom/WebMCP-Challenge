@@ -6,7 +6,7 @@ import { App } from "../../App";
 import { createHandlers } from "../../webmcp/handlers";
 import { isToolError } from "../../webmcp/errors";
 
-describe("primary journey — tool/UI parity through compare, the turn, review, adopt, reset", () => {
+describe("primary journey - tool/UI parity through compare, the turn, review, adopt, reset", () => {
   it("completes the full loop on one shared store", { timeout: 25_000 }, async () => {
     const user = userEvent.setup();
     const { store } = renderWithStore(<App />);
@@ -52,7 +52,7 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
       ],
       rationale: "Safety-and-access plan within budget.",
     });
-    expect(await screen.findByText(/DRAFT RESOLUTION — WD-12/i)).toBeInTheDocument();
+    expect(await screen.findByText(/DRAFT RESOLUTION: WD-12/i)).toBeInTheDocument();
     expect(screen.getByText(/FROM THE ASSISTANT/i)).toBeInTheDocument();
 
     // 5. Value judgment: protect the riverside play area (P-03, not in the draft, needs P-04).
@@ -96,11 +96,11 @@ describe("primary journey — tool/UI parity through compare, the turn, review, 
     await user.click(screen.getByRole("button", { name: /Accept this plan/i }));
     await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /Adopt resolution WD-12/i }));
-    expect(screen.getByText(/RESOLUTION WD-12 — ADOPTED/i)).toBeInTheDocument();
+    expect(screen.getByText(/RESOLUTION WD-12: ADOPTED/i)).toBeInTheDocument();
     expect((tools.get_budget_state({}) as { finalised: boolean }).finalised).toBe(true);
 
     // 11. Reset restores the initial scenario.
-    await user.click(screen.getByRole("button", { name: /Reset — run the demonstration again/i }));
+    await user.click(screen.getByRole("button", { name: /Reset: run the demonstration again/i }));
     await user.click(screen.getByRole("button", { name: /Confirm reset/i }));
     const after = tools.get_budget_state({}) as { budgetRevision: number; proposal: unknown };
     expect(after.budgetRevision).toBe(0);

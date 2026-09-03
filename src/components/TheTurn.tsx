@@ -8,7 +8,7 @@ import type { Allocation, ProjectId } from "../domain/types";
 
 /**
  * The turn: a human protect action has stalled the current draft. Show the
- * *problem* the assistant must now solve — not a re-plan that does not exist yet.
+ * *problem* the assistant must now solve - not a re-plan that does not exist yet.
  */
 export function TheTurn() {
   const state = useAppState();
@@ -100,7 +100,7 @@ export function TheTurn() {
                 ? "build a fresh draft"
                 : over > 0
                 ? `about ${formatMoney(over)} of other works`
-                : "nothing — just re-check"}
+                : "nothing - just re-check"}
             </b>
           </p>
         </div>

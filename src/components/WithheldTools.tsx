@@ -1,5 +1,5 @@
 /**
- * The actions the assistant simply cannot do — because the functions that would
+ * The actions the assistant simply cannot do - because the functions that would
  * do them were never registered as tools. Collapsed by default; it's the one
  * place the *mechanism* (boundary by omission) is shown rather than asserted.
  */
@@ -23,7 +23,7 @@ export function WithheldTools() {
         ))}
       </ul>
       <p className="withheld__note">
-        These aren&rsquo;t exposed to the assistant at all &mdash; there&rsquo;s no function for it
+        These aren&rsquo;t exposed to the assistant at all. There&rsquo;s no function for it
         to call.
       </p>
     </details>

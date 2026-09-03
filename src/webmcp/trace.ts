@@ -43,7 +43,7 @@ function summaryFor(toolName: ToolName, result: unknown): string {
 
   switch (toolName) {
     case "get_budget_state":
-      return `Read canonical budget state at revision ${String(value.budgetRevision ?? "—")}`;
+      return `Read canonical budget state at revision ${String(value.budgetRevision ?? "-")}`;
     case "list_projects":
       return `Returned ${Array.isArray(value.projects) ? value.projects.length : 0} structured projects`;
     case "list_strategy_options":
@@ -51,11 +51,11 @@ function summaryFor(toolName: ToolName, result: unknown): string {
     case "simulate_allocation":
       return `${value.valid ? "Validated" : "Rejected"} ${money(value.committedTotal)} simulation`;
     case "propose_allocation":
-      return `Stored proposal rev ${String(value.proposalRevision ?? "—")} · ${String(value.status ?? "unknown")}`;
+      return `Stored proposal rev ${String(value.proposalRevision ?? "-")} · ${String(value.status ?? "unknown")}`;
     case "explain_tradeoffs":
-      return `Explained trade-offs for proposal rev ${String(value.proposalRevision ?? "—")}`;
+      return `Explained trade-offs for proposal rev ${String(value.proposalRevision ?? "-")}`;
     case "request_allocation_review":
-      return `Requested resident review of proposal rev ${String(value.proposalRevision ?? "—")}`;
+      return `Requested resident review of proposal rev ${String(value.proposalRevision ?? "-")}`;
   }
 }
 

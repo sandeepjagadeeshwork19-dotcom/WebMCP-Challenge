@@ -1,5 +1,5 @@
 /**
- * Canonical "strategy directions" — three distinct, deterministically valid ways
+ * Canonical "strategy directions" - three distinct, deterministically valid ways
  * to spend the fund, each expressing a different priority lens.
  *
  * These are application-owned example allocations. The agent can compare their
@@ -20,7 +20,7 @@ export interface StrategyPreset {
   label: string;
   /**
    * The priority intent this direction expresses. Describes the *lens*, never
-   * the specific works funded — so it stays true after a rebuild around locks.
+   * the specific works funded - so it stays true after a rebuild around locks.
    */
   lens: string;
   /** One line: what this direction is strongest at. */
@@ -53,7 +53,7 @@ export const STRATEGY_PRESETS: readonly StrategyPreset[] = [
     id: "climate_resilience",
     label: "Climate resilience",
     lens: "Prioritise heat relief, drainage and lower-emission travel.",
-    mainBenefit: "Built for the monsoon and the heat — the drain, full tree drive, clean travel.",
+    mainBenefit: "Built for the monsoon and the heat - the drain, full tree drive, clean travel.",
     mainSacrifice: "No play area, no road crossings, no study room.",
     priorities: { safety: 2, accessibility: 1, climate: 3, communitySupport: 1 },
     allocations: [
@@ -68,7 +68,7 @@ export const STRATEGY_PRESETS: readonly StrategyPreset[] = [
     id: "broad_coverage",
     label: "Broad ward coverage",
     lens: "Spread the fund across as many localities as possible.",
-    mainBenefit: "The widest spread — and the only direction that funds the riverside play area.",
+    mainBenefit: "The widest spread - and the only direction that funds the riverside play area.",
     mainSacrifice: "No road crossings, no cycle track; smallest tree phase.",
     priorities: { safety: 2, accessibility: 2, climate: 2, communitySupport: 3 },
     allocations: [

@@ -210,7 +210,7 @@ export function validateAllocation(
     issues.push({
       code: "budget_exceeded",
       projectIds: [],
-      message: `This plan spends ${money(committedTotal)} — that's ${money(
+      message: `This plan spends ${money(committedTotal)} - that's ${money(
         committedTotal - FUND_LIMIT,
       )} over the ${money(FUND_LIMIT)} fund.`,
     });

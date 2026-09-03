@@ -86,7 +86,7 @@ export function LeftRail() {
           state.lockedAllocations.map((lock) => (
             <div className="protected-item" key={lock.projectId}>
               <p className="protected-item__name">
-                {getProject(lock.projectId).name} &mdash; {formatMoney(lock.amount)}
+                {getProject(lock.projectId).name}: {formatMoney(lock.amount)}
               </p>
               <button
                 type="button"

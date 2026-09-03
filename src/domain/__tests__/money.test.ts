@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { inr } from "../money";
 
-describe("inr — Indian digit grouping", () => {
+describe("inr - Indian digit grouping", () => {
   it("groups by lakh / crore", () => {
     expect(inr(0)).toBe("₹0");
     expect(inr(60_000)).toBe("₹60,000");

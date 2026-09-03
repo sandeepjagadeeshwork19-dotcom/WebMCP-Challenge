@@ -27,7 +27,7 @@ export function useWebMcp(): WebMcpState {
     let started = false;
 
     // Defer one tick so StrictMode's setup / cleanup / setup collapses to a
-    // single real registration pass — the cleanup below clears this timer
+    // single real registration pass - the cleanup below clears this timer
     // before it fires on the first (discarded) setup.
     const timer = setTimeout(() => {
       started = true;

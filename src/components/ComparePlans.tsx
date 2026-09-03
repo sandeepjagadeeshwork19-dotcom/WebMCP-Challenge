@@ -13,7 +13,7 @@ export function ComparePlans() {
   const hasProtectedWorks = state.lockedAllocations.length > 0;
 
   // Opening a plan loads it as a starting draft. It does NOT touch the resident's
-  // priorities — those stay exactly as set, and the final record reflects what
+  // priorities - those stay exactly as set, and the final record reflects what
   // the resident actually chose.
   const openPlan = (strategyId: (typeof STRATEGY_PRESETS)[number]["id"]) => {
     dispatch({ type: "app/loadDirectionDraft", strategyId });
@@ -26,9 +26,9 @@ export function ComparePlans() {
       </h2>
       <p className="compare__lead">
         {hasProtectedWorks
-          ? "Three starting plans rebuilt around what you protected. Open one to continue from — it is not the final decision."
+          ? "Three starting plans rebuilt around what you protected. Open one to continue from - it is not the final decision."
           : prioritiesWeighted
-          ? "Three ready-made plans, scored against your priorities. Open one to start from — it is not the final decision."
+          ? "Three ready-made plans, scored against your priorities. Open one to start from - it is not the final decision."
           : "You have not weighted a priority yet. These are still valid starting points; choose a weight above to see which direction best fits you."}
       </p>
 
@@ -47,7 +47,7 @@ export function ComparePlans() {
 
               <div className="plan-card__score">
                 <span className="plan-card__score-num">
-                  {prioritiesWeighted ? v.scoreAtResidentPriorities : "—"}
+                  {prioritiesWeighted ? v.scoreAtResidentPriorities : "-"}
                 </span>
                 <span className="plan-card__score-label">
                   {prioritiesWeighted ? "priority score" : "choose a weight to score"}

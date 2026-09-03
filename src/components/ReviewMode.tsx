@@ -32,7 +32,7 @@ export function ReviewMode() {
   return (
     <section className="stage-block" aria-labelledby="review-band">
       <div className="review-band" ref={headingRef} tabIndex={-1} id="review-band">
-        <strong>REVIEW &mdash; RESOLUTION WD-12</strong>
+        <strong>REVIEW: RESOLUTION WD-12</strong>
       </div>
 
       <div className="review-summary">
@@ -42,7 +42,7 @@ export function ReviewMode() {
           spent, {formatMoney(FUND_LIMIT - total)} left.
         </p>
         <p className="review-summary__validation">
-          &#10003; Re-checked just now &mdash; all rules pass.
+          &#10003; Re-checked just now. All rules pass.
         </p>
         {tradeoff && (tradeoff.added.length > 0 || tradeoff.removed.length > 0) && (
           <p className="review-summary__tradeoff">
@@ -57,7 +57,7 @@ export function ReviewMode() {
       <div className="authority-notice">
         <Icon name="user" size={18} />
         <p>
-          The assistant can&rsquo;t accept or adopt a plan &mdash; only you can. These buttons are
+          The assistant can&rsquo;t accept or adopt a plan. Only you can. These buttons are
           yours.
         </p>
       </div>

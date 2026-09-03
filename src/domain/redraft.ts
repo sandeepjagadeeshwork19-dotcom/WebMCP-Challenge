@@ -4,7 +4,7 @@
  * Pure: given a seed allocation, the locked allocations and the resident's
  * priorities, it returns a valid allocation that keeps every locked work and
  * every dependency, then drops the lowest-value unprotected works until it fits
- * the fund. No search, no optimisation target beyond "valid and within budget" —
+ * the fund. No search, no optimisation target beyond "valid and within budget" -
  * the ordering is a fixed benefit-at-priorities ranking so the result is
  * reproducible. Used by the WebMCP-absent fallback so a protect action never
  * dead-ends, and available to the agent's re-plan path.
@@ -59,7 +59,7 @@ export function redraftAroundLocks(
 
   ensureDependencies();
 
-  // Resolve incompatibilities — drop the unprotected / lower-value side.
+  // Resolve incompatibilities - drop the unprotected / lower-value side.
   for (const id of [...amount.keys()]) {
     if (!amount.has(id)) continue;
     for (const other of getProject(id).incompatibilities) {
