@@ -1,6 +1,6 @@
 # Neighbors Decide — Ward Participatory-Budgeting Workspace
 
-**Live demo:** https://neighbours-decide.netlify.app
+**Live demo:** https://sandeepjagadeeshwork19-dotcom.github.io/WebMCP-Challenge/
 &nbsp;·&nbsp; open it in ChatGPT's browser or Chrome with WebMCP enabled to drive
 it with an agent; it also works fully as a manual workspace.
 
@@ -154,11 +154,17 @@ Verified against the WebMCP spec IDL and Chrome's imperative-API docs
 
 ## Deployment
 
-Static SPA — any static HTTPS host works.
+Static SPA — any static HTTPS host works. Assets use relative URLs
+(`base: "./"`), so the build runs unchanged at a bare domain or a project
+subpath.
+
+`main` deploys to GitHub Pages via
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) (build with
+`pnpm build`, publish `dist/`). To deploy anywhere else:
 
 ```bash
 npm run build
-# deploy ./dist  (e.g. Netlify: `netlify deploy --prod --dir=dist`)
+# then serve ./dist  (e.g. `netlify deploy --prod --dir=dist`)
 ```
 
 No backend, API keys, external data calls, authentication or persistence. The

@@ -21,7 +21,7 @@ a function that was never registered on `document.modelContext`.
 
 - [x] Repo pushed to public GitHub; MIT auto-detected; URL filled in **Links** below
 - [ ] Video recorded in a real WebMCP runtime, uploaded public to YouTube, ≤ 3:00, audio on; URL filled in
-- [x] Netlify wired to `main` for continuous deployment; live URL serves the latest build
+- [x] GitHub Pages wired to `main` for continuous deployment; live URL serves the latest build
 - [x] Live URL run end-to-end **in the ChatGPT in-app browser** (agent actions via WebMCP tools) — app-side screenshots below
 - [ ] Agent-side evidence (ChatGPT conversation + tool calls) captured — in the video
 - [ ] This document's substance pasted into the Devpost form
@@ -174,7 +174,7 @@ layer down: which actions belong on the API.
 ## Real WebMCP runtime evidence — 2026-09-01
 
 Run against the public deployment in the **ChatGPT desktop in-app browser** at
-`https://neighbours-decide.netlify.app/`. Agent actions went through the
+the live URL in **Links** below. Agent actions went through the
 page-registered WebMCP tools; the resident actions (priorities, protect, accept,
 adopt) were done in the visible UI. The screenshots below are the app-side
 record; the demo video captures the agent's conversation and tool calls.
@@ -225,7 +225,7 @@ the assistant unable to adopt).
 
 ## Links
 
-- **Live demo:** https://neighbours-decide.netlify.app
+- **Live demo:** https://sandeepjagadeeshwork19-dotcom.github.io/WebMCP-Challenge/
 - **Repo:** https://github.com/sandeepjagadeeshwork19-dotcom/WebMCP-Challenge
 - **Demo video:** _(add public YouTube URL on upload)_
 - **Demo script / shot list:** `docs/VIDEO.md`
